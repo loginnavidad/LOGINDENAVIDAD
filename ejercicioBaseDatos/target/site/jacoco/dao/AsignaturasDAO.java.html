@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AsignaturasDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ejercicioBaseDatos</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">AsignaturasDAO.java</span></div><h1>AsignaturasDAO.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package dao;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Asignatura;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
+
+/**
+ *
+ * @author Miguel Angel Diaz
+ */
+<span class="nc" id="L23">public class AsignaturasDAO {</span>
+
+    public List&lt;Asignatura&gt; getAllAsignaturas() {
+<span class="nc" id="L26">        List&lt;Asignatura&gt; lista = null;</span>
+<span class="nc" id="L27">        Connection con = null;</span>
+        try {
+<span class="nc" id="L29">            con = DBConnection.getInstance().getConnection();</span>
+<span class="nc" id="L30">            QueryRunner qr = new QueryRunner();</span>
+<span class="nc" id="L31">            ResultSetHandler&lt;List&lt;Asignatura&gt;&gt; h = new BeanListHandler&lt;Asignatura&gt;(Asignatura.class);</span>
+<span class="nc" id="L32">            lista = qr.query(con, &quot;select * FROM ASIGNATURAS&quot;, h);</span>
+
+<span class="nc" id="L34">        } catch (Exception ex) {</span>
+<span class="nc" id="L35">            Logger.getLogger(AsignaturasDAO.class.getName()).log(Level.SEVERE, null, ex);</span>
+        } finally {
+<span class="nc" id="L37">            DBConnection.getInstance().cerrarConexion(con);</span>
+<span class="nc" id="L38">        }</span>
+<span class="nc" id="L39">        return lista;</span>
+    }
+
+    public Asignatura addAsignatura(Asignatura a) {
+<span class="nc" id="L43">        Connection con = null;</span>
+        try {
+<span class="nc" id="L45">            con = DBConnection.getInstance().getConnection();</span>
+<span class="nc" id="L46">            con.setAutoCommit(false);</span>
+<span class="nc" id="L47">            QueryRunner qr = new QueryRunner();</span>
+<span class="nc" id="L48">            long id = qr.insert(con,</span>
+                    &quot;INSERT INTO ASIGNATURAS (NOMBRE,CICLO,CURSO) VALUES(?,?,?)&quot;,
+<span class="nc" id="L50">                    new ScalarHandler&lt;Long&gt;(), a.getNombre(), a.getCiclo(), a.getCurso());</span>
+           
+<span class="nc" id="L52">            a.setId(id);</span>
+<span class="nc" id="L53">            con.commit();</span>
+<span class="nc" id="L54">        } catch (Exception ex) {</span>
+<span class="nc" id="L55">            Logger.getLogger(AsignaturasDAO.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L56">            a = null;</span>
+        } finally {
+<span class="nc" id="L58">            DBConnection.getInstance().cerrarConexion(con);</span>
+<span class="nc" id="L59">        }</span>
+<span class="nc" id="L60">        return a;</span>
+    }
+
+    public int updateAsignatura(Asignatura a) {
+<span class="nc" id="L64">        Connection con = null;</span>
+<span class="nc" id="L65">        int filas = 0;</span>
+        try {
+<span class="nc" id="L67">            con = DBConnection.getInstance().getConnection();</span>
+<span class="nc" id="L68">            QueryRunner qr = new QueryRunner();</span>
+<span class="nc" id="L69">            filas = qr.update(con, &quot;UPDATE ASIGNATURAS SET NOMBRE = ?, CICLO = ?, CURSO = ? WHERE ID = ?&quot;, a.getNombre(), a.getCiclo(), a.getCurso(), a.getId());</span>
+
+<span class="nc" id="L71">        } catch (Exception ex) {</span>
+<span class="nc" id="L72">            Logger.getLogger(AsignaturasDAO.class.getName()).log(Level.SEVERE, null, ex);</span>
+        } finally {
+<span class="nc" id="L74">            DBConnection.getInstance().cerrarConexion(con);</span>
+<span class="nc" id="L75">        }</span>
+<span class="nc" id="L76">        return filas;</span>
+    }
+
+    public int delAsignatura(Asignatura a) {
+<span class="nc" id="L80">        Connection con = null;</span>
+<span class="nc" id="L81">        int filas = 0;</span>
+        try {
+<span class="nc" id="L83">            con = DBConnection.getInstance().getConnection();</span>
+<span class="nc" id="L84">            QueryRunner qr = new QueryRunner();</span>
+<span class="nc" id="L85">            filas = qr.update(con, &quot;DELETE FROM ASIGNATURAS WHERE ID = ?&quot;, a.getId());</span>
+
+<span class="nc" id="L87">        } catch (Exception ex) {</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">            if (ex.getMessage().contains(&quot;foreign&quot;)){</span>
+<span class="nc" id="L89">                filas = -1;</span>
+            }
+<span class="nc" id="L91">            Logger.getLogger(AsignaturasDAO.class.getName()).log(Level.SEVERE, null, ex);</span>
+        } finally {
+<span class="nc" id="L93">            DBConnection.getInstance().cerrarConexion(con);</span>
+<span class="nc" id="L94">        }</span>
+<span class="nc" id="L95">        return filas;</span>
+    }
+    
+    public int delAsignatura2(Asignatura a) {
+<span class="nc" id="L99">        Connection con = null;</span>
+<span class="nc" id="L100">        int filas = 0;</span>
+        try {
+<span class="nc" id="L102">            con = DBConnection.getInstance().getConnection();</span>
+<span class="nc" id="L103">            con.setAutoCommit(false);</span>
+<span class="nc" id="L104">            QueryRunner qr = new QueryRunner();</span>
+<span class="nc" id="L105">            filas += qr.update(con, &quot;DELETE FROM NOTAS WHERE ID_ASIGNATURA = ?&quot;, a.getId());</span>
+<span class="nc" id="L106">            filas += qr.update(con, &quot;DELETE FROM ASIGNATURAS WHERE ID = ?&quot;, a.getId());</span>
+            
+<span class="nc" id="L108">            con.commit();</span>
+
+<span class="nc" id="L110">        } catch (Exception ex) {</span>
+<span class="nc" id="L111">            Logger.getLogger(AsignaturasDAO.class.getName()).log(Level.SEVERE, null, ex);</span>
+            try {
+<span class="nc bnc" id="L113" title="All 2 branches missed.">                if (con!=null)</span>
+<span class="nc" id="L114">                    con.rollback();</span>
+<span class="nc" id="L115">            } catch (SQLException ex1) {</span>
+<span class="nc" id="L116">                Logger.getLogger(AlumnosDAO.class.getName()).log(Level.SEVERE, null, ex1);</span>
+<span class="nc" id="L117">            }</span>
+        } finally {
+<span class="nc" id="L119">            DBConnection.getInstance().cerrarConexion(con);</span>
+<span class="nc" id="L120">        }</span>
+<span class="nc" id="L121">        return filas;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

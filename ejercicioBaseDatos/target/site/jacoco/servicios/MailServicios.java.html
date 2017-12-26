@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MailServicios.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ejercicioBaseDatos</a> &gt; <a href="index.source.html" class="el_package">servicios</a> &gt; <span class="el_source">MailServicios.java</span></div><h1>MailServicios.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package servicios;
+
+import config.Configuration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.mail.Email;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.SimpleEmail;
+
+/**
+ *
+ * @author Miguel Angel Diaz
+ */
+<span class="nc" id="L19">public class MailServicios {</span>
+
+    public void mandarMail(String to, String msg, String subject) {
+        try {
+
+<span class="nc" id="L24">            Email email = new SimpleEmail();</span>
+
+<span class="nc" id="L26">            email.setHostName(Configuration.getInstance().getSmtpServer());</span>
+<span class="nc" id="L27">            email.setSmtpPort(Integer.parseInt(Configuration.getInstance().getSmtpPort()));</span>
+<span class="nc" id="L28">            email.setAuthentication(Configuration.getInstance().getMailFrom(), Configuration.getInstance().getMailPass());</span>
+<span class="nc" id="L29">            email.setStartTLSEnabled(true);</span>
+
+            //El correo siempre muestra el MailFrom del archivo de configuracion
+<span class="nc" id="L32">            email.setFrom(Configuration.getInstance().getMailFrom());</span>
+
+            /*En algunos correos te muestra el MailFrom que tu le pongas.
+            En otros como Gmail, aunque el correo se envía sin problemas, te mostrará 
+            siempre el MailFrom del archivo de configuracion*/
+            //email.setFrom(&quot;prueba@iesquevedo.es&quot;);
+<span class="nc" id="L38">            email.setSubject(subject);</span>
+<span class="nc" id="L39">            email.setContent(&quot;&lt;html&gt;&quot;</span>
+                    + &quot;&lt;body&gt;&quot;
+                    + &quot;&lt;h1&gt;Registro &lt;strong&gt;completado&lt;/strong&gt;&lt;/h1&gt;&quot;
+                    + &quot;&lt;p&gt;Muchas gracias por registrarte.&lt;/p&gt;&quot;
+                    + &quot;&lt;p&gt;Haz click en el siguiente enlace para activar tu cuenta.&lt;/p&gt;&quot;
+                    + &quot;&lt;a href='&quot; + msg + &quot;'&gt;Activar&lt;/a&gt;&quot;
+                    + &quot;&lt;/body&gt;&quot;
+                    + &quot;&lt;/html&gt;&quot;, &quot;text/html&quot;);
+            //email.setMsg(msg);
+<span class="nc" id="L48">            email.addTo(to);</span>
+
+<span class="nc" id="L50">            email.send();</span>
+<span class="nc" id="L51">        } catch (EmailException ex) {</span>
+<span class="nc" id="L52">            System.out.println(ex.getMessage());</span>
+<span class="nc" id="L53">            Logger.getLogger(MailServicios.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L54">        }</span>
+<span class="nc" id="L55">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

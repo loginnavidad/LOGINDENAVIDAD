@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NotasDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ejercicioBaseDatos</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">NotasDAO.java</span></div><h1>NotasDAO.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package dao;
+
+import java.sql.Connection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Nota;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
+
+/**
+ *
+ * @author Miguel Angel Diaz
+ */
+<span class="nc" id="L21">public class NotasDAO {</span>
+
+    public Nota guardarNota(Nota n) {
+<span class="nc" id="L24">        Connection con = null;</span>
+<span class="nc" id="L25">        int filas = 0;</span>
+        try {
+<span class="nc" id="L27">            con = DBConnection.getInstance().getConnection();</span>
+<span class="nc" id="L28">            QueryRunner qr = new QueryRunner();</span>
+<span class="nc" id="L29">            filas = qr.update(con, &quot;UPDATE NOTAS SET NOTA = ? WHERE ID_ALUMNO = ? AND ID_ASIGNATURA = ?&quot;, n.getNota(), n.getIdAlumno(), n.getIdAsignatura());</span>
+
+<span class="nc bnc" id="L31" title="All 2 branches missed.">            if (filas == 0) {</span>
+<span class="nc" id="L32">                con.setAutoCommit(false);</span>
+<span class="nc" id="L33">                Long id = qr.insert(con,</span>
+                        &quot;INSERT INTO NOTAS (ID_ALUMNO,ID_ASIGNATURA,NOTA) VALUES(?,?,?)&quot;,
+<span class="nc" id="L35">                        new ScalarHandler&lt;Long&gt;(), n.getIdAlumno(), n.getIdAsignatura(), n.getNota());</span>
+<span class="nc" id="L36">                con.commit();</span>
+            }
+<span class="nc" id="L38">        } catch (Exception ex) {</span>
+<span class="nc" id="L39">            Logger.getLogger(NotasDAO.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L40">            n = null;</span>
+        } finally {
+<span class="nc" id="L42">            DBConnection.getInstance().cerrarConexion(con);</span>
+<span class="nc" id="L43">        }</span>
+<span class="nc" id="L44">        return n;</span>
+    }
+
+    public int delNota(Nota n) {
+<span class="nc" id="L48">        Connection con = null;</span>
+<span class="nc" id="L49">        int filas = 0;</span>
+        try {
+<span class="nc" id="L51">            con = DBConnection.getInstance().getConnection();</span>
+<span class="nc" id="L52">            QueryRunner qr = new QueryRunner();</span>
+<span class="nc" id="L53">            filas = qr.update(con, &quot;DELETE FROM NOTAS WHERE ID_ALUMNO = ? AND ID_ASIGNATURA = ?&quot;, n.getIdAlumno(), n.getIdAsignatura());</span>
+
+<span class="nc" id="L55">        } catch (Exception ex) {</span>
+<span class="nc" id="L56">            Logger.getLogger(NotasDAO.class.getName()).log(Level.SEVERE, null, ex);</span>
+        } finally {
+<span class="nc" id="L58">            DBConnection.getInstance().cerrarConexion(con);</span>
+<span class="nc" id="L59">        }</span>
+<span class="nc" id="L60">        return filas;</span>
+    }
+
+    public Nota getNota(Long idAlu, Long idAsig) {
+<span class="nc" id="L64">        Connection con = null;</span>
+<span class="nc" id="L65">        Nota n = null;</span>
+        try {
+<span class="nc" id="L67">            con = DBConnection.getInstance().getConnection();</span>
+<span class="nc" id="L68">            QueryRunner qr = new QueryRunner();</span>
+<span class="nc" id="L69">            ResultSetHandler&lt;Nota&gt; h = new BeanHandler&lt;&gt;(Nota.class);</span>
+<span class="nc" id="L70">            n = qr.query(con, &quot;SELECT * FROM NOTAS WHERE ID_ALUMNO = ? AND ID_ASIGNATURA = ?&quot;, h, idAlu, idAsig);</span>
+
+<span class="nc" id="L72">        } catch (Exception ex) {</span>
+<span class="nc" id="L73">            Logger.getLogger(NotasDAO.class.getName()).log(Level.SEVERE, null, ex);</span>
+        } finally {
+<span class="nc" id="L75">            DBConnection.getInstance().cerrarConexion(con);</span>
+<span class="nc" id="L76">        }</span>
+<span class="nc" id="L77">        return n;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
