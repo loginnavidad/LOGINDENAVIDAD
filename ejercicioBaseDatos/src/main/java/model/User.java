@@ -13,11 +13,10 @@ import java.time.LocalDateTime;
  */
 public class User {
     private long id;
-    private String nombre;
+    private String user;
     private String password;
     private boolean activo;
     private String codigo_activacion;
-    private LocalDateTime fecha_activacion;
     private String email;
 
     public User() {
@@ -31,13 +30,14 @@ public class User {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getUser() {
+        return user;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setUser(String user) {
+        this.user = user;
     }
+
 
     public String getPassword() {
         return password;
@@ -63,13 +63,6 @@ public class User {
         this.codigo_activacion = codigo_activacion;
     }
 
-    public LocalDateTime getFecha_activacion() {
-        return fecha_activacion;
-    }
-
-    public void setFecha_activacion(LocalDateTime fecha_activacion) {
-        this.fecha_activacion = fecha_activacion;
-    }
 
     public String getEmail() {
         return email;

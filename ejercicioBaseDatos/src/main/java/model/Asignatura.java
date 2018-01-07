@@ -13,35 +13,42 @@ public class Asignatura {
     
     private Long id;
     private String nombre;
-    private String ciclo;
-    private String curso;
+    private Long id_curso;
+    private String descripcionCurso;
     
     public Asignatura(){
     }
-    
-    public void setId(Long id){
-        this.id=id;
-    }
-    public void setNombre(String nombre){
-        this.nombre=nombre;
-    }
-    public void setCiclo(String ciclo){
-        this.ciclo=ciclo;
-    }
-    public void setCurso(String curso){
-        this.curso=curso;
-    }
-    
-    public Long getId(){
+
+    public Long getId() {
         return id;
     }
-    public String getNombre(){
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
         return nombre;
     }
-    public String getCiclo(){
-        return ciclo;
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
-    public String getCurso(){
-        return curso;
+
+    public Long getId_curso() {
+        return id_curso;
     }
+
+    public void setId_curso(Long id_curso) {
+        this.id_curso = id_curso;
+    }
+
+    public String getDescripcionCurso() {
+        return descripcionCurso;
+    }
+
+    public void setDescripcionCurso(String descripcionCurso) {
+        this.descripcionCurso = descripcionCurso;
+    }
+    
 }

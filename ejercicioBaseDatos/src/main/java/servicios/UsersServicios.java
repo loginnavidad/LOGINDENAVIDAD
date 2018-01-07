@@ -9,9 +9,14 @@ import config.Configuration;
 import dao.UsersDAO;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Asignatura;
 import model.User;
 import utils.Constantes;
 import utils.PasswordHash;
@@ -22,29 +27,75 @@ import utils.Utils;
  * @author Miguel Angel Diaz
  */
 public class UsersServicios {
+   
+    public User mailProfesor(String nombreP,String pass ){
+         User user = new User();
+        
+            if (!"".equals(nombreP)) {
 
-    public User registrar(User user) {
-        UsersDAO dao = new UsersDAO();
+                user.setUser(nombreP);
+            }
+            if (!"".equals(pass)) {
 
-        boolean existe = this.comprobarNombres(user.getNombre());
+                user.setPassword(pass);
+            }
+            return user;
+    }
+    public User recogidaParametros(String nombre,String password,String correo){
+        User user = new User();
+        
+            if (!"".equals(nombre)) {
 
-        User alta = null;
-        if (!existe) {
+                user.setUser(nombre);
+            }
+            if (!"".equals(password)) {
+                String hash = "";
+                
+                
             try {
-                user.setPassword(PasswordHash.getInstance().createHash(user.getPassword()));
-                user.setCodigo_activacion(Utils.randomAlphaNumeric(Configuration.getInstance().getLongitudCodigo()));
-                LocalDateTime fechaActual = LocalDateTime.now();
-                user.setFecha_activacion(fechaActual);
-                alta = dao.registrar(user);
-                MailServicios mail = new MailServicios();
-                mail.mandarMail(user.getEmail(), Constantes.LINK_EMAIL + user.getCodigo_activacion(), Constantes.ASUNTO_EMAIL);
+                
+                hash = PasswordHash.getInstance().createHash(password);
+                
             } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
+                
                 Logger.getLogger(UsersServicios.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        return alta;
-    }
+            
+                user.setPassword(hash);
 
+
+            if (!"".equals(correo)){
+                user.setEmail(correo);
+            }
+            String codigo = Utils.randomAlphaNumeric(10);
+            user.setCodigo_activacion(codigo);
+            user.setActivo(Boolean.FALSE);
+            
+        }
+        return user;
+    }
+    public List<User> getAllUsers(){
+        UsersDAO dao = new UsersDAO();
+        return dao.getUsers();
+    }
+    public boolean addUsuario(User user) {
+        UsersDAO dao = new UsersDAO();
+        MailServicios mail = new MailServicios();
+        mail.mandarMail(user.getEmail(), Constantes.LINK_EMAIL + user.getCodigo_activacion(), Constantes.ASUNTO_EMAIL);
+        return dao.addUser(user);
+    }
+    public boolean addProfesor(User user, User user2){
+        UsersDAO dao = new UsersDAO();
+        MailServicios mail = new MailServicios();
+        mail.mandarMail(user.getEmail(), Constantes.USUARIO + user2.getUser() + "</br>" + Constantes.PASSWORD + user2.getPassword(), Constantes.ASUNTO_EMAIL);
+        return dao.addProfe(user, user2);
+    }
+    public boolean addAlumno(User user, User user2){
+        UsersDAO dao = new UsersDAO();
+        MailServicios mail = new MailServicios();
+        mail.mandarMail(user.getEmail(), Constantes.USUARIO + user2.getUser() + "</br>" + Constantes.PASSWORD + user2.getPassword(), Constantes.ASUNTO_EMAIL);
+        return dao.addAlum(user, user2);
+    }
     public boolean comprobarNombres(String nombreUser) {
         UsersDAO dao = new UsersDAO();
         return dao.comprobarNombres(nombreUser);
@@ -55,7 +106,7 @@ public class UsersServicios {
         try {
 
             UsersDAO dao = new UsersDAO();
-            User userDB = dao.getUserByNombre(user.getNombre());
+            User userDB = dao.getUserByNombre(user.getUser());
             boolean passCorrecta = PasswordHash.getInstance().validatePassword(user.getPassword(), userDB.getPassword());
             if (passCorrecta == true && userDB.getActivo()) {
                 valido = true;
@@ -66,16 +117,13 @@ public class UsersServicios {
         }
         return valido;
     }
-
     public int activar(String codigo) {
         UsersDAO dao = new UsersDAO();
         int activar;
         User userDB = dao.getUserByCodigoActivacion(codigo);
 
         if (!userDB.getActivo()) {
-            LocalDateTime fechaActivacion = userDB.getFecha_activacion();
-            LocalDateTime fechaActual = LocalDateTime.now().minusMinutes(Configuration.getInstance().getMinutosParaValidar());
-            if (fechaActivacion.isAfter(fechaActual)) {
+            if (true) {
                 activar = dao.updateValido(userDB);
             } else {
                 dao.borrarUserByCodigoActivacion(userDB);
@@ -86,5 +134,36 @@ public class UsersServicios {
         }
         return activar;
     }
-
+    public boolean desactivarPermisoAdmin(String id){
+        UsersDAO dao = new UsersDAO();
+        if(dao.desactivarPermisoDeAdmin(this.parseoId(id)) == 1){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public boolean activaPermisoConSuper(String id){
+        UsersDAO dao = new UsersDAO();
+        if(dao.activarPermisoAdmin(this.parseoId(id)) == 1){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public boolean activarUserManualmente(String id){
+        UsersDAO dao = new UsersDAO();
+        return dao.activarManualmente(this.parseoId(id));
+    }
+    public int parseoId(String id){
+        int idParseado = 0;
+        idParseado = Integer.parseInt(id);
+        return idParseado;
+    }
+    public int parseoAdministrador(String admin){
+        if(admin != null){
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }

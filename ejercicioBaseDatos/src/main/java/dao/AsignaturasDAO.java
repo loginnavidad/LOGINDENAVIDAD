@@ -15,6 +15,7 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
+import utils.Constantes;
 
 /**
  *
@@ -39,27 +40,49 @@ public class AsignaturasDAO {
         return lista;
     }
 
-    public Asignatura addAsignatura(Asignatura a) {
+    public boolean addAsig(Asignatura asig) {
         Connection con = null;
+        int id_permiso = 2;
         try {
-            con = DBConnection.getInstance().getConnection();
-            con.setAutoCommit(false);
+            try {
+                con = DBConnection.getInstance().getConnection();
+                con.setAutoCommit(false);
+            } catch (Exception ex) {
+                Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
             QueryRunner qr = new QueryRunner();
+            //QUERY PARA INSERTAR EL CURSO
             long id = qr.insert(con,
-                    "INSERT INTO ASIGNATURAS (NOMBRE,CICLO,CURSO) VALUES(?,?,?)",
-                    new ScalarHandler<Long>(), a.getNombre(), a.getCiclo(), a.getCurso());
-           
-            a.setId(id);
+                    Constantes.ADD_CURSO,
+                    new ScalarHandler<Long>(), asig.getDescripcionCurso());
+            //GUARDAMOS EL ID DEL CURSO
+            asig.setId_curso(id);
+            //INSERTAMOS LA ASIGNATURA ASOCIANDOLA AL CURSO
+            long idPermiso = qr.insert(con,
+                    Constantes.DAR_PERMISO,
+                    new ScalarHandler<Long>(),asig.getNombre(), asig.getId_curso());
+
             con.commit();
         } catch (Exception ex) {
-            Logger.getLogger(AsignaturasDAO.class.getName()).log(Level.SEVERE, null, ex);
-            a = null;
+            Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
+
+            try {
+                if (con != null) {
+                    con.rollback();
+                    return false;
+                }
+                return false;
+            } catch (SQLException ex1) {
+                Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex1);
+                return false;
+            }
         } finally {
             DBConnection.getInstance().cerrarConexion(con);
         }
-        return a;
+        return true;
     }
-
+/*
     public int updateAsignatura(Asignatura a) {
         Connection con = null;
         int filas = 0;
@@ -119,5 +142,5 @@ public class AsignaturasDAO {
             DBConnection.getInstance().cerrarConexion(con);
         }
         return filas;
-    }
+    }*/
 }

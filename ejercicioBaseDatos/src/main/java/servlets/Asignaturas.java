@@ -5,7 +5,13 @@
  */
 package servlets;
 
+import config.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Asignatura;
 import servicios.AsignaturasServicios;
+import utils.Constantes;
 
 /**
  *
@@ -35,51 +42,39 @@ public class Asignaturas extends HttpServlet {
 
         AsignaturasServicios as = new AsignaturasServicios();
         String op = request.getParameter("accion");
-
+        HashMap root = new HashMap();
+        boolean insertadas = false;
         if (op != null) {
-            Asignatura a = new Asignatura();
-            a.setNombre(request.getParameter("nombre"));
-            a.setCiclo(request.getParameter("ciclo"));
-            a.setCurso(request.getParameter("curso"));
-            int filas = 0;
-            boolean errorBorrar = false;
+            
 
             switch (op) {
-                case "actualizar":
-                    a.setId(Long.parseLong(request.getParameter("idasignatura")));
-                    filas = as.updateAsignatura(a);
-                    break;
-                case "insertar":
-                    a = as.addAsignatura(a);
-                    if (a != null) {
-                        filas = 1;
+                
+                case "addAsignatura":
+                    Asignatura asignatura = as.recogerAsignatura(request.getParameter("nombreAsignatura"), request.getParameter("descripcion"));
+                    insertadas = as.addAsignatura(asignatura);
+                    if (!insertadas) {
+                        try {
+                            root.put("insertado", 0);
+                            root.put("mensaje", Constantes.MENSAJE_ASIGNATURA_CREADA_MAL);
+                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
+                            temp.process(root, response.getWriter());
+                        } catch (TemplateException ex) {
+                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else {
+                        try {
+                            root.put("insertado", 1);
+                            root.put("mensaje", Constantes.MENSAJE_ASIGNATURA_CREADA_BIEN);
+                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
+                            temp.process(root, response.getWriter());
+                        } catch (TemplateException ex) {
+                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                     break;
-                case "borrar":
-                    a.setId(Long.parseLong(request.getParameter("idasignatura")));
-                    filas = as.delAsignatura(a);
-                    if (filas == -1) {
-                        request.setAttribute("errorBorrar", "Si borras esta asignatura se borrarán todas las notas asociadas a ella.");
-                        request.setAttribute("idAsignatura", a.getId());
-                        errorBorrar = true;
-                    }
-                    break;
-                case "borrar2":
-                    a.setId(Long.parseLong(request.getParameter("idasignatura")));
-                    filas = as.delAsignatura2(a);
-                    break;
             }
-            if (errorBorrar == false) {
-                if (filas != 0) {
-                    request.setAttribute("mensaje", filas + " filas modificadas correctamente");
-                } else {
-                    request.setAttribute("mensaje", "No se han hecho modificaciones");
-                }
-            }
+            
         }
-        // getAll siempre se hace
-        request.setAttribute("asignaturas", as.getAllAsignaturas());
-        request.getRequestDispatcher("/pintarListaAsignaturas.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

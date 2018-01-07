@@ -5,14 +5,22 @@
  */
 package servlets;
 
+import config.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Asignatura;
 import model.User;
+import servicios.AsignaturasServicios;
 
 import servicios.UsersServicios;
 import utils.Constantes;
@@ -34,36 +42,118 @@ public class Users extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
-
-        String accion = request.getParameter("accion");
+            throws ServletException, IOException {
+        String accion = "";
+        boolean insertadas = false;
         UsersServicios us = new UsersServicios();
-
-        if (accion != null) {
+        AsignaturasServicios as = new AsignaturasServicios();
+        HashMap root = new HashMap();
+        if (request.getParameter("accion") != null) {
+            accion = request.getParameter("accion");
 
             switch (accion) {
-                case "registro":
-                    String nombreRegistro = request.getParameter("nombreRegistro");
-
-                    User u = new User();
-                    String email = request.getParameter("emailRegistro");
-
-                    u.setNombre(nombreRegistro);
-                    u.setPassword(request.getParameter("passRegistro"));
-                    u.setEmail(email);
-                    
-                    u = us.registrar(u);
-                    if (u == null) {
-                        request.setAttribute("mensaje", Constantes.ERROR_REGISTRO);
+                case "addUser":
+                    User usuario = us.recogidaParametros(request.getParameter("nombreUser"), request.getParameter("passUser"), request.getParameter("emailUser"));
+                    insertadas = us.addUsuario(usuario);
+                    if (!insertadas) {
+                        try {
+                            root.put("insertado", 0);
+                            root.put("mensaje", Constantes.ERROR_REGISTRO);
+                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
+                            temp.process(root, response.getWriter());
+                        } catch (TemplateException ex) {
+                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     } else {
-
-                        request.setAttribute("mensaje", Constantes.REGISTRO_CORRECTO);
-                        request.setAttribute("mensaje2", Constantes.REGISTRO_CORRECTO_2);
+                        try {
+                            root.put("insertado", 1);
+                            root.put("mensaje", Constantes.REGISTRO_CORRECTO_ADMINISTRADOR);
+                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
+                            temp.process(root, response.getWriter());
+                        } catch (TemplateException ex) {
+                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
-
-                    //     request.setAttribute("errorNombre", Constantes.ERROR_NOMBRE);
                     break;
-                // activarUsuario
+                case "addProfesor":
+                    User usuarioProfe = us.mailProfesor(request.getParameter("nombreProfesor"), request.getParameter("passUser"));
+                    User usuarioProfesor = us.recogidaParametros(request.getParameter("nombreUser"), request.getParameter("passUser"), request.getParameter("emailUser"));
+                    insertadas = us.addProfesor(usuarioProfesor, usuarioProfe);
+                    if (!insertadas) {
+                        try {
+                            root.put("insertado", 0);
+                            root.put("mensaje", Constantes.MENSAJE_PROFESOR_CREADO_MAL);
+                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
+                            temp.process(root, response.getWriter());
+                        } catch (TemplateException ex) {
+                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else {
+                        try {
+                            root.put("insertado", 1);
+                            root.put("mensaje", Constantes.MENSAJE_PROFESOR_CREADO_BIEN);
+                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
+                            temp.process(root, response.getWriter());
+                        } catch (TemplateException ex) {
+                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    break;
+                case "login":
+                    String nombreLogin = request.getParameter("nombreLogin");
+                    String passLogin = request.getParameter("passLogin");
+                    User u = new User();
+                    u.setUser(nombreLogin);
+                    u.setPassword(passLogin);
+
+                    boolean error = false;
+                    if (us.login(u)) {
+                        request.getSession().setAttribute("nombreUsuario", nombreLogin);
+                    } else {
+                        request.setAttribute("errorLogin", Constantes.ERROR_LOGIN);
+                    }
+                    break;
+
+                case "logout": {
+                    request.getSession().invalidate();
+                }
+                case "addAlumno":
+                    User usuarioAlum = us.mailProfesor(request.getParameter("nombreProfesor"), request.getParameter("passUser"));
+                    User usuarioAlumno = us.recogidaParametros(request.getParameter("nombreUser"), request.getParameter("passUser"), request.getParameter("emailUser"));
+                    insertadas = us.addProfesor(usuarioAlumno, usuarioAlum);
+                    if (!insertadas) {
+                        try {
+                            root.put("insertado", 0);
+                            root.put("mensaje", Constantes.MENSAJE_ALUMNO_CREADO_MAL);
+                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
+                            temp.process(root, response.getWriter());
+                        } catch (TemplateException ex) {
+                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else {
+                        try {
+                            root.put("insertado", 1);
+                            root.put("mensaje", Constantes.MENSAJE_ALUMNO_CREADO_BIEN);
+                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
+                            temp.process(root, response.getWriter());
+                        } catch (TemplateException ex) {
+                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    break;
+                
+                case "DesactivarAdmin":
+                    if (us.activaPermisoConSuper(request.getParameter("id"))) {
+                        request.setAttribute("mensaje", Constantes.ADMIN_CAMBIADO_OK);
+                    } else {
+                        request.setAttribute("mensaje", Constantes.ADMIN_CAMBIADO_ERROR);
+                    }
+                case "activarConSuper":
+                    if (us.activaPermisoConSuper(request.getParameter("id"))) {
+                        request.setAttribute("mensaje", Constantes.ADMIN_CAMBIADO_OK);
+                    } else {
+                        request.setAttribute("mensaje", Constantes.ADMIN_CAMBIADO_ERROR);
+                    }
                 case "validarUsuario":
                     String codigo = request.getParameter("codigo");
                     int valido = us.activar(codigo);
@@ -86,28 +176,38 @@ public class Users extends HttpServlet {
                             break;
                     }
                     break;
-
-                case "login":
-                    String nombreLogin = request.getParameter("nombreLogin");
-                    String passLogin = request.getParameter("passLogin");
-                    u = new User();
-                    u.setNombre(nombreLogin);
-                    u.setPassword(request.getParameter("passRegistro"));
-                    
-                    boolean error = false;
-                    if (us.login(u)) {
-                        request.getSession().setAttribute("nombreUsuario", nombreLogin);
-                    }else{
-                        request.setAttribute("errorLogin", Constantes.ERROR_LOGIN);
+                case "activacionManual":
+                    boolean actualizada = us.activarUserManualmente(request.getParameter("id")); 
+                    if (actualizada){
+                        try {
+                            root.put("insertado", 1);
+                            root.put("mensaje", Constantes.MENSAJE_USUARIO_ACTIVADO);
+                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
+                            temp.process(root, response.getWriter());
+                        } catch (TemplateException ex) {
+                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else {
+                        try {
+                            root.put("insertado", 0);
+                            root.put("mensaje", Constantes.MENSAJE_USUARIO_NO_ACTIVADO);
+                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
+                            temp.process(root, response.getWriter());
+                        } catch (TemplateException ex) {
+                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                     break;
-
-                case "logout": {
-                    request.getSession().invalidate();
-                }
+            }
+        } else {
+            try {
+                root.put("contenido", "1");
+                Template temp = Configuration.getInstance().getFreeMarker().getTemplate("registro.ftl");
+                temp.process(root, response.getWriter());
+            } catch (TemplateException ex) {
+                Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        request.getRequestDispatcher(Constantes.PINTAR_LOGIN).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -121,7 +221,7 @@ public class Users extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -135,7 +235,7 @@ public class Users extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
