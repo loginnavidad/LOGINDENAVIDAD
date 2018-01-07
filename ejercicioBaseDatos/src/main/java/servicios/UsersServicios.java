@@ -84,12 +84,14 @@ public class UsersServicios {
         mail.mandarMail(user.getEmail(), Constantes.LINK_EMAIL + user.getCodigo_activacion(), Constantes.ASUNTO_EMAIL);
         return dao.addUser(user);
     }
+    //Es posible que se deba mover
     public boolean addProfesor(User user, User user2){
         UsersDAO dao = new UsersDAO();
         MailServicios mail = new MailServicios();
         mail.mandarMail(user.getEmail(), Constantes.USUARIO + user2.getUser() + "</br>" + Constantes.PASSWORD + user2.getPassword(), Constantes.ASUNTO_EMAIL);
         return dao.addProfe(user, user2);
     }
+    //Es posible que se deba mover
     public boolean addAlumno(User user, User user2){
         UsersDAO dao = new UsersDAO();
         MailServicios mail = new MailServicios();
