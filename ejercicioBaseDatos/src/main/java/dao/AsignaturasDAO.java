@@ -83,6 +83,24 @@ public class AsignaturasDAO {
         }
         return true;
     }
+    
+    public List<Asignatura> getAsignaturas(String nombreProf) {
+        List<Asignatura> lista = null;
+        Connection con = null;
+        try {
+            con = DBConnection.getInstance().getConnection();
+            QueryRunner qr = new QueryRunner();
+            ResultSetHandler<List<Asignatura>> h = new BeanListHandler<Asignatura>(Asignatura.class);
+            lista = qr.query(con, "select * FROM ASIGNATURAS", h);//falta join para sacar todas las asignaturas del profesor que se pasa por parametro
+
+        } catch (Exception ex) {
+            Logger.getLogger(AsignaturasDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DBConnection.getInstance().cerrarConexion(con);
+        }
+        return lista;
+    }
+    
 /*
     public int updateAsignatura(Asignatura a) {
         Connection con = null;

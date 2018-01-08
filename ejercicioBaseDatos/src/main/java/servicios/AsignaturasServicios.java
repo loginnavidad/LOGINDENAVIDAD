@@ -38,6 +38,11 @@ public class AsignaturasServicios {
         AsignaturasDAO dao = new AsignaturasDAO();
        return dao.addAsig(asignatura,curso);
     }
+    
+    public List<Asignatura> getAsignaturas(String nombreProf) {//Devuelve todas las asignaturas de un profesor
+        AsignaturasDAO dao = new AsignaturasDAO();
+        return dao.getAsignaturas(nombreProf);
+    }
 /*
     public int updateAsignatura(Asignatura a) {
         AsignaturasDAO dao = new AsignaturasDAO();

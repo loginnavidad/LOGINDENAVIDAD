@@ -12,38 +12,55 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import servicios.AsignaturasServicios;
+import servicios.ProfesoresServicios;
 
 /**
  *
  * @author erasto
  */
-@WebServlet(name = "Profesores", urlPatterns = {"/Profesores"})
+@WebServlet(name = "Profesores", urlPatterns = {"/profesores"})
 public class Profesores extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+   
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Profesores</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Profesores at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        
+        AsignaturasServicios as = new AsignaturasServicios();
+        
+        String nombre = request.getParameter("nombre");
+        String id_asig = request.getParameter("id_asig");
+        String asignatura = request.getParameter("asignatura");
+        
+        //la primera vista del profesor es una lista de todas las asignaturas que imparte.
+        //Segun la que escoja se mostrara otra vista con un listado de los alumnos que hay en esa asignatura,
+        //y las notas de cada uno, si las tuviera, ademas de un menu con las opciones insertar nota, borrar nota etc
+        //y poner tareas.
+        
+        if (asignatura != null) {
+      
+            String op = request.getParameter("op");
+            
+            if(op != null){
+                switch (op) {
+                case "insertar_nota":
+                    
+                    break;
+                case "modificar_nota":
+                    
+                    break;
+                case "borrar_nota":
+                    
+                    break;
+                }
+            }
+             //request.setAttribute("alumnos", as.getAsignaturas(nombre)); queri que muestra los alumnos que hay en esa asignatura
+            //request.getRequestDispatcher("alumnos.jsp").forward(request, response);
         }
+        
+        
+        request.setAttribute("profesores", as.getAsignaturas(nombre));
+        request.getRequestDispatcher("profesores.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
