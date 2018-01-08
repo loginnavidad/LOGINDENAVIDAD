@@ -28,6 +28,18 @@
             <#list usuarios as usuario>
                 <tr>
                     <td>${usuario.user}</td>
+                    <#if usuario.activo == false>
+                    <td>No activo
+                        <form action="users" method="get" name="formulario2">
+                            <input type="hidden" name="id" value="${usuario.id}"/>
+                            <button name="accion">Activar</button>
+                        </form>
+                    </td>
+                    <#elseif usuario.activo == true>
+                    <td>Activo</td>
+                    </#if>
+                    <td>${usuario.codigo_activacion}</td>
+                    <td>${usuario.email}</td>
                 </tr>
             </#list>
         <table>
