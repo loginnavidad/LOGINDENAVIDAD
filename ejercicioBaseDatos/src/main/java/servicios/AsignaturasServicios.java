@@ -8,32 +8,35 @@ package servicios;
 import dao.AsignaturasDAO;
 import model.Asignatura;
 import java.util.List;
+import model.Curso;
 
 /**
  *
  * @author Miguel Angel Diaz
  */
 public class AsignaturasServicios {
- public Asignatura recogerAsignatura(String nombre,String descripcion){
-        Asignatura asig = new Asignatura();
+ public Asignatura recogerAsignatura(String nombre){
+        Asignatura asignatura = new Asignatura();
         if (!"".equals(nombre)) {
-
-                asig.setNombre(nombre);
+                asignatura.setNombre(nombre);
             }
-            if (!"".equals(descripcion)) {
-
-                asig.setDescripcionCurso(descripcion);
-            }
-        return asig;
+        return asignatura;
     }
+ public Curso recogerCurso(String descripcion){
+     Curso curso = new Curso();
+     if(!"".equals(descripcion)){
+         curso.setDescripcion(descripcion);
+     }
+     return curso;
+ }
     public List<Asignatura> getAllAsignaturas() {
         AsignaturasDAO dao = new AsignaturasDAO();
         return dao.getAllAsignaturas();
     }
 
-    public boolean addAsignatura(Asignatura asignatura){
+    public boolean addAsignatura(Asignatura asignatura,Curso curso){
         AsignaturasDAO dao = new AsignaturasDAO();
-       return dao.addAsig(asignatura);
+       return dao.addAsig(asignatura,curso);
     }
 /*
     public int updateAsignatura(Asignatura a) {

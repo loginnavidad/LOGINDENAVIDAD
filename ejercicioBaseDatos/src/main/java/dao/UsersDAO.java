@@ -52,9 +52,7 @@ public class UsersDAO {
 
             usuario.setId(id);
             //LE DAMOS INICIALMENTE UN PERMISO DE INVITADO CON EL QUE NO PODRA ACCEDER A NADA
-            long idPermiso = qr.insert(con,
-                    Constantes.DAR_PERMISO,
-                    new ScalarHandler<Long>(), id_permiso, id);
+ 
 
             con.commit();
         } catch (Exception ex) {
@@ -182,7 +180,7 @@ public class UsersDAO {
             QueryRunner qr = new QueryRunner();
             ResultSetHandler<List<User>> h = new BeanListHandler<User>(User.class
             );
-            lista = qr.query(con, "SELECT USERS.ID ID, USERS.USER NOMBRE, USERS.ACTIVO ACTIVO, PERMISOS_USUARIOS.ID_PERMISO ID_PERMISO FROM USERS JOIN PERMISOS_USUARIOS", h);
+            lista = qr.query(con, "SELECT USER NOMBRE FROM USERS", h);
 
         } catch (Exception ex) {
             Logger.getLogger(UsersDAO.class
@@ -316,5 +314,10 @@ public class UsersDAO {
             DBConnection.getInstance().cerrarConexion(con);
         }
         return true;
+    }
+    
+    public int sacarPermiso(String nombre){
+        Connection con = null;
+        return 2;
     }
 }

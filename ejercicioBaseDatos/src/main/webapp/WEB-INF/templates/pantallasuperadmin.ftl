@@ -1,8 +1,5 @@
 <#ftl strip_whitespace = true>
 
-<#setting boolean_format=computer>
-<#import "/libs/mylib.ftl" as my>
-
 <#assign charset="UTF-8">
 <#assign title="Example">
 <!DOCTYPE html>
@@ -30,34 +27,7 @@
             <tr>
             <#list usuarios as usuario>
                 <tr>
-                    <td>${usuario.nombre}</td>
-                    <#if usuario.activo == 0>
-                        <td>No activo 
-                            <form action="users" method="get" name="formulario1">
-                                <input type="hidden" name="id" value="${usuario.id}"/>
-                                <button name="action" value="activacionManual" class="btn btn-primary"  onclick="enviar1();">Activar</button>
-                            </form>
-                        </td>
-                    <#elseif usuario.activo == 1>
-                        <td>Activado</td>
-                    </#if>
-                    <#if usuario.permiso == 1>
-                        <td>
-                            <form action="users" method="get" name="formulario2">
-                                <input type="hidden" name="id" value="${usuario.id}"/>
-                                <input type="checkbox" name="administrador" checked="checked"/>
-                                <button name="accion" value="DesactivarAdmin" class="btn btn-primary"  onclick="enviar2();">Desactivar</button>
-                            </form>
-                        </td>
-                    <#else>
-                        <td>
-                            <form action="users" method="get" name="formulario2">
-                                <input type="hidden" name="id" value="${usuario.id}"/>
-                                <input type="checkbox" name="administrador"/>
-                                <button name="accion" value="activarConSuper" class="btn btn-primary" onclick="enviar2();">Activar</button>
-                            </form>
-                        </td>
-                    </#if>
+                    <td>${usuario.user}</td>
                 </tr>
             </#list>
         <table>

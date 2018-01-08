@@ -3,21 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-//COGE EL MODAL
-var modalAdministrador = document.getElementById('admin');
-var modalProfe = document.getElementById('profe');
-var modalAlum = document.getElementById('alum');
-var modalAsig = document.getElementById('asig');
+function cargar(){
+    //COGE EL MODAL
+    var modalAdministrador = document.getElementById('admin');
+    var modalProfe = document.getElementById('profe');
+    var modalAlum = document.getElementById('alum');
+    var modalAsig = document.getElementById('asig');
 
-//COGE EL BOTON QUE HACE FUNCIONAR EL MODA
-var administrador = document.getElementById("administrador");
-var profesor = document.getElementById("profesor");
-var alumno = document.getElementById("alumno");
-var asignatura = document.getElementById("asignatura");
+    //COGE EL BOTON QUE HACE FUNCIONAR EL MODA
+    var administrador = document.getElementById("administrador");
+    var profesor = document.getElementById("profesor");
+    var alumno = document.getElementById("alumno");
+    var asignatura = document.getElementById("asignatura");
 
-//ICONO DE CERRAR EL MODAL
-var span = document.getElementsByClassName("close");
-
+    //ICONO DE CERRAR EL MODAL
+    var span = document.getElementsByClassName("close");
+}
 
 span[0].onclick = function() {
     modalAdministrador.style.display = "none";

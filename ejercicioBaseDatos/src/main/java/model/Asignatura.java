@@ -14,7 +14,6 @@ public class Asignatura {
     private Long id;
     private String nombre;
     private Long id_curso;
-    private String descripcionCurso;
     
     public Asignatura(){
     }
@@ -41,14 +40,6 @@ public class Asignatura {
 
     public void setId_curso(Long id_curso) {
         this.id_curso = id_curso;
-    }
-
-    public String getDescripcionCurso() {
-        return descripcionCurso;
-    }
-
-    public void setDescripcionCurso(String descripcionCurso) {
-        this.descripcionCurso = descripcionCurso;
     }
     
 }

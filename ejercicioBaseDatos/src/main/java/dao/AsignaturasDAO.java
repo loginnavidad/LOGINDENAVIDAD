@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Asignatura;
+import model.Curso;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
@@ -40,7 +41,7 @@ public class AsignaturasDAO {
         return lista;
     }
 
-    public boolean addAsig(Asignatura asig) {
+    public boolean addAsig(Asignatura asig,Curso curso) {
         Connection con = null;
         int id_permiso = 2;
         try {
@@ -55,9 +56,9 @@ public class AsignaturasDAO {
             //QUERY PARA INSERTAR EL CURSO
             long id = qr.insert(con,
                     Constantes.ADD_CURSO,
-                    new ScalarHandler<Long>(), asig.getDescripcionCurso());
+                    new ScalarHandler<Long>(), curso.getDescripcion());
             //GUARDAMOS EL ID DEL CURSO
-            asig.setId_curso(id);
+            curso.setId(id);
             //INSERTAMOS LA ASIGNATURA ASOCIANDOLA AL CURSO
             long idPermiso = qr.insert(con,
                     Constantes.DAR_PERMISO,

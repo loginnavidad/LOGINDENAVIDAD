@@ -16,7 +16,7 @@
            <input type="text" name="nombreLogin" placeholder="Introduzca el usuario" class="form-control"/>
            <input type="text" name="passLogin" placeholder="Introduzca la contraseña" class="form-control"/>
            <img src="assets/Imagenes/ojo.png">
-           <input type="submit" value="Enviar" class="btn btn-primary"/>
+           <input type="submit" value="login" class="btn btn-primary"/>
         </form>
 
     </body>

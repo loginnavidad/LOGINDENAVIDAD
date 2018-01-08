@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Asignatura;
+import model.Curso;
 import servicios.AsignaturasServicios;
 import utils.Constantes;
 
@@ -25,7 +26,7 @@ import utils.Constantes;
  *
  * @author Miguel Angel Diaz
  */
-@WebServlet(name = "Asignaturas", urlPatterns = {"/sesion/asignaturas"})
+@WebServlet(name = "Asignaturas", urlPatterns = {"/asignaturas"})
 public class Asignaturas extends HttpServlet {
 
     /**
@@ -50,8 +51,9 @@ public class Asignaturas extends HttpServlet {
             switch (op) {
                 
                 case "addAsignatura":
-                    Asignatura asignatura = as.recogerAsignatura(request.getParameter("nombreAsignatura"), request.getParameter("descripcion"));
-                    insertadas = as.addAsignatura(asignatura);
+                    Asignatura asignatura = as.recogerAsignatura(request.getParameter("nombreAsignatura"));
+                    Curso curso = as.recogerCurso(request.getParameter("descripcion"));
+                    insertadas = as.addAsignatura(asignatura,curso);
                     if (!insertadas) {
                         try {
                             root.put("insertado", 0);

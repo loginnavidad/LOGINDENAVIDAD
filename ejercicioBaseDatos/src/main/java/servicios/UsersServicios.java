@@ -119,6 +119,10 @@ public class UsersServicios {
         }
         return valido;
     }
+public int cogerPermiso(String nombre){
+       UsersDAO dao = new UsersDAO();
+       return dao.sacarPermiso(nombre);
+    }
     public int activar(String codigo) {
         UsersDAO dao = new UsersDAO();
         int activar;

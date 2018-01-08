@@ -108,7 +108,9 @@ public class Users extends HttpServlet {
 
                     boolean error = false;
                     if (us.login(u)) {
+                        int permiso = us.cogerPermiso(nombreLogin);
                         request.getSession().setAttribute("nombreUsuario", nombreLogin);
+                        request.getSession().setAttribute("permisoUser", permiso);
                     } else {
                         request.setAttribute("errorLogin", Constantes.ERROR_LOGIN);
                     }

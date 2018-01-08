@@ -33,8 +33,8 @@ public class Constantes {
     public static final String LOGIN = "login.ftl";
     public static final String INSERTAR_USERS = "INSERT INTO USERS (USER,PASSWORD,CODIGO_ACTIVACION,EMAIL,ACTIVO) VALUES(?,?,?,?,?)";
     public static final String DAR_PERMISO = "INSERT INTO PERMISOS_USUARIOS (ID_PERMISO,ID_USER) VALUES (?,?)";
-    public static final String HACER_ADMIN = "UPDATE PERMISOS_USUARIOS SET ID_PERMISO = ? WHERE ID_USER = ?";
-    public static final String DESHACER_ADMIN = "UPDATE PERMISOS_USUARIOS SET ID_PERMISO = ? WHERE ID_USER = ?";
+    public static final String HACER_ADMIN = "INSERT INTO PERMISOS_USUARIOS (ID_PERMISO,ID_USER) VALUES (?,?)";
+    public static final String DESHACER_ADMIN = "DELETE FROM PERMISOS_USUARIOS WHERE ID_USER = ?";
     public static final String ADMIN_CAMBIADO_OK = "Cambio a administrador correcto";
     public static final String ADMIN_CAMBIADO_ERROR = "Se produjo un error al daar el permiso";
     public static final String USUARIO = "Su usuario es: ";
