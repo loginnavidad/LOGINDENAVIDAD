@@ -33,12 +33,20 @@ public class AsignaturasServicios {
         AsignaturasDAO dao = new AsignaturasDAO();
         return dao.getAllAsignaturas();
     }
-
-    public boolean addAsignatura(Asignatura asignatura,Curso curso){
-        AsignaturasDAO dao = new AsignaturasDAO();
-       return dao.addAsig(asignatura,curso);
+    public long parseoId(String id){
+        long id_parseado = 0;
+        id_parseado = Long.parseLong(id);
+        return id_parseado;
     }
-/*
+    public boolean addAsignatura(Asignatura asignatura, String id){
+        AsignaturasDAO dao = new AsignaturasDAO();
+       return dao.addAsig(asignatura,parseoId(id));
+    }
+    public boolean addCursos(Curso curso){
+        AsignaturasDAO dao = new AsignaturasDAO();
+       return dao.addCurso(curso);
+    }
+/*  
     public int updateAsignatura(Asignatura a) {
         AsignaturasDAO dao = new AsignaturasDAO();
         return dao.updateAsignatura(a);

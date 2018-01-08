@@ -180,7 +180,7 @@ public class UsersDAO {
             QueryRunner qr = new QueryRunner();
             ResultSetHandler<List<User>> h = new BeanListHandler<User>(User.class
             );
-            lista = qr.query(con, "SELECT * FROM USERS", h);
+            lista = qr.query(con, "SELECT USERS.ID ID, USERS.USER NOMBRE, USERS.EMAIL EMAIL, USERS.ACTIVO ACTIVO, PERMISOS_USUARIOS.ID_PERMISO ID_PERMISO from USERS LEFT JOIN PERMISOS_USUARIOS ON USERS.ID = PERMISOS_USUARIOS.ID_USER;", h);
 
         } catch (Exception ex) {
             Logger.getLogger(UsersDAO.class

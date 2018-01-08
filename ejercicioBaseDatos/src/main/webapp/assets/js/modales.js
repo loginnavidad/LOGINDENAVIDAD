@@ -3,44 +3,76 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+var modalAdministrador ="";
+var modalProfe="";
+var modalAlum="";
+var modalAsig="";
+
+var administrador="";
+var profesor="";
+var alumno="";
+var asignatura="";
+
+var span="";
+
+var divs="";
 function cargar(){
+    divs = document.getElementsByTagName("div");
     //COGE EL MODAL
-    var modalAdministrador = document.getElementById('admin');
-    var modalProfe = document.getElementById('profe');
-    var modalAlum = document.getElementById('alum');
-    var modalAsig = document.getElementById('asig');
-
+    modalProfe = document.getElementById('profe');
+    modalAlum = document.getElementById('alum');
+    modalAsig = document.getElementById('asig');
+    modalCurs = document.getElementById("curs");
     //COGE EL BOTON QUE HACE FUNCIONAR EL MODA
-    var administrador = document.getElementById("administrador");
-    var profesor = document.getElementById("profesor");
-    var alumno = document.getElementById("alumno");
-    var asignatura = document.getElementById("asignatura");
-
+    profesor = document.getElementById("profesor");
+    alumno = document.getElementById("alumno");
+    asignatura = document.getElementById("asignatura");
+    curso = document.getElementById("curso");
     //ICONO DE CERRAR EL MODAL
-    var span = document.getElementsByClassName("close");
+    cp = document.getElementById("closep");
+    ca = document.getElementById("closea");
+    cas = document.getElementById("closeas");
+    cc = document.getElementById("closec");
+    
+    
+    profesor.addEventListener("click", verModalProfe);
+    alumno.addEventListener("click", verModalAlum);
+    asignatura.addEventListener("click", verModalAsig);
+    curso.addEventListener("click", verModalCurso);
+    
+    cp.addEventListener("click", ocultarModalProfe);
+    ca.addEventListener("click", ocultarModalAlum);
+    cas.addEventListener("click", ocultarModalAsig);
+    cc.addEventListener("click", ocultarModalCurso);
+    
 }
 
-span[0].onclick = function() {
-    modalAdministrador.style.display = "none";
+function verModalCurso(){
+    modalCurs.style.display="block";
 }
-span[1].onclick = function() {
+function verModalProfe(){
+     modalProfe.style.display = "block";
+}
+function verModalAlum(){
+    modalAlum.style.display = "block";
+}
+function verModalAsig(){
+    modalAsig.style.display = "block";
+}
+
+
+function ocultarModalProfe() {
     modalProfe.style.display = "none";
 }
-span[2].onclick = function() {
+
+function ocultarModalAlum() {
     modalAlum.style.display = "none";
 }
-span[3].onclick = function() {
+
+function ocultarModalAsig() {
     modalAsig.style.display = "none";
 }
 
-
-
-window.onclick = function(event) {
-    if (event.target == modalAdministrador || event.target == modalProfe || event.target == modalAlum || event.target == modalAsig) {
-        modalAdministrador.style.display = "none";
-        modalProfe.style.display = "none";
-        modalAlum.style.display = "none";
-        modalAsig.style.display = "none";
-    }
+function ocultarModalCurso() {
+    modalCurs.style.display = "none";
 }
-
