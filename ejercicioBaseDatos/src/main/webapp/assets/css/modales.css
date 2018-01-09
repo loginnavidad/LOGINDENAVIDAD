@@ -8,7 +8,7 @@ and open the template in the editor.
     Author     : Sergio
 */
 
-.formularioAdministrador,.formularioProfesor,.formularioAlumno,.formularioAsignatura{
+.formularioAdministrador,.formularioProfesor,.formularioAlumno,.formularioAsignatura,.formularioCurso{
     display: none; 
     position: fixed; 
     z-index: 1; 

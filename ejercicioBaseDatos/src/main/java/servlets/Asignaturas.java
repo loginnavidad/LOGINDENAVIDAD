@@ -52,8 +52,7 @@ public class Asignaturas extends HttpServlet {
                 
                 case "addAsignatura":
                     Asignatura asignatura = as.recogerAsignatura(request.getParameter("nombreAsignatura"));
-                    Curso curso = as.recogerCurso(request.getParameter("descripcion"));
-                    insertadas = as.addAsignatura(asignatura,curso);
+                    insertadas = as.addAsignatura(asignatura,request.getParameter("id_curso"));
                     if (!insertadas) {
                         try {
                             root.put("insertado", 0);
@@ -67,6 +66,29 @@ public class Asignaturas extends HttpServlet {
                         try {
                             root.put("insertado", 1);
                             root.put("mensaje", Constantes.MENSAJE_ASIGNATURA_CREADA_BIEN);
+                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
+                            temp.process(root, response.getWriter());
+                        } catch (TemplateException ex) {
+                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    break;
+                    case "addCurso":
+                    Curso curso = as.recogerCurso(request.getParameter("descripcion"));
+                    insertadas = as.addCursos(curso);
+                    if (!insertadas) {
+                        try {
+                            root.put("insertado", 0);
+                            root.put("mensaje", Constantes.MENSAJE_CURSO_CREADO_MAL);
+                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
+                            temp.process(root, response.getWriter());
+                        } catch (TemplateException ex) {
+                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else {
+                        try {
+                            root.put("insertado", 1);
+                            root.put("mensaje", Constantes.MENSAJE_CURSO_CREADO_BIEN);
                             Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
                             temp.process(root, response.getWriter());
                         } catch (TemplateException ex) {

@@ -182,18 +182,20 @@ public class Users extends HttpServlet {
                     boolean actualizada = us.activarUserManualmente(request.getParameter("id")); 
                     if (actualizada){
                         try {
-                            root.put("insertado", 1);
+                            root.put("activado", 1);
                             root.put("mensaje", Constantes.MENSAJE_USUARIO_ACTIVADO);
-                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
+                            root.put("usuarios",us.getAllUsers());
+                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("pantallasuperadmin.ftl");
                             temp.process(root, response.getWriter());
                         } catch (TemplateException ex) {
                             Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     } else {
                         try {
-                            root.put("insertado", 0);
+                            root.put("activado", 0);
                             root.put("mensaje", Constantes.MENSAJE_USUARIO_NO_ACTIVADO);
-                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
+                            root.put("usuarios",us.getAllUsers());
+                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("pantallasuperadmin.ftl");
                             temp.process(root, response.getWriter());
                         } catch (TemplateException ex) {
                             Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
@@ -209,6 +211,7 @@ public class Users extends HttpServlet {
             } catch (TemplateException ex) {
                 Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
             }
+        
         }
     }
 
