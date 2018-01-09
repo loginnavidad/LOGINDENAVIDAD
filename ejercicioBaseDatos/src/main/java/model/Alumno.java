@@ -1,28 +1,27 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
-
-import java.util.Date;
 
 /**
  *
- * @author Miguel Angel Diaz
+ * @author miguel palomares
  */
 public class Alumno {
-    
-    private long id;
-    private String nombre;
-    private Date fecha_nacimiento;
-    private Boolean mayor_edad;
 
-    public long getId() {
+    private int id;
+    private String nombre;
+
+    public Alumno() {
+    }
+
+    public Alumno(int id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -34,26 +33,4 @@ public class Alumno {
         this.nombre = nombre;
     }
 
-    public Date getFecha_nacimiento() {
-        return fecha_nacimiento;
-    }
-
-    public void setFecha_nacimiento(Date fecha_nacimiento) {
-        this.fecha_nacimiento = fecha_nacimiento;
-    }
-
-    public Boolean getMayor_edad() {
-        return mayor_edad;
-    }
-
-    public void setMayor_edad(Boolean mayor_edad) {
-        this.mayor_edad = mayor_edad;
-    }
-
-  
-    public Alumno() {
-    }
-
-   
-    
 }

@@ -1,42 +1,33 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package servicios;
 
-import dao.AlumnosDAO;
+import dao.AlumnoDAO;
 import java.util.List;
 import model.Alumno;
 
 /**
  *
- * @author Miguel Angel Diaz
+ * @author miguel palomares
  */
 public class AlumnosServicios {
 
-    public List<Alumno> getAllAlumnos() {
-        AlumnosDAO dao = new AlumnosDAO();
-        return dao.getAllAlumnosJDBC();
+    AlumnoDAO alumDao = null;
+    
+    /**
+     * listamos todos los alumnos existentes
+     *
+     * @return listado de todos los alumnos
+     */
+    public List<Alumno> listarAlumnos() {
+        return alumDao.listarAlumnos();
     }
 
-    public Alumno addAlumno(Alumno alumnoNuevo) {
-        AlumnosDAO dao = new AlumnosDAO();
-        return dao.insertAlumnoJDBC(alumnoNuevo);
-    }
-
-    public int updateAlumno(Alumno alumnoNuevo) {
-        AlumnosDAO dao = new AlumnosDAO();
-        return dao.updateUser(alumnoNuevo);
-    }
-    
-    public int delAlumno(Alumno alumnoNuevo){
-        AlumnosDAO dao = new AlumnosDAO();
-        return dao.delUser(alumnoNuevo);
-    }
-    
-    public int delAlumno2(Alumno alumnoNuevo){
-        AlumnosDAO dao = new AlumnosDAO();
-        return dao.delUser2(alumnoNuevo);
+    /**
+     * Buscar un alumno
+     *
+     * @param id buscamos el alumno por su identificador
+     * @return un objeto de tipo alumno
+     */
+    public Alumno buscarAlumno(int id) {
+        return alumDao.buscarAlumno(id);
     }
 }

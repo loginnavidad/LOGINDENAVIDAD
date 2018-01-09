@@ -1,28 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package servlets;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import servicios.AlumnosServicios;
 import model.Alumno;
+import servicios.AlumnosServicios;
 
 /**
  *
- * @author Miguel Angel Diaz
+ * @author miguel palomares
  */
-@WebServlet(name = "Alumnos", urlPatterns = {"/sesion/alumnos"})
+@WebServlet(name = "Alumnos", urlPatterns = {"/Alumnos"})
 public class Alumnos extends HttpServlet {
 
     /**
@@ -36,61 +27,28 @@ public class Alumnos extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        String op = request.getParameter("op");
         AlumnosServicios as = new AlumnosServicios();
-        String op = request.getParameter("accion");
+        Alumno a = new Alumno();
+        int ok = 0;
+        int state = 0;
 
-        if (op != null) {
-            String nombre = request.getParameter("nombre");
-            String fecha = request.getParameter("fecha");
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            LocalDate fechaNacimiento = LocalDate.parse(fecha, dtf);
-            boolean mayor;
-            mayor = request.getParameter("mayor") != null;
-            Alumno a = new Alumno();
-            a.setNombre(nombre);
-            a.setFecha_nacimiento(Date.from(fechaNacimiento.atStartOfDay().toInstant(ZoneOffset.UTC)));
-            a.setMayor_edad(mayor);
-            int filas = 0;
-            boolean errorBorrar = false;
-
-            switch (op) {
-                case "actualizar":
-                    a.setId(Long.parseLong(request.getParameter("idalumno")));
-                    filas = as.updateAlumno(a);
-                    break;
-                case "insertar":
-                    a = as.addAlumno(a);
-                    if (a != null) {
-                        filas = 1;
-                    }
-                    break;
-                case "borrar":
-                    a.setId(Long.parseLong(request.getParameter("idalumno")));
-                    filas = as.delAlumno(a);
-                    if (filas == -1) {
-                        request.setAttribute("errorBorrar", "Si borras este alumno se borrarán todas sus notas.");
-                        request.setAttribute("idAlumno", a.getId());
-                        request.setAttribute("fecha", fecha);
-                        errorBorrar = true;
-                    }
-                    break;
-                case "borrar2":
-                    a.setId(Long.parseLong(request.getParameter("idalumno")));
-                    filas = as.delAlumno2(a);
-            }
-            if (errorBorrar == false) {
-                if (filas != 0) {
-                    request.setAttribute("mensaje", filas + " filas modificadas correctamente");
-                } else {
-                    request.setAttribute("mensaje", "No se han hecho modificaciones");
-                }
-            }
+        switch (op) {
+            case "GETALUM":
+                int id = Integer.parseInt(request.getParameter("id"));
+                a = as.buscarAlumno(id);
+                state = 1;
+                break;
         }
-        // getAll siempre se hace
-        request.setAttribute("alumnos", as.getAllAlumnos());
-        request.getRequestDispatcher("/pintarListaAlumnos.jsp").forward(request, response);
 
+        if (state == 0) {
+            request.setAttribute("ok", ok);
+            request.setAttribute("Alumnos", as.listarAlumnos());;
+        } else {
+            request.setAttribute("Alumno", a);
+        }
+
+        request.getRequestDispatcher("pintarListaAlumnos.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
