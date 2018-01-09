@@ -1,6 +1,12 @@
 package servlets;
 
+import config.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,24 +37,34 @@ public class Alumnos extends HttpServlet {
         AlumnosServicios as = new AlumnosServicios();
         Alumno a = new Alumno();
         int ok = 0;
-        int state = 0;
-
-        switch (op) {
-            case "GETALUM":
-                int id = Integer.parseInt(request.getParameter("id"));
-                a = as.buscarAlumno(id);
-                state = 1;
-                break;
+        int action = 0;
+        String page;
+        HashMap root = new HashMap();
+        Template temp = null;
+        if (op!=null) {
+            switch (op) {
+                case "GETALUM":
+                    int id = Integer.parseInt(request.getParameter("id"));
+                    a = as.buscarAlumno(id);
+                    root.put("alumnos", a);
+                    action = 1;
+                    break;
+            }
         }
 
-        if (state == 0) {
-            request.setAttribute("ok", ok);
-            request.setAttribute("Alumnos", as.listarAlumnos());;
+        if (action == 0) {
+            root.put("alumnos", as.listarAlumnos());
         } else {
-            request.setAttribute("Alumno", a);
+            root.put("alumno", a);
         }
-
-        request.getRequestDispatcher("pintarListaAlumnos.jsp").forward(request, response);
+        root.put("action", action);
+        temp = Configuration.getInstance().getFreeMarker().getTemplate("alumnos.ftl");
+        
+        try {
+            temp.process(root, response.getWriter());
+        } catch (TemplateException ex) {
+            Logger.getLogger(Alumnos.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

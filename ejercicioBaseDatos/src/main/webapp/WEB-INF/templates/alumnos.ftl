@@ -6,22 +6,30 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>${title}</title>
+        <title>Listado alumnos</title>
         <meta charset="${charset}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
-    <body>  
-    <#if content??>
-        <div>${content}</div>
-    <#else>
-        <div>No content</div>
-    </#if>
-    <#list alumnos as alumno>
-     ${alumno.nombre},
-${alumno.fecha_nacimiento?string["dd-MM-yyyy"]},
-            ${alumno.mayor_edad?c}
-    </#list>	
-
-
+    <body>
+        <table>
+            <tr>
+                <th>Ver datos</th>
+                <th>ID</th>
+                <th>Nombre</th>
+            </tr>
+            <#if content??>
+                <#list alumnos as alumno>
+                <tr>
+                    <td>
+                        <input type="button" value="Ver">
+                    </td>
+                    <td>${alumno.id}</td>
+                    <td>${alumno.nombre}</td>
+                </tr>
+                </#list>
+            <#else>
+                <div>No existen alumnos</div>
+            </#if>
+            </table>	
         </body>
     </html>
