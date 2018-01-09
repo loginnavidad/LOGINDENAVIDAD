@@ -9,7 +9,6 @@ import config.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,14 +17,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import servicios.UsersServicios;
+import model.Curso;
+import servicios.CursosServicios;
+import utils.Constantes;
 
 /**
  *
  * @author Sergio
  */
-@WebServlet(name = "Login", urlPatterns = {"/login"})
-public class Login extends HttpServlet {
+@WebServlet(name = "Cursos", urlPatterns = {"/cursos"})
+public class Cursos extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,13 +40,37 @@ public class Login extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        UsersServicios us = new UsersServicios();
+        CursosServicios as = new CursosServicios();
+        String op = request.getParameter("accion");
         HashMap root = new HashMap();
-        try {
-            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("login.ftl");
-            temp.process(root, response.getWriter());
-        } catch (TemplateException ex) {
-            Logger.getLogger(Superadministrador.class.getName()).log(Level.SEVERE, null, ex);
+        boolean insertadas = false;
+        if (op != null) {
+
+            switch (op) {
+                case "addCurso":
+                    Curso curso = as.recogerCurso(request.getParameter("descripcion"));
+                    insertadas = as.addCursos(curso);
+                    if (!insertadas) {
+                        try {
+                            root.put("insertado", 0);
+                            root.put("mensaje", Constantes.MENSAJE_CURSO_CREADO_MAL);
+                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
+                            temp.process(root, response.getWriter());
+                        } catch (TemplateException ex) {
+                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else {
+                        try {
+                            root.put("insertado", 1);
+                            root.put("mensaje", Constantes.MENSAJE_CURSO_CREADO_BIEN);
+                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
+                            temp.process(root, response.getWriter());
+                        } catch (TemplateException ex) {
+                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    break;
+            }
         }
     }
 

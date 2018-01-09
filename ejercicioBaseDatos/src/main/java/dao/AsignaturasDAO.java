@@ -71,35 +71,6 @@ public class AsignaturasDAO {
         }
         return true;
     }
-    public boolean addCurso(Curso curso) {
-        Connection con = null;
-        try {
-            try {
-                con = DBConnection.getInstance().getConnection();
-                con.setAutoCommit(false);
-            } catch (Exception ex) {
-                Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            QueryRunner qr = new QueryRunner();
-            //QUERY PARA INSERTAR EL CURSO
-            long id = qr.insert(con,
-                    Constantes.ADD_CURSO,
-                    new ScalarHandler<Long>(), curso.getDescripcion());
-            //GUARDAMOS EL ID DEL CURSO
-            curso.setId(id);
-            //INSERTAMOS LA ASIGNATURA ASOCIANDOLA AL CURSO
-            
-            con.commit();
-        } catch (Exception ex) {
-            Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
-                return false;
-           
-        } finally {
-            DBConnection.getInstance().cerrarConexion(con);
-        }
-        return true;
-    }
     
     public List<Asignatura> getAsignaturas(long id_prof) {
         List<Asignatura> lista = null;

@@ -81,7 +81,7 @@ public class Notas extends HttpServlet {
         }
         // getAll siempre se hace
         request.setAttribute("asignaturas", asigs.getAllAsignaturas());
-        request.setAttribute("alumnos", alums.getAllAlumnos());
+        request.setAttribute("alumnos", alums.listarAlumnos());
         request.setAttribute("nomAlu", nomAlu);
         request.setAttribute("idAlu", idAlu);
         request.setAttribute("nomAsig", nomAsig);

@@ -77,6 +77,11 @@
                 <span class="close" id="closeas">&times;</span>
                 <form action="asignaturas" method="get" name="envioasignatura">
                     <input type="text" name="nombreAsignatura" placeholder="Introduzca el nombre de la asignatura" class="form-control"/>
+                    <select name="id_curso">
+                        <#list cursos as curso>
+                            <option value="${curso.id}">${curso.descripcion}</option>
+                        </#list>
+                    </select>
                     <button value="addAsignatura" name="accion" class="btn btn-primary">Enviar</button>
                 </form>
             </div>
@@ -88,7 +93,7 @@
 
             <div class="modal-content">
                 <span class="close" id="closec">&times;</span>
-                <form action="asignaturas" method="get" name="enviocurso">
+                <form action="cursos" method="get" name="enviocurso">
                     <textarea name="descripcion" placeholder="Introduzca una breve descripcion del curso" rows="5" class="form-control">Escriba aqui la descripcion del curso</textarea>
                     <button value="addCurso" name="accion" class="btn btn-primary">Enviar</button>
                 </form>

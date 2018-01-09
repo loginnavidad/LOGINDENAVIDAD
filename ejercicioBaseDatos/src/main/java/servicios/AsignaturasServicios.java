@@ -22,13 +22,7 @@ public class AsignaturasServicios {
             }
         return asignatura;
     }
- public Curso recogerCurso(String descripcion){
-     Curso curso = new Curso();
-     if(!"".equals(descripcion)){
-         curso.setDescripcion(descripcion);
-     }
-     return curso;
- }
+ 
     public List<Asignatura> getAllAsignaturas() {
         AsignaturasDAO dao = new AsignaturasDAO();
         return dao.getAllAsignaturas();
@@ -47,10 +41,6 @@ public class AsignaturasServicios {
     public boolean addAsignatura(Asignatura asignatura, String id){
         AsignaturasDAO dao = new AsignaturasDAO();
        return dao.addAsig(asignatura,parseoId(id));
-    }
-    public boolean addCursos(Curso curso){
-        AsignaturasDAO dao = new AsignaturasDAO();
-       return dao.addCurso(curso);
     }
 /*  
     public int updateAsignatura(Asignatura a) {

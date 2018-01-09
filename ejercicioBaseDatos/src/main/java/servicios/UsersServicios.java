@@ -5,29 +5,37 @@
  */
 package servicios;
 
-import config.Configuration;
 import dao.UsersDAO;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Asignatura;
+import model.Profesor;
 import model.User;
 import utils.Constantes;
 import utils.PasswordHash;
 import utils.Utils;
-
+import model.Alumno;
 /**
  *
  * @author Miguel Angel Diaz
  */
 public class UsersServicios {
-   
+    public Profesor recogidaProfesor(String nombreProfe){
+        Profesor profe = new Profesor();
+        if (!"".equals(profe)) {
+             profe.setNombre(nombreProfe);
+        }
+        return profe;
+    }
+    public Alumno recogidaAlumno(String nombreAlumno){
+        Alumno alum = new Alumno();
+        if (!"".equals(nombreAlumno)) {
+             alum.setNombre(nombreAlumno);
+        }
+        return alum;
+    }
     public User mailProfesor(String nombreP,String pass ){
          User user = new User();
         
@@ -74,6 +82,7 @@ public class UsersServicios {
         }
         return user;
     }
+    
     public List<User> getAllUsers(){
         UsersDAO dao = new UsersDAO();
         return dao.getUsers();
@@ -85,18 +94,18 @@ public class UsersServicios {
         return dao.addUser(user);
     }
     //Es posible que se deba mover
-    public boolean addProfesor(User user, User user2){
+    public boolean addProfesor(User user, Profesor profe, User user2){
         UsersDAO dao = new UsersDAO();
-        MailServicios mail = new MailServicios();
-        mail.mandarMail(user.getEmail(), Constantes.USUARIO + user2.getUser() + "</br>" + Constantes.PASSWORD + user2.getPassword(), Constantes.ASUNTO_EMAIL);
-        return dao.addProfe(user, user2);
+        /*MailServicios mail = new MailServicios();
+        mail.mandarMail(user.getEmail(), Constantes.USUARIO + profe.getNombre() + "</br>" + Constantes.PASSWORD + user2.getPassword(), Constantes.ASUNTO_EMAIL);*/
+        return dao.addProfe(user, profe);
     }
     //Es posible que se deba mover
-    public boolean addAlumno(User user, User user2){
+    public boolean addAlumno(User user, Alumno alumno ,User user2){
         UsersDAO dao = new UsersDAO();
-        MailServicios mail = new MailServicios();
-        mail.mandarMail(user.getEmail(), Constantes.USUARIO + user2.getUser() + "</br>" + Constantes.PASSWORD + user2.getPassword(), Constantes.ASUNTO_EMAIL);
-        return dao.addAlum(user, user2);
+       /* MailServicios mail = new MailServicios();
+        mail.mandarMail(user.getEmail(), Constantes.USUARIO + user2.getUser() + "</br>" + Constantes.PASSWORD + user2.getPassword(), Constantes.ASUNTO_EMAIL);*/
+        return dao.addAlum(user, alumno);
     }
     public boolean comprobarNombres(String nombreUser) {
         UsersDAO dao = new UsersDAO();
@@ -160,9 +169,17 @@ public int cogerPermiso(String nombre){
         UsersDAO dao = new UsersDAO();
         return dao.activarManualmente(this.parseoId(id));
     }
+    
+    
     public int parseoId(String id){
         int idParseado = 0;
         idParseado = Integer.parseInt(id);
+        return idParseado;
+    }
+    
+    public long parseoIdLong(String id){
+        long idParseado = 0;
+        idParseado = Long.parseLong(id);
         return idParseado;
     }
     public int parseoAdministrador(String admin){
