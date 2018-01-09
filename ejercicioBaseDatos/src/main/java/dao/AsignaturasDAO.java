@@ -108,7 +108,10 @@ public class AsignaturasDAO {
             con = DBConnection.getInstance().getConnection();
             QueryRunner qr = new QueryRunner();
             ResultSetHandler<List<Asignatura>> h = new BeanListHandler<Asignatura>(Asignatura.class);
-            lista = qr.query(con, "select * FROM ASIGNATURAS where ID_PROFE = ?", h, id_prof);
+            lista = qr.query(con, "select * FROM ASIGNATURAS.as"
+                    + "join PROFE_ASIGNATURA.pa"
+                    + "on pa.ID_ASIGNATURA = as.ID"
+                    + "where pa.ID_PROFE = ?", h, id_prof);
 
         } catch (Exception ex) {
             Logger.getLogger(AsignaturasDAO.class.getName()).log(Level.SEVERE, null, ex);
