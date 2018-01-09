@@ -33,9 +33,9 @@ public class AsignaturasServicios {
         return id_parseado;
     }
     
-    public List<Asignatura> getAsignaturas(String nombreProf) {//Devuelve todas las asignaturas de un profesor
+    public List<Asignatura> getAsignaturas(long idProf) {//Devuelve todas las asignaturas de un profesor
         AsignaturasDAO dao = new AsignaturasDAO();
-        return dao.getAsignaturas(nombreProf);
+        return dao.getAsignaturas(idProf);
     }
 
     public boolean addAsignatura(Asignatura asignatura, String id){

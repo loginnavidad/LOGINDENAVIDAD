@@ -5,14 +5,20 @@
  */
 package servlets;
 
+import config.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import servicios.AsignaturasServicios;
+import model.User;
 import servicios.ProfesoresServicios;
 
 /**
@@ -26,41 +32,44 @@ public class Profesores extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        AsignaturasServicios as = new AsignaturasServicios();
+        ProfesoresServicios ps = new ProfesoresServicios();
         
-        String nombre = request.getParameter("nombre");
         String id_asig = request.getParameter("id_asig");
         String asignatura = request.getParameter("asignatura");
+        String op = request.getParameter("op");
         
-        //la primera vista del profesor es una lista de todas las asignaturas que imparte.
-        //Segun la que escoja se mostrara otra vista con un listado de los alumnos que hay en esa asignatura,
-        //y las notas de cada uno, si las tuviera, ademas de un menu con las opciones insertar nota, borrar nota etc
-        //y poner tareas.
+        HashMap root = new HashMap();
+        Template temp = null;
         
         if (asignatura != null) {
-      
-            String op = request.getParameter("op");
             
-            if(op != null){
+            User u = ps.getAlumnos();//le paso la asignatura y me devuelve los alumnos que pertenecen a ella
+                                     //tambien debera mostrar las notas de los alumnos, si los tuviera
+            
+            
+            
+            
+        }else if(op != null){
                 switch (op) {
                 case "insertar_nota":
                     
                     break;
-                case "modificar_nota":
+                case "añadir_tarea":
                     
                     break;
-                case "borrar_nota":
-                    
-                    break;
-                }
+                }     
+        }else{
+            User u = ps.dameIdProf(request.getParameter("nombre_prof"));//extrae la id del profesor
+            root.put("asignaturas",  ps.getAsignaturas(u.getId()));//devuelve lista de asignaturas de ese profesor
+
+            temp = Configuration.getInstance().getFreeMarker().getTemplate("profesores.ftl");
+
+            try {
+                temp.process(root, response.getWriter());
+            } catch (TemplateException ex) {
+                Logger.getLogger(Alumnos.class.getName()).log(Level.SEVERE, null, ex);
             }
-             //request.setAttribute("alumnos", as.getAsignaturas(nombre)); queri que muestra los alumnos que hay en esa asignatura
-            //request.getRequestDispatcher("alumnos.jsp").forward(request, response);
         }
-        
-        
-        request.setAttribute("profesores", as.getAsignaturas(nombre));
-        request.getRequestDispatcher("profesores.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

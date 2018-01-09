@@ -72,14 +72,14 @@ public class AsignaturasDAO {
         return true;
     }
     
-    public List<Asignatura> getAsignaturas(String nombreProf) {
+    public List<Asignatura> getAsignaturas(long id_prof) {
         List<Asignatura> lista = null;
         Connection con = null;
         try {
             con = DBConnection.getInstance().getConnection();
             QueryRunner qr = new QueryRunner();
             ResultSetHandler<List<Asignatura>> h = new BeanListHandler<Asignatura>(Asignatura.class);
-            lista = qr.query(con, "select * FROM ASIGNATURAS", h);//falta join para sacar todas las asignaturas del profesor que se pasa por parametro
+            lista = qr.query(con, "select * FROM ASIGNATURAS where ID_PROFE = ?", h, id_prof);
 
         } catch (Exception ex) {
             Logger.getLogger(AsignaturasDAO.class.getName()).log(Level.SEVERE, null, ex);
