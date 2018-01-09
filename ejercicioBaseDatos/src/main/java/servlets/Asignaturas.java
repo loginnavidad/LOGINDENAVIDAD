@@ -42,6 +42,7 @@ public class Asignaturas extends HttpServlet {
             throws ServletException, IOException {
 
         AsignaturasServicios as = new AsignaturasServicios();
+        
         String op = request.getParameter("accion");
         HashMap root = new HashMap();
         boolean insertadas = false;
@@ -66,29 +67,6 @@ public class Asignaturas extends HttpServlet {
                         try {
                             root.put("insertado", 1);
                             root.put("mensaje", Constantes.MENSAJE_ASIGNATURA_CREADA_BIEN);
-                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
-                            temp.process(root, response.getWriter());
-                        } catch (TemplateException ex) {
-                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    break;
-                    case "addCurso":
-                    Curso curso = as.recogerCurso(request.getParameter("descripcion"));
-                    insertadas = as.addCursos(curso);
-                    if (!insertadas) {
-                        try {
-                            root.put("insertado", 0);
-                            root.put("mensaje", Constantes.MENSAJE_CURSO_CREADO_MAL);
-                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
-                            temp.process(root, response.getWriter());
-                        } catch (TemplateException ex) {
-                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    } else {
-                        try {
-                            root.put("insertado", 1);
-                            root.put("mensaje", Constantes.MENSAJE_CURSO_CREADO_BIEN);
                             Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
                             temp.process(root, response.getWriter());
                         } catch (TemplateException ex) {

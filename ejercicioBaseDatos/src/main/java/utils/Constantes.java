@@ -40,7 +40,10 @@ public class Constantes {
     public static final String INSERTAR_EN_ALUMNOS = "INSERT INTO ALUMNOS (ID,NOMBRE) VALUES (?,?)";
     public static final String ACTIVACION_MANUAL = "UPDATE USERS SET ACTIVO = ? WHERE ID = ?";
     public static final String ADD_CURSO = "INSERT INTO CURSOS(DESCRIPCION) VALUES (?)";
-    public static final String ADD_ASIGNATURA = "INSERT INTO ASIGNATURAS (NOMBRE) VALUES (?)";
+    public static final String LISTAR_CURSOS = "SELECT * FROM CURSOS";
+    public static final String ADD_ASIGNATURA = "INSERT INTO ASIGNATURAS (NOMBRE,ID_CURSO) VALUES (?,?)";
+    public static final String SELECT_USERS_PERMISOS = "SELECT * FROM USERS LEFT JOIN PERMISOS_USUARIOS ON USERS.ID = PERMISOS_USUARIOS.ID_USER;";
+    
     
     
     //MENSAJES DE CAMBIO DE PERMISOS DE ADMINISTRADOR

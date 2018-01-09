@@ -10,8 +10,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Asignatura;
+import model.Profesor;
 import model.User;
+import model.Alumno;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
@@ -74,7 +75,7 @@ public class UsersDAO {
         return true;
     }
 
-    public boolean addProfe(User user, User user2) {
+    public boolean addProfe(User user, Profesor profe) {
         Connection con = null;
         int id_permiso = 2;
         try {
@@ -89,18 +90,22 @@ public class UsersDAO {
             //QUERY PARA INSERTAR EL USUARIO EN LA TABLA DE USUARIOS
             long id = qr.insert(con,
                     Constantes.INSERTAR_USERS,
-                    new ScalarHandler<Long>(), user.getUser(), user.getPassword(), user.getCodigo_activacion(), user.getEmail(), user.getActivo());
+                    new ScalarHandler<Long>(), user.getUser(), user.getPassword(), user.getCodigo_activacion(), user.getEmail(), true);
 
-            user.setId(id);
-            //LE DAMOS EL PERMISO
-            long idPermiso = qr.insert(con,
-                    Constantes.DAR_PERMISO,
-                    new ScalarHandler<Long>(), id_permiso, user.getId());
+            user.setId(id); 
+            profe.setId_user(id);
 
             //INSERTAMOS EL PROFESOR EN LA TABLA DE PROFESORES
             long idProfesor = qr.insert(con,
                     Constantes.INSERTAR_EN_PROFESOR,
-                    new ScalarHandler<Long>(), user.getId(), user2.getUser());
+                    new ScalarHandler<Long>(), user.getId(), profe.getNombre());
+            
+            
+            //LE DAMOS EL PERMISO
+            long idPermiso = qr.insert(con,
+                    Constantes.DAR_PERMISO,
+                    new ScalarHandler<Long>(), id_permiso, user.getId());
+           
 
             con.commit();
         } catch (Exception ex) {
@@ -122,9 +127,12 @@ public class UsersDAO {
         return true;
     }
 
-    public boolean addAlum(User user, User user2) {
+    public boolean addAlum(User user, Alumno alumno) {
         Connection con = null;
         int id_permiso = 2;
+        long id = 0;
+        long idPermiso = 0;
+        long idAlumno = 0;
         try {
             try {
                 con = DBConnection.getInstance().getConnection();
@@ -135,20 +143,21 @@ public class UsersDAO {
 
             QueryRunner qr = new QueryRunner();
             //QUERY PARA INSERTAR EL USUARIO EN LA TABLA DE USUARIOS
-            long id = qr.insert(con,
+            id = qr.insert(con,
                     Constantes.INSERTAR_USERS,
-                    new ScalarHandler<Long>(), user.getUser(), user.getPassword(), user.getCodigo_activacion(), user.getEmail(), user.getActivo());
+                    new ScalarHandler<Long>(), user.getUser(), user.getPassword(), user.getCodigo_activacion(), user.getEmail(), true);
 
             user.setId(id);
-
-            //LE DAMOS EL PERMISO DE USUARIO CON LA VARIABLE ID PERMISO
-            long idPermiso = qr.insert(con,
-                    Constantes.DAR_PERMISO,
-                    new ScalarHandler<Long>(), id_permiso, user.getId());
             //INSERTAMOS EL ALUMNO EN LA TABLA DE ALUMNOS
-            long idAlumno = qr.insert(con,
+            idAlumno = qr.insert(con,
                     Constantes.INSERTAR_EN_ALUMNOS,
-                    new ScalarHandler<Long>(), user.getId(), user2.getUser());
+                    new ScalarHandler<Long>(), user.getId(), alumno.getNombre());
+            
+            alumno.setId(idAlumno);
+            //LE DAMOS EL PERMISO DE USUARIO CON LA VARIABLE ID PERMISO
+            idPermiso = qr.insert(con,
+                    Constantes.DAR_PERMISO,
+                    new ScalarHandler<Long>(), id_permiso, alumno.getId());
 
             con.commit();
         } catch (Exception ex) {
@@ -169,7 +178,6 @@ public class UsersDAO {
         }
         return true;
     }
-
     
 
     public List<User> getUsers() {
@@ -180,7 +188,7 @@ public class UsersDAO {
             QueryRunner qr = new QueryRunner();
             ResultSetHandler<List<User>> h = new BeanListHandler<User>(User.class
             );
-            lista = qr.query(con, "SELECT USERS.ID ID, USERS.USER NOMBRE, USERS.EMAIL EMAIL, USERS.ACTIVO ACTIVO, PERMISOS_USUARIOS.ID_PERMISO ID_PERMISO from USERS LEFT JOIN PERMISOS_USUARIOS ON USERS.ID = PERMISOS_USUARIOS.ID_USER;", h);
+            lista = qr.query(con, Constantes.SELECT_USERS_PERMISOS, h);
 
         } catch (Exception ex) {
             Logger.getLogger(UsersDAO.class

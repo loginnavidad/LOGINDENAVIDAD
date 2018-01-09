@@ -18,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import servicios.CursosServicios;
 import servicios.UsersServicios;
 
 /**
@@ -40,8 +41,10 @@ public class Administrador extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         UsersServicios us = new UsersServicios();
+        CursosServicios cs = new CursosServicios();
         HashMap root = new HashMap();
         root.put("usuarios", us.getAllUsers());
+        root.put("cursos", cs.listarCursos());
         try {
             Template temp = Configuration.getInstance().getFreeMarker().getTemplate("usuarios.ftl");
             temp.process(root, response.getWriter());

@@ -21,15 +21,14 @@
     <body>
         <table class="table table-striped">
             <tr>
-                <td>Nombre</td>
+                <td class="table-dark">Nombre</td>
                 <td>Cuenta Activada</td>
                 <td>Correo Electrónico</td>
                 <td>Permiso</td>
-                <td>Otros</td>
             <tr>
             <#list usuarios as usuario>
                 <tr>
-                    <td>${usuario.nombre}</td>
+                    <td>${usuario.user}</td>
                     <#if usuario.activo == false>
                     <td>No activo
                         <form action="users" method="get" name="formulario2">
@@ -41,13 +40,31 @@
                     <td>Activo</td>
                     </#if>
                     <td>${usuario.email}</td>
-                    <td>Blablabla</td>
                     <td>
-                        <form action="users" method="get" name="formulario2">
+                        <#if usuario.id_permiso??>
+                            <#if usuario.id_permiso == 2>
+                                <p>Profesor</p>
+                            <#elseif usuario.id_permiso == 1>
+                                <form action="users" method="get">
+                                    <input type="hidden" name="id" value="${usuario.id}"/>
+                                    <input type="checkbox" name="admin" checked="checked">
+                                    <button name="accion" value="DesactivarAdmin" class="btn btn-primary">Enviar</button>
+                                </form>
+                            <#elseif usuario.id_permiso == 3>
+                                <p>Alumno</p>
+                            <#elseif usuario.id_permiso == 4>
+                                <p>Superadmin</p>
+                            </#if>
+                      <#else>
+                         <form action="users" method="get">
                             <input type="hidden" name="id" value="${usuario.id}"/>
-                            <button name="accion" value="borrar" class="btn btn-primary">Borrar</button>
+                            <input type="checkbox" name="admin">
+                            <button name="accion" value="ActivarAdmin" class="btn btn-primary">Enviar</button>
                         </form>
+                      </#if>
+                        
                     </td>
+                    
                 </tr>
             </#list>
         <table>

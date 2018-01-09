@@ -18,6 +18,7 @@ public class User {
     private boolean activo;
     private String codigo_activacion;
     private String email;
+    private long id_permiso;
 
     public User() {
     }
@@ -70,6 +71,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public long getId_permiso() {
+        return id_permiso;
+    }
+
+    public void setId_permiso(long id_permiso) {
+        this.id_permiso = id_permiso;
     }
     
 }

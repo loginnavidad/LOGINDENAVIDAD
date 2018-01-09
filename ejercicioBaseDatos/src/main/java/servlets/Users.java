@@ -9,7 +9,6 @@ import config.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,7 +17,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Asignatura;
+import model.Alumno;
+import model.Profesor;
 import model.User;
 import servicios.AsignaturasServicios;
 
@@ -76,9 +76,10 @@ public class Users extends HttpServlet {
                     }
                     break;
                 case "addProfesor":
+                    Profesor profesor = us.recogidaProfesor(request.getParameter("nombreProfesor"));
                     User usuarioProfe = us.mailProfesor(request.getParameter("nombreProfesor"), request.getParameter("passUser"));
                     User usuarioProfesor = us.recogidaParametros(request.getParameter("nombreUser"), request.getParameter("passUser"), request.getParameter("emailUser"));
-                    insertadas = us.addProfesor(usuarioProfesor, usuarioProfe);
+                    insertadas = us.addProfesor(usuarioProfesor, profesor, usuarioProfe);
                     if (!insertadas) {
                         try {
                             root.put("insertado", 0);
@@ -120,9 +121,10 @@ public class Users extends HttpServlet {
                     request.getSession().invalidate();
                 }
                 case "addAlumno":
+                    Alumno alumno = us.recogidaAlumno(request.getParameter("nombreAlumno"));
                     User usuarioAlum = us.mailProfesor(request.getParameter("nombreProfesor"), request.getParameter("passUser"));
                     User usuarioAlumno = us.recogidaParametros(request.getParameter("nombreUser"), request.getParameter("passUser"), request.getParameter("emailUser"));
-                    insertadas = us.addProfesor(usuarioAlumno, usuarioAlum);
+                    insertadas = us.addAlumno(usuarioAlumno, alumno ,usuarioAlum);
                     if (!insertadas) {
                         try {
                             root.put("insertado", 0);
@@ -202,6 +204,7 @@ public class Users extends HttpServlet {
                         }
                     }
                     break;
+                 
             }
         } else {
             try {
