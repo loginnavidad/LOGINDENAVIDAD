@@ -141,6 +141,7 @@ public class UsersDAO {
             }
 
             QueryRunner qr = new QueryRunner();
+            
             //QUERY PARA INSERTAR EL USUARIO EN LA TABLA DE USUARIOS
             long id = qr.insert(con,
                     Constantes.INSERTAR_USERS,
