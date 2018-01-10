@@ -43,7 +43,7 @@
                     </td>
                     <td>${alumno.id}</td>
                     <td>${alumno.nombre}</td>
-                    </tr>
+                </tr>
             </#if>
                 </table>
             <div>

@@ -48,9 +48,7 @@ public class Alumnos extends HttpServlet {
                 case "GETALUM":
                     String nombre = request.getParameter("nombre");
                     a = as.buscarAlumno(nombre);
-                    System.out.println("id " + a.getId());
-                    System.out.println("nombre " + a.getNombre());
-                    //root.put("alumnos", a);
+                    root.put("alumnos", a);
                     action = 1;
                     break;
             }
