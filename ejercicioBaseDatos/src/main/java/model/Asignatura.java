@@ -14,6 +14,7 @@ public class Asignatura {
     private Long id;
     private String nombre;
     private Long id_curso;
+    private String nombre_curso;
     
     public Asignatura(){
     }
@@ -42,4 +43,11 @@ public class Asignatura {
         this.id_curso = id_curso;
     }
     
+    public String getNombre_curso() {
+        return nombre_curso;
+    }
+
+    public void setNombre_curso(String nombre_curso) {
+        this.nombre_curso = nombre_curso;
+    }
 }

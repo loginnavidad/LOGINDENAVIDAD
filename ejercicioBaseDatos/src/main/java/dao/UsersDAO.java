@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import model.Profesor;
 import model.User;
 import model.Alumno;
+import model.Asignatura;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;

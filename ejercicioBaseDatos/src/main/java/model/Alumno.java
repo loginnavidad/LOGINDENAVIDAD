@@ -8,6 +8,7 @@ public class Alumno {
 
     private long id;
     private String nombre;
+    private int nota;
     
     public Alumno() {
     }

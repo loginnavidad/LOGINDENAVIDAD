@@ -5,7 +5,13 @@
  */
 package servlets;
 
+import config.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -37,56 +43,42 @@ public class Notas extends HttpServlet {
         NotasServicios ns = new NotasServicios();
         AlumnosServicios alums = new AlumnosServicios();
         AsignaturasServicios asigs = new AsignaturasServicios();
+        
         String op = request.getParameter("accion");
-        String idAlu = request.getParameter("idAlumno");
-        String idAsig = request.getParameter("idAsignatura");
-        String nomAlu = request.getParameter("nombreAlumno");
-        String nomAsig = request.getParameter("nombreAsignatura");
+        
+        String id_alumno = request.getParameter("id_alumno");
+        String id_asignatura = request.getParameter("id_asignatura");
         String nota = request.getParameter("nota");
-        boolean cargar = false;
+       
+        HashMap root = new HashMap();
+        Template temp = null;
 
         if (op != null) {
+            int filas;
             Nota n = new Nota();
-            n.setIdAlumno(Long.parseLong(idAlu));
-            n.setIdAsignatura(Long.parseLong(idAsig));
-            int filas = 0;
-
-            switch (op) {
-                case "guardar":
-                    n.setNota(Integer.parseInt(nota));
-                    n = ns.guardarNota(n);
-                    if (n != null) {
-                        filas = 1;
-                    }
-                    request.setAttribute("nota", n);
-                    break;
-                case "borrar":
-                    filas = ns.delNota(n);
-                    break;
-                case "cargar":
-                    n = ns.getNota(n.getIdAlumno(), n.getIdAsignatura());
-                    cargar = true;
-                    if (n == null) {
-                        request.setAttribute("mensaje", "No hay notas");
-                    }else{
-                        request.setAttribute("nota", n);
-                    }
-                    break;
+            n.setIdAlumno(Long.parseLong(id_alumno));
+            n.setIdAsignatura(Long.parseLong(id_asignatura));
+            n.setNota(Integer.parseInt(nota));
+            
+            n = ns.guardarNota(n);
+            
+            if (n != null) {
+                filas = 1;//FALTAN LOS MENSAJES DE X FILAS MODIFICADAS CORRECTAMENTE
             }
+            root.put("nota", n);
+            temp = Configuration.getInstance().getFreeMarker().getTemplate("profesores.ftl");
+            try {
+                temp.process(root, response.getWriter());
+            } catch (TemplateException ex) {
+                Logger.getLogger(Alumnos.class.getName()).log(Level.SEVERE, null, ex);
+            }      
+           /*
             if (filas != 0 && cargar == false) {
                 request.setAttribute("mensaje", filas + " filas modificadas correctamente");
             } else if (filas == 0 && cargar == false) {
                 request.setAttribute("mensaje", "No se han hecho modificaciones");
-            }
+            }*/
         }
-        // getAll siempre se hace
-        request.setAttribute("asignaturas", asigs.getAllAsignaturas());
-        request.setAttribute("alumnos", alums.listarAlumnos());
-        request.setAttribute("nomAlu", nomAlu);
-        request.setAttribute("idAlu", idAlu);
-        request.setAttribute("nomAsig", nomAsig);
-        request.setAttribute("idAsig", idAsig);
-        request.getRequestDispatcher("/pintarListaNotas.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

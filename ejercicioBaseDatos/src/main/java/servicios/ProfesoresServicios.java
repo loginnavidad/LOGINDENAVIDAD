@@ -5,10 +5,16 @@
  */
 package servicios;
 
+import dao.AlumnoDAO;
 import dao.AsignaturasDAO;
+import dao.CursosDAO;
+import dao.NotasDAO;
 import dao.UsersDAO;
 import java.util.List;
+import model.Alumno;
 import model.Asignatura;
+import model.Curso;
+import model.Nota;
 import model.User;
 
 /**
@@ -22,11 +28,17 @@ public class ProfesoresServicios {
     }
      
     public User dameIdProf(String nombre_prof) {
-            UsersDAO dao = new UsersDAO();
-            return  dao.getUserByNombre(nombre_prof);       
+        UsersDAO dao = new UsersDAO();
+        return  dao.getUserByNombre(nombre_prof);       
     }
 
-    public User getAlumnos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Alumno> getAlumnos(int id_asig) {
+        AlumnoDAO dao = new AlumnoDAO();
+        return  dao.getAlumnosAsignatura(id_asig);
+    }
+
+    public List<Nota> getNotas(List<Alumno> a) {
+        NotasDAO dao = new NotasDAO();
+        return dao.getNotasDAO(a);
     }
 }

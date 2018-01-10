@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Alumno;
+import model.Asignatura;
+import model.Nota;
+import model.User;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
@@ -48,5 +51,23 @@ public class AlumnoDAO {
             DBConnection.getInstance().cerrarConexion(con);
         }
         return a;
+    }
+
+    public List<Alumno> getAlumnosAsignatura(int id_asig) {
+        try {
+            con = DBConnection.getInstance().getConnection();
+            QueryRunner qr = new QueryRunner();
+            ResultSetHandler<List<Alumno>> h = new BeanListHandler<>(Alumno.class);
+            alumnos = qr.query(con, "SELECT al.*, aa.NOTA "
+                    + "FROM ALUMNOS al"
+                    + "join ALUMNO_ASIGNATURA aa"
+                    + "on al.ID = aa.ID_ALUMNO"
+                    + " WHERE aa.ID_ASIGNATURA = ?", h, id_asig);
+        } catch (Exception e) {
+            Logger.getLogger(AlumnoDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            DBConnection.getInstance().cerrarConexion(con);
+        }
+        return alumnos;
     }
 }

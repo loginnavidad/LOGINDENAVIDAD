@@ -6,8 +6,10 @@
 package dao;
 
 import java.sql.Connection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Alumno;
 import model.Nota;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
@@ -74,6 +76,11 @@ public class NotasDAO {
         } finally {
             DBConnection.getInstance().cerrarConexion(con);
         }
+        return n;
+    }
+
+    public List<Nota> getNotasDAO(List<Alumno> a) {
+        List<Nota> n = null;
         return n;
     }
 }
