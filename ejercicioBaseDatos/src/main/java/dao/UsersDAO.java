@@ -5,6 +5,7 @@
  */
 package dao;
 
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -15,6 +16,7 @@ import model.User;
 import model.Alumno;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -88,23 +90,23 @@ public class UsersDAO {
 
             QueryRunner qr = new QueryRunner();
             //QUERY PARA INSERTAR EL USUARIO EN LA TABLA DE USUARIOS
-            long id = qr.insert(con,
+            BigInteger id = qr.insert(con,
                     Constantes.INSERTAR_USERS,
-                    new ScalarHandler<Long>(), user.getUser(), user.getPassword(), user.getCodigo_activacion(), user.getEmail(), true);
+                    new ScalarHandler<BigInteger>(), user.getUser(), user.getPassword(), user.getCodigo_activacion(), user.getEmail(), true);
 
-            user.setId(id); 
-            profe.setId_user(id);
+            user.setId(id.longValue()); 
+            profe.setId_user(id.longValue());
 
             //INSERTAMOS EL PROFESOR EN LA TABLA DE PROFESORES
-            long idProfesor = qr.insert(con,
+            BigInteger idProfesor = qr.insert(con,
                     Constantes.INSERTAR_EN_PROFESOR,
-                    new ScalarHandler<Long>(), user.getId(), profe.getNombre());
+                    new ScalarHandler<BigInteger>(), user.getId(), profe.getNombre());
             
             
             //LE DAMOS EL PERMISO
-            long idPermiso = qr.insert(con,
+            BigInteger idPermiso = qr.insert(con,
                     Constantes.DAR_PERMISO,
-                    new ScalarHandler<Long>(), id_permiso, user.getId());
+                    new ScalarHandler<BigInteger>(), id_permiso, user.getId());
            
 
             con.commit();
@@ -130,9 +132,6 @@ public class UsersDAO {
     public boolean addAlum(User user, Alumno alumno) {
         Connection con = null;
         int id_permiso = 2;
-        long id = 0;
-        long idPermiso = 0;
-        long idAlumno = 0;
         try {
             try {
                 con = DBConnection.getInstance().getConnection();
@@ -143,21 +142,21 @@ public class UsersDAO {
 
             QueryRunner qr = new QueryRunner();
             //QUERY PARA INSERTAR EL USUARIO EN LA TABLA DE USUARIOS
-            id = qr.insert(con,
+            BigInteger id = qr.insert(con,
                     Constantes.INSERTAR_USERS,
-                    new ScalarHandler<Long>(), user.getUser(), user.getPassword(), user.getCodigo_activacion(), user.getEmail(), true);
+                    new ScalarHandler<BigInteger>(), user.getUser(), user.getPassword(), user.getCodigo_activacion(), user.getEmail(), true);
 
-            user.setId(id);
+            user.setId(id.longValue());
             //INSERTAMOS EL ALUMNO EN LA TABLA DE ALUMNOS
-            idAlumno = qr.insert(con,
+            BigInteger idAlumno = qr.insert(con,
                     Constantes.INSERTAR_EN_ALUMNOS,
-                    new ScalarHandler<Long>(), user.getId(), alumno.getNombre());
+                    new ScalarHandler<BigInteger>(), user.getId(), alumno.getNombre());
             
-            alumno.setId(idAlumno);
+            alumno.setId(idAlumno.longValue());
             //LE DAMOS EL PERMISO DE USUARIO CON LA VARIABLE ID PERMISO
-            idPermiso = qr.insert(con,
+            BigInteger idPermiso = qr.insert(con,
                     Constantes.DAR_PERMISO,
-                    new ScalarHandler<Long>(), id_permiso, alumno.getId());
+                    new ScalarHandler<BigInteger>(), id_permiso, alumno.getId());
 
             con.commit();
         } catch (Exception ex) {
@@ -241,8 +240,7 @@ public class UsersDAO {
         User u;
         try {
             JdbcTemplate jtm = new JdbcTemplate(DBConnection.getInstance().getDataSource());
-            u
-                    = (User) jtm.queryForObject(queryUserByCodigoActivacion, new Object[]{codigoActivacion}, new BeanPropertyRowMapper(User.class
+            u  = (User) jtm.queryForObject(queryUserByCodigoActivacion, new Object[]{codigoActivacion}, new BeanPropertyRowMapper(User.class
                     ));
 
         } catch (Exception ex) {
@@ -327,5 +325,38 @@ public class UsersDAO {
     public int sacarPermiso(String nombre){
         Connection con = null;
         return 2;
+    }
+    public User getUserByEmail(String correo){
+        Connection con = null;
+        User user = null;
+        try {
+            con = DBConnection.getInstance().getConnection();
+
+            QueryRunner qr = new QueryRunner();
+            ResultSetHandler<User> h = new BeanHandler<>(User.class);
+            user = qr.query(con, Constantes.SELECT_USERS_PERMISOS, h,correo);
+        } catch (Exception ex) {
+            Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DBConnection.getInstance().cerrarConexion(con);
+        }
+        return user;
+    }
+    public boolean cambiarPassword(User user){
+        Connection con = null;
+        int actualizadas = 0;
+        try {
+            con = DBConnection.getInstance().getConnection();
+
+            QueryRunner qr = new QueryRunner();
+            actualizadas = qr.update(con,
+                    Constantes.UPDATE_NEW_PASSWORD,user.getPassword(),user.getEmail());
+        } catch (Exception ex) {
+            Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } finally {
+            DBConnection.getInstance().cerrarConexion(con);
+        }
+        return true;
     }
 }

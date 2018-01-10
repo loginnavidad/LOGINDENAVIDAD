@@ -14,8 +14,8 @@
     <body>
         <form action="users" method="get">
            <input type="text" name="nombreLogin" placeholder="Introduzca el usuario" class="form-control"/>
-           <input type="text" name="passLogin" placeholder="Introduzca la contraseña" class="form-control"/>
-           <img src="assets/Imagenes/ojo.png">
+           <input type="pass" name="passLogin" placeholder="Introduzca la contraseña" id="inputPass" class="form-control">
+           <img src="assets/Imagenes/ojo.jpg" alt="Ojo ver pass" title="aaa" id="ver">
            <input type="submit" value="login" class="btn btn-primary"/>
         </form>
     <a href="cambiopassword">Cambia la contraseña</a>

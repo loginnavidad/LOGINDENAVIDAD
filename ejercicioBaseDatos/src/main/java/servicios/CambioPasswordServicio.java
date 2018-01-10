@@ -5,7 +5,14 @@
  */
 package servicios;
 
+import dao.UsersDAO;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.User;
+import utils.PasswordHash;
 
 /**
  *
@@ -23,7 +30,25 @@ public class CambioPasswordServicio {
         }
         return user;
     }
+    public User listarUsuarios(String correo){
+        UsersDAO dao = new UsersDAO();
+        return dao.getUserByEmail(correo);
+    }
+    public boolean comprobarPassword(User user,User user2){
+        try {
+            if(PasswordHash.getInstance().validatePassword(user2.getPassword(), user.getPassword())){
+                return true;
+            } else {
+                return false;
+            }
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
+            Logger.getLogger(CambioPasswordServicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
     public boolean cambioPassword(User user){
-        return true;
+        UsersDAO dao = new UsersDAO();
+        
+        return dao.cambiarPassword(user);
     }
 }

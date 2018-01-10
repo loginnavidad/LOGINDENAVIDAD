@@ -57,17 +57,28 @@ public class CambioPassword extends HttpServlet {
         switch (accion) {
             case "cambiopassword":
                 User usuario = cps.recogerDatos(request.getParameter("correo"), request.getParameter("password"));
-                actualizadas = cps.cambioPassword(usuario);
-                try{
-                    if (actualizadas) {
-                        root.put("mensaje", "Su contraseña se actualizó correctamente");
-                    } else {
-                        root.put("mensaje", "Ha ocurrido un error al cambiar su contraseña");
+                User usuario2 = cps.listarUsuarios(usuario.getEmail());
+                if (cps.comprobarPassword(usuario2, usuario)) {
+                    actualizadas = cps.cambioPassword(usuario2);
+                    try {
+                        if (actualizadas) {
+                            root.put("mensaje", "Su contraseña se actualizó correctamente");
+                        } else {
+                            root.put("mensaje", "Ha ocurrido un error al cambiar su contraseña");
+                        }
+                        Template temp = Configuration.getInstance().getFreeMarker().getTemplate("cambiohecho.ftl");
+                        temp.process(root, response.getWriter());
+                    } catch (TemplateException ex) {
+                        Logger.getLogger(CambioPassword.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    Template temp = Configuration.getInstance().getFreeMarker().getTemplate("cambiohecho.ftl");
-                    temp.process(root, response.getWriter());
-                }catch(TemplateException ex){
-                   Logger.getLogger(CambioPassword.class.getName()).log(Level.SEVERE, null, ex); 
+                } else {
+                    try {
+                        root.put("mensaje", "Correo o contraseña equivocado");
+                        Template temp = Configuration.getInstance().getFreeMarker().getTemplate("cambiohecho.ftl");
+                        temp.process(root, response.getWriter());
+                    } catch (TemplateException ex) {
+                        Logger.getLogger(CambioPassword.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
         }
     }
