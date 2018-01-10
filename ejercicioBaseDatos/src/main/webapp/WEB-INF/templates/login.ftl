@@ -18,6 +18,7 @@
            <img src="assets/Imagenes/ojo.png">
            <input type="submit" value="login" class="btn btn-primary"/>
         </form>
-
+    <a href="cambiopassword">Cambia la contraseña</a>
+    <a href="recuperarpassword">¿Has olvidado la contraseña?</a>
     </body>
     </html>
