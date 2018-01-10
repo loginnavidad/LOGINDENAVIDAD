@@ -90,12 +90,12 @@ public class UsersDAO {
 
             QueryRunner qr = new QueryRunner();
             //QUERY PARA INSERTAR EL USUARIO EN LA TABLA DE USUARIOS
-            BigInteger id = qr.insert(con,
+            long id = qr.insert(con,
                     Constantes.INSERTAR_USERS,
-                    new ScalarHandler<BigInteger>(), user.getUser(), user.getPassword(), user.getCodigo_activacion(), user.getEmail(), true);
+                    new ScalarHandler<Long>(), user.getUser(), user.getPassword(), user.getCodigo_activacion(), user.getEmail(), true);
 
-            user.setId(id.longValue()); 
-            profe.setId_user(id.longValue());
+            user.setId(id); 
+            profe.setId_user(id);
 
             //INSERTAMOS EL PROFESOR EN LA TABLA DE PROFESORES
             BigInteger idProfesor = qr.insert(con,
@@ -142,11 +142,11 @@ public class UsersDAO {
 
             QueryRunner qr = new QueryRunner();
             //QUERY PARA INSERTAR EL USUARIO EN LA TABLA DE USUARIOS
-            BigInteger id = qr.insert(con,
+            long id = qr.insert(con,
                     Constantes.INSERTAR_USERS,
-                    new ScalarHandler<BigInteger>(), user.getUser(), user.getPassword(), user.getCodigo_activacion(), user.getEmail(), true);
+                    new ScalarHandler<Long>(), user.getUser(), user.getPassword(), user.getCodigo_activacion(), user.getEmail(), true);
 
-            user.setId(id.longValue());
+            user.setId(id);
             //INSERTAMOS EL ALUMNO EN LA TABLA DE ALUMNOS
             BigInteger idAlumno = qr.insert(con,
                     Constantes.INSERTAR_EN_ALUMNOS,

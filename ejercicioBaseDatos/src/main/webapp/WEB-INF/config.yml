@@ -4,9 +4,17 @@ driverDB: com.mysql.jdbc.Driver
 ##urlDB: jdbc:mysql://localhost:3306/baselocal?useSSL=false
 ##userDB: root
 ##passDB: admin
-urlDB: jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11212627?useSSL=false
-userDB: sql11212627
-passDB: LWzV3WksI1
+
+
+#Antigua base de datos.
+#urlDB: jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11212627?useSSL=false
+#passDB: LWzV3WksI1
+#userDB: sql11212627
+
+
+urlDB: jdbc:mysql://sql2.freemysqlhosting.net:3306/sql2215088?useSSL=false
+userDB: sql2215088
+passDB: zX3*vZ8!
 mailFrom: alumno1@iesquevedo.es
 smtpServer: smtp.gmail.com
 smtpPort: 587
