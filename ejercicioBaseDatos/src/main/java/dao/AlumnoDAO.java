@@ -29,8 +29,7 @@ public class AlumnoDAO {
             con = DBConnection.getInstance().getConnection();
             QueryRunner qr = new QueryRunner();
             ResultSetHandler<List<Alumno>> h = new BeanListHandler<>(Alumno.class);
-            alumnos = qr.query(con, "SELECT * FROM Person", h);
-            return alumnos = new ArrayList<>();
+            alumnos = qr.query(con, "SELECT * FROM ALUMNOS", h);
         } catch (Exception e) {
             Logger.getLogger(AlumnoDAO.class.getName()).log(Level.SEVERE, null, e);
         } finally {
@@ -39,12 +38,12 @@ public class AlumnoDAO {
         return alumnos;
     }
 
-    public Alumno buscarAlumno(int id) {
+    public Alumno buscarAlumno(String nombre) {
         try {
             con = DBConnection.getInstance().getConnection();
             QueryRunner qr = new QueryRunner();
             ResultSetHandler<Alumno> h = new BeanHandler<>(Alumno.class);
-            a = qr.query(con, "SELECT * FROM ALUMNOS WHERE ID = ?", h, id);
+            a = qr.query(con, "SELECT * FROM ALUMNOS WHERE NOMBRE = ?", h, nombre);
         } catch (Exception e) {
             Logger.getLogger(AlumnoDAO.class.getName()).log(Level.SEVERE, null, e);
         } finally {

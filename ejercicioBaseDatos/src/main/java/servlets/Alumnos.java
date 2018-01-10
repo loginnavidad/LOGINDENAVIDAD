@@ -4,7 +4,9 @@ import config.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -19,7 +21,7 @@ import servicios.AlumnosServicios;
  *
  * @author miguel palomares
  */
-@WebServlet(name = "Alumnos", urlPatterns = {"/Alumnos"})
+@WebServlet(name = "Alumnos", urlPatterns = {"/alumnos"})
 public class Alumnos extends HttpServlet {
 
     /**
@@ -44,9 +46,11 @@ public class Alumnos extends HttpServlet {
         if (op!=null) {
             switch (op) {
                 case "GETALUM":
-                    int id = Integer.parseInt(request.getParameter("id"));
-                    a = as.buscarAlumno(id);
-                    root.put("alumnos", a);
+                    String nombre = request.getParameter("nombre");
+                    a = as.buscarAlumno(nombre);
+                    System.out.println("id " + a.getId());
+                    System.out.println("nombre " + a.getNombre());
+                    //root.put("alumnos", a);
                     action = 1;
                     break;
             }
@@ -58,7 +62,7 @@ public class Alumnos extends HttpServlet {
             root.put("alumno", a);
         }
         root.put("action", action);
-        temp = Configuration.getInstance().getFreeMarker().getTemplate("alumnos.ftl");
+        temp = Configuration.getInstance().getFreeMarker().getTemplate("listaAlumnos.ftl");
         
         try {
             temp.process(root, response.getWriter());
