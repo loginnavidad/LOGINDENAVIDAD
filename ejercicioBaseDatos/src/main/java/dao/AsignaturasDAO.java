@@ -14,6 +14,7 @@ import model.Asignatura;
 import model.Curso;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 import utils.Constantes;
@@ -79,8 +80,11 @@ public class AsignaturasDAO {
             con = DBConnection.getInstance().getConnection();
             QueryRunner qr = new QueryRunner();
             ResultSetHandler<List<Asignatura>> h = new BeanListHandler<Asignatura>(Asignatura.class);
-            lista = qr.query(con, "select * FROM ASIGNATURAS.as"
-                    + "join PROFE_ASIGNATURA.pa"
+            lista = qr.query(con, "select as.*, cu.DESCRIPCION "
+                    + "FROM ASIGNATURAS as"
+                    + "join CURSOS cu"
+                    + "on as.ID_CURSO = cu.ID"
+                    + "join PROFE_ASIGNATURA pa"
                     + "on pa.ID_ASIGNATURA = as.ID"
                     + "where pa.ID_PROFE = ?", h, id_prof);
 
@@ -91,8 +95,26 @@ public class AsignaturasDAO {
         }
         return lista;
     }
+/*   
+    public Asignatura getIdAsignatura(String nombre_asignatura) {
+        Asignatura as = null;
+        Connection con = null;
+        try {
+            
+            con = DBConnection.getInstance().getConnection();
+            QueryRunner qr = new QueryRunner();
+            ResultSetHandler<Asignatura> h = new BeanHandler<>(Asignatura.class);
+            as = qr.query(con, "select ID FROM ASIGNATURAS"
+                    + "where ID = ?", h, nombre_asignatura);
+
+        } catch (Exception ex) {
+            Logger.getLogger(AsignaturasDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DBConnection.getInstance().cerrarConexion(con);
+        }
+        return as;
+    }
     
-/*
     public int updateAsignatura(Asignatura a) {
         Connection con = null;
         int filas = 0;

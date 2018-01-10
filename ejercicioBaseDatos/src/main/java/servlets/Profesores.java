@@ -11,6 +11,7 @@ import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -18,7 +19,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Alumno;
+import model.Asignatura;
+import model.Curso;
+import model.Nota;
 import model.User;
+import servicios.AsignaturasServicios;
 import servicios.ProfesoresServicios;
 
 /**
@@ -34,34 +40,20 @@ public class Profesores extends HttpServlet {
         
         ProfesoresServicios ps = new ProfesoresServicios();
         
-        String id_asig = request.getParameter("id_asig");
-        String asignatura = request.getParameter("asignatura");
-        String op = request.getParameter("op");
+        String id_asignatura = request.getParameter("id_asignatura");
         
         HashMap root = new HashMap();
         Template temp = null;
         
-        if (asignatura != null) {
+        if (id_asignatura != null) {
             
-            User u = ps.getAlumnos();//le paso la asignatura y me devuelve los alumnos que pertenecen a ella
-                                     //tambien debera mostrar las notas de los alumnos, si los tuviera
-            
-            
-            
-            
-        }else if(op != null){
-                switch (op) {
-                case "insertar_nota":
-                    
-                    break;
-                case "añadir_tarea":
-                    
-                    break;
-                }     
+            List<Alumno> a = ps.getAlumnos(Integer.parseInt(id_asignatura));//le paso la asignatura y me devuelve los alumnos que pertenecen a ella y sus notas.
+            root.put("alumnos", a);                       
+            temp = Configuration.getInstance().getFreeMarker().getTemplate("profesores.ftl");          
         }else{
             User u = ps.dameIdProf(request.getParameter("nombre_prof"));//extrae la id del profesor
-            root.put("asignaturas",  ps.getAsignaturas(u.getId()));//devuelve lista de asignaturas de ese profesor
-
+            List<Asignatura> asig = ps.getAsignaturas(u.getId());//devuelve lista de asignaturas de ese profesor y el curso de las mismas.
+            root.put("asignaturas", asig);
             temp = Configuration.getInstance().getFreeMarker().getTemplate("profesores.ftl");
 
             try {

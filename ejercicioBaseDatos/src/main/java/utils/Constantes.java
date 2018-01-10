@@ -13,7 +13,7 @@ public class Constantes {
     //DE LA APP ANTERIOR
     public static final String INDEX_SUPERUSUARIO = "usuarios.ftl";
     public static final String ERROR_REGISTRO = "No se ha podido registrar al usuario";
-    public static final String LINK_EMAIL = "http://localhost:8080/users?accion=validarUsuario&codigo=";
+    public static final String LINK_EMAIL = "http://localhost:8080/LOGINDENAVIDAD/ejercicioBaseDatos/users?accion=validarUsuario&codigo=";
     public static final String ASUNTO_EMAIL = "Activa tu cuenta";
     public static final String REGISTRO_CORRECTO_ADMINISTRADOR = "Administrador registrado con éxito.";
     public static final String REGISTRO_CORRECTO_PROFESOR = "Profesor registrado con éxito";
