@@ -43,7 +43,8 @@ public class Constantes {
     public static final String LISTAR_CURSOS = "SELECT * FROM CURSOS";
     public static final String ADD_ASIGNATURA = "INSERT INTO ASIGNATURAS (NOMBRE,ID_CURSO) VALUES (?,?)";
     public static final String SELECT_USERS_PERMISOS = "SELECT * FROM USERS LEFT JOIN PERMISOS_USUARIOS ON USERS.ID = PERMISOS_USUARIOS.ID_USER;";
-    
+    public static final String SELECT_USER_BY_CORREO = "SELECT * FROM USERS WHERE EMAIL = ?";
+    public static final String UPDATE_NEW_PASSWORD = "UPDATE USERS SET PASSWORD = ? WHERE EMAIL = ?";
     
     
     //MENSAJES DE CAMBIO DE PERMISOS DE ADMINISTRADOR
