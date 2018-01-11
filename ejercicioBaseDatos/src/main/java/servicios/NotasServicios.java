@@ -17,7 +17,7 @@ public class NotasServicios {
         NotasDAO dao = new NotasDAO();
         return dao.guardarNota(n);
     }
-    
+/*    
     public Nota getNota(Long idalu, Long idasig){
         NotasDAO dao = new NotasDAO();
         return dao.getNota(idalu, idasig);
@@ -27,4 +27,5 @@ public class NotasServicios {
         NotasDAO dao = new NotasDAO();
         return dao.delNota(n);
     }
+*/
 }

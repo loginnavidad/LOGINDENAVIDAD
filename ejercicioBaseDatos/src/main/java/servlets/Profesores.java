@@ -21,10 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Alumno;
 import model.Asignatura;
-import model.Curso;
-import model.Nota;
 import model.User;
-import servicios.AsignaturasServicios;
 import servicios.ProfesoresServicios;
 
 /**

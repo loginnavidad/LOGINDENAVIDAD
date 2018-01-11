@@ -3,6 +3,7 @@ package servicios;
 import dao.AlumnoDAO;
 import java.util.List;
 import model.Alumno;
+import model.Asignatura;
 
 /**
  *
@@ -18,16 +19,23 @@ public class AlumnosServicios {
      * @return listado de todos los alumnos
      */
     public List<Alumno> listarAlumnos() {
+        alumDao = new AlumnoDAO();
         return alumDao.listarAlumnos();
     }
 
     /**
      * Buscar un alumno
      *
-     * @param id buscamos el alumno por su identificador
+     * @param nombre buscamos el alumno por su identificador
      * @return un objeto de tipo alumno
      */
-    public Alumno buscarAlumno(int id) {
-        return alumDao.buscarAlumno(id);
+    public Alumno buscarAlumno(String nombre) {
+        alumDao = new AlumnoDAO();
+        return alumDao.buscarAlumno(nombre);
+    }
+    
+    public List<Asignatura> getAsignaturaAlumno(int id_alumno){
+    alumDao = new AlumnoDAO();
+    return alumDao.getAsignaturaAlumno(id_alumno);
     }
 }

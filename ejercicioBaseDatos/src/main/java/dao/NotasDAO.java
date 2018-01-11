@@ -28,12 +28,12 @@ public class NotasDAO {
         try {
             con = DBConnection.getInstance().getConnection();
             QueryRunner qr = new QueryRunner();
-            filas = qr.update(con, "UPDATE NOTAS SET NOTA = ? WHERE ID_ALUMNO = ? AND ID_ASIGNATURA = ?", n.getNota(), n.getIdAlumno(), n.getIdAsignatura());
+            filas = qr.update(con, "UPDATE NOTA SET ALUMNO_ASIGNATURA = ? WHERE ID_ALUMNO = ? AND ID_ASIGNATURA = ?", n.getNota(), n.getIdAlumno(), n.getIdAsignatura());
 
             if (filas == 0) {
                 con.setAutoCommit(false);
                 Long id = qr.insert(con,
-                        "INSERT INTO NOTAS (ID_ALUMNO,ID_ASIGNATURA,NOTA) VALUES(?,?,?)",
+                        "INSERT INTO ALUMNO_ASIGNATURA (ID_ALUMNO,ID_ASIGNATURA,NOTA) VALUES(?,?,?)",
                         new ScalarHandler<Long>(), n.getIdAlumno(), n.getIdAsignatura(), n.getNota());
                 con.commit();
             }
@@ -45,7 +45,7 @@ public class NotasDAO {
         }
         return n;
     }
-
+/*
     public int delNota(Nota n) {
         Connection con = null;
         int filas = 0;
@@ -83,4 +83,5 @@ public class NotasDAO {
         List<Nota> n = null;
         return n;
     }
+*/
 }

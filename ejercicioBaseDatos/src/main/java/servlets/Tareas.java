@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package servlets;
 
 import config.Configuration;
@@ -17,52 +12,53 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Nota;
-import servicios.NotasServicios;
+import model.Tarea;
+import servicios.TareaServicios;
 
 /**
  *
- * @author erasto
+ * @author miguel palomares
  */
-@WebServlet(name = "Notas", urlPatterns = {"/sesion/notas"})
-public class Notas extends HttpServlet {
+@WebServlet(name = "Tareas", urlPatterns = {"/tareas"})
+public class Tareas extends HttpServlet {
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        NotasServicios ns = new NotasServicios();
-        
-        String op = request.getParameter("accion");
-        
-        String id_alumno = request.getParameter("id_alumno");
-        String id_asignatura = request.getParameter("id_asignatura");
-        String nota = request.getParameter("nota");
-       
-        HashMap root = new HashMap();
+        String op = request.getParameter("op");
+        TareaServicios ts = new TareaServicios();
+        Tarea t = new Tarea();
         Template temp = null;
+        HashMap root = new HashMap();
+        switch ((String) request.getSession().getAttribute("permisoUser")) {
+            case "ALUMNO":
+                //listado de las tareas del alumno en caso de que el permiso sea alumno
+                //ALERTA!!no funciona la query hay que revisarla
+                int id_asig = Integer.parseInt(request.getParameter("id"));
+                root.put("tareas", ts.listarTareas(id_asig));
+                break;
+            case "PROFESOR":
+                if(op.equals("GETALLTAREAS")){
+                //listado de todas las tareas si el permiso es profesor
+                }
+                break;
 
-        if (op != null) {
-            int filas;
-            Nota n = new Nota();
-            n.setIdAlumno(Long.parseLong(id_alumno));
-            n.setIdAsignatura(Long.parseLong(id_asignatura));
-            n.setNota(Integer.parseInt(nota));
-            
-            n = ns.guardarNota(n);
-            
-            if (n != null) {
-                filas = 1;
-                root.put("mensaje", filas+" nota modificada correctamente"); 
-            }else{
-                root.put("mensaje", "no se han hecho modificaciones"); 
-            }
-            root.put("nota", n);
-            temp = Configuration.getInstance().getFreeMarker().getTemplate("profesores.ftl");
-            try {
-                temp.process(root, response.getWriter());
-            } catch (TemplateException ex) {
-                Logger.getLogger(Alumnos.class.getName()).log(Level.SEVERE, null, ex);
-            }      
+        }
+                      
+        temp = Configuration.getInstance().getFreeMarker().getTemplate("listaTareas.ftl");
+
+        try {
+            temp.process(root, response.getWriter());
+        } catch (TemplateException ex) {
+            Logger.getLogger(Tareas.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

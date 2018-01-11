@@ -12,14 +12,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Alumno;
+import javax.servlet.http.HttpSession;
 import servicios.AlumnosServicios;
 
 /**
  *
  * @author miguel palomares
  */
-@WebServlet(name = "Alumnos", urlPatterns = {"/Alumnos"})
+@WebServlet(name = "Alumnos", urlPatterns = {"/alumnos"})
 public class Alumnos extends HttpServlet {
 
     /**
@@ -33,33 +33,15 @@ public class Alumnos extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String op = request.getParameter("op");
-        AlumnosServicios as = new AlumnosServicios();
-        Alumno a = new Alumno();
-        int ok = 0;
-        int action = 0;
-        String page;
+        
+        HttpSession sesion=request.getSession();
+        int id_alumno=Integer.parseInt(request.getParameter("id"));
+        AlumnosServicios as = new AlumnosServicios();       
         HashMap root = new HashMap();
         Template temp = null;
-        if (op!=null) {
-            switch (op) {
-                case "GETALUM":
-                    int id = Integer.parseInt(request.getParameter("id"));
-                    a = as.buscarAlumno(id);
-                    root.put("alumnos", a);
-                    action = 1;
-                    break;
-            }
-        }
-
-        if (action == 0) {
-            root.put("alumnos", as.listarAlumnos());
-        } else {
-            root.put("alumno", a);
-        }
-        root.put("action", action);
-        temp = Configuration.getInstance().getFreeMarker().getTemplate("alumnos.ftl");
-        
+        //ontenemos las asignaturas y sus notas mediante el id del alumno
+        root.put("asignaturas",  as.getAsignaturaAlumno(id_alumno));
+        temp = Configuration.getInstance().getFreeMarker().getTemplate("listaAsignaturaAlum.ftl");
         try {
             temp.process(root, response.getWriter());
         } catch (TemplateException ex) {

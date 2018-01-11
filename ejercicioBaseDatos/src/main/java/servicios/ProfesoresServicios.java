@@ -36,9 +36,9 @@ public class ProfesoresServicios {
         AlumnoDAO dao = new AlumnoDAO();
         return  dao.getAlumnosAsignatura(id_asig);
     }
-
+/*
     public List<Nota> getNotas(List<Alumno> a) {
         NotasDAO dao = new NotasDAO();
         return dao.getNotasDAO(a);
-    }
+    }*/
 }
