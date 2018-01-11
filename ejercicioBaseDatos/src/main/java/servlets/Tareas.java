@@ -12,15 +12,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import servicios.AlumnosServicios;
+import model.Tarea;
+import servicios.TareaServicios;
 
 /**
  *
  * @author miguel palomares
  */
-@WebServlet(name = "Alumnos", urlPatterns = {"/alumnos"})
-public class Alumnos extends HttpServlet {
+@WebServlet(name = "Tareas", urlPatterns = {"/tareas"})
+public class Tareas extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,19 +33,32 @@ public class Alumnos extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        HttpSession sesion=request.getSession();
-        int id_alumno=Integer.parseInt(request.getParameter("id"));
-        AlumnosServicios as = new AlumnosServicios();       
-        HashMap root = new HashMap();
+        String op = request.getParameter("op");
+        TareaServicios ts = new TareaServicios();
+        Tarea t = new Tarea();
         Template temp = null;
-        //ontenemos las asignaturas y sus notas mediante el id del alumno
-        root.put("asignaturas",  as.getAsignaturaAlumno(id_alumno));
-        temp = Configuration.getInstance().getFreeMarker().getTemplate("listaAsignaturaAlum.ftl");
+        HashMap root = new HashMap();
+        switch ((String) request.getSession().getAttribute("permisoUser")) {
+            case "ALUMNO":
+                //listado de las tareas del alumno en caso de que el permiso sea alumno
+                //ALERTA!!no funciona la query hay que revisarla
+                int id_asig = Integer.parseInt(request.getParameter("id"));
+                root.put("tareas", ts.listarTareas(id_asig));
+                break;
+            case "PROFESOR":
+                if(op.equals("GETALLTAREAS")){
+                //listado de todas las tareas si el permiso es profesor
+                }
+                break;
+
+        }
+                      
+        temp = Configuration.getInstance().getFreeMarker().getTemplate("listaTareas.ftl");
+
         try {
             temp.process(root, response.getWriter());
         } catch (TemplateException ex) {
-            Logger.getLogger(Alumnos.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Tareas.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

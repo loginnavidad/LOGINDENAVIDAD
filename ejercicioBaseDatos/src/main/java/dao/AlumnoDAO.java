@@ -1,14 +1,11 @@
 package dao;
 
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Alumno;
 import model.Asignatura;
-import model.Nota;
-import model.User;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
@@ -23,6 +20,7 @@ public class AlumnoDAO {
     
     Connection con = null;
     List<Alumno> alumnos = null;
+    List<Asignatura> asignatura = null;
     Alumno a = null;
     public List<Alumno> listarAlumnos() {
         try {
@@ -69,4 +67,23 @@ public class AlumnoDAO {
         }
         return alumnos;
     }
+    
+    public List<Asignatura> getAsignaturaAlumno(int id_alumno) {
+        try {
+            con = DBConnection.getInstance().getConnection();
+            QueryRunner qr = new QueryRunner();
+            ResultSetHandler<List<Asignatura>> h = new BeanListHandler<>(Asignatura.class);
+            asignatura = qr.query(con, "select asi.* , aa.nota\n" +
+                    "from alumno_asignatura aa\n" +
+                    "join asignaturas asi\n" +
+                    "on aa.id_asignatura=asi.id\n" +
+                    "where aa.id_alumno=?;", h, id_alumno);
+        } catch (Exception e) {
+            Logger.getLogger(AlumnoDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            DBConnection.getInstance().cerrarConexion(con);
+        }
+        return asignatura;
+    }
+    
 }

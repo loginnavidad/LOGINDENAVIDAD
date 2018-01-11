@@ -3,6 +3,7 @@ package servicios;
 import dao.AlumnoDAO;
 import java.util.List;
 import model.Alumno;
+import model.Asignatura;
 
 /**
  *
@@ -31,5 +32,10 @@ public class AlumnosServicios {
     public Alumno buscarAlumno(String nombre) {
         alumDao = new AlumnoDAO();
         return alumDao.buscarAlumno(nombre);
+    }
+    
+    public List<Asignatura> getAsignaturaAlumno(int id_alumno){
+    alumDao = new AlumnoDAO();
+    return alumDao.getAsignaturaAlumno(id_alumno);
     }
 }
