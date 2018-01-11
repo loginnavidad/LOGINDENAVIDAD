@@ -18,31 +18,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Nota;
-import servicios.AlumnosServicios;
-import servicios.AsignaturasServicios;
 import servicios.NotasServicios;
 
 /**
  *
- * @author Miguel Angel Diaz
+ * @author erasto
  */
 @WebServlet(name = "Notas", urlPatterns = {"/sesion/notas"})
 public class Notas extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         NotasServicios ns = new NotasServicios();
-        AlumnosServicios alums = new AlumnosServicios();
-        AsignaturasServicios asigs = new AsignaturasServicios();
         
         String op = request.getParameter("accion");
         
@@ -63,7 +51,10 @@ public class Notas extends HttpServlet {
             n = ns.guardarNota(n);
             
             if (n != null) {
-                filas = 1;//FALTAN LOS MENSAJES DE X FILAS MODIFICADAS CORRECTAMENTE
+                filas = 1;
+                root.put("mensaje", filas+" nota modificada correctamente"); 
+            }else{
+                root.put("mensaje", "no se han hecho modificaciones"); 
             }
             root.put("nota", n);
             temp = Configuration.getInstance().getFreeMarker().getTemplate("profesores.ftl");
@@ -72,12 +63,6 @@ public class Notas extends HttpServlet {
             } catch (TemplateException ex) {
                 Logger.getLogger(Alumnos.class.getName()).log(Level.SEVERE, null, ex);
             }      
-           /*
-            if (filas != 0 && cargar == false) {
-                request.setAttribute("mensaje", filas + " filas modificadas correctamente");
-            } else if (filas == 0 && cargar == false) {
-                request.setAttribute("mensaje", "No se han hecho modificaciones");
-            }*/
         }
     }
 
