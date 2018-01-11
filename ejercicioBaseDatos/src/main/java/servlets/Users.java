@@ -21,6 +21,7 @@ import model.Alumno;
 import model.Profesor;
 import model.User;
 import servicios.AsignaturasServicios;
+import servicios.CambioPasswordServicio;
 
 import servicios.UsersServicios;
 import utils.Constantes;
@@ -47,6 +48,7 @@ public class Users extends HttpServlet {
         boolean insertadas = false;
         UsersServicios us = new UsersServicios();
         AsignaturasServicios as = new AsignaturasServicios();
+        CambioPasswordServicio cps = new CambioPasswordServicio();
         HashMap root = new HashMap();
         if (request.getParameter("accion") != null) {
             accion = request.getParameter("accion");
@@ -54,64 +56,67 @@ public class Users extends HttpServlet {
             switch (accion) {
                 case "addUser":
                     User usuario = us.recogidaParametros(request.getParameter("nombreUser"), request.getParameter("passUser"), request.getParameter("emailUser"));
-                    insertadas = us.addUsuario(usuario);
+
+                    
+                        insertadas = us.addUsuario(usuario);
+                    
+
                     if (!insertadas) {
-                        try {
-                            root.put("insertado", 0);
-                            root.put("mensaje", Constantes.ERROR_REGISTRO);
-                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
-                            temp.process(root, response.getWriter());
-                        } catch (TemplateException ex) {
-                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        root.put("mensaje", Constantes.ERROR_REGISTRO);
                     } else {
-                        try {
-                            root.put("insertado", 1);
-                            root.put("mensaje", Constantes.REGISTRO_CORRECTO_ADMINISTRADOR);
-                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
-                            temp.process(root, response.getWriter());
-                        } catch (TemplateException ex) {
-                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        root.put("mensaje", Constantes.REGISTRO_CORRECTO_ADMINISTRADOR);
+                    }
+
+                    try {
+                        Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
+                        temp.process(root, response.getWriter());
+                    } catch (TemplateException ex) {
+                        Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     break;
                 case "addProfesor":
                     Profesor profesor = us.recogidaProfesor(request.getParameter("nombreProfesor"));
                     User usuarioProfe = us.mailProfesor(request.getParameter("nombreProfesor"), request.getParameter("passUser"));
                     User usuarioProfesor = us.recogidaParametros(request.getParameter("nombreUser"), request.getParameter("passUser"), request.getParameter("emailUser"));
-                    insertadas = us.addProfesor(usuarioProfesor, profesor, usuarioProfe);
+
+                        insertadas = us.addProfesor(usuarioProfesor, profesor, usuarioProfe);
+                    
+
                     if (!insertadas) {
-                        try {
-                            root.put("insertado", 0);
-                            root.put("mensaje", Constantes.MENSAJE_PROFESOR_CREADO_MAL);
-                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
-                            temp.process(root, response.getWriter());
-                        } catch (TemplateException ex) {
-                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        root.put("mensaje", Constantes.MENSAJE_PROFESOR_CREADO_MAL);
+
                     } else {
-                        try {
-                            root.put("insertado", 1);
-                            root.put("mensaje", Constantes.MENSAJE_PROFESOR_CREADO_BIEN);
-                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
-                            temp.process(root, response.getWriter());
-                        } catch (TemplateException ex) {
-                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        root.put("mensaje", Constantes.MENSAJE_PROFESOR_CREADO_BIEN);
                     }
+
+                    try {
+                        Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
+                        temp.process(root, response.getWriter());
+                    } catch (TemplateException ex) {
+                        Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
                     break;
                 case "login":
-                    String nombreLogin = request.getParameter("nombreLogin");
+                    String correoLogin = request.getParameter("correoLogin");
                     String passLogin = request.getParameter("passLogin");
-                    User u = new User();
-                    u.setUser(nombreLogin);
-                    u.setPassword(passLogin);
+                    User user = new User();
+                    user.setEmail(correoLogin);
+                    user.setPassword(passLogin);
 
                     boolean error = false;
-                    if (us.login(u)) {
-                        int permiso = us.cogerPermiso(nombreLogin);
-                        request.getSession().setAttribute("nombreUsuario", nombreLogin);
-                        request.getSession().setAttribute("permisoUser", permiso);
+                    if (us.login(user)) {
+                        //int permiso = us.cogerPermiso(correoLogin);
+                        root.put("mensaje","Login hecho");
+                        
+                        try {
+                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("loginhecho.ftl");
+                            temp.process(root, response.getWriter());
+                        } catch (TemplateException ex) {
+                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        request.getSession().setAttribute("nombreUsuario", correoLogin);
+                        //request.getSession().setAttribute("permisoUser", permiso);
                     } else {
                         request.setAttribute("errorLogin", Constantes.ERROR_LOGIN);
                     }
@@ -122,30 +127,23 @@ public class Users extends HttpServlet {
                 }
                 case "addAlumno":
                     Alumno alumno = us.recogidaAlumno(request.getParameter("nombreAlumno"));
-                    User usuarioAlum = us.mailProfesor(request.getParameter("nombreProfesor"), request.getParameter("passUser"));
+                    User usuarioAlum = us.mailProfesor(request.getParameter("nombreAlumno"), request.getParameter("passUser"));
                     User usuarioAlumno = us.recogidaParametros(request.getParameter("nombreUser"), request.getParameter("passUser"), request.getParameter("emailUser"));
-                    insertadas = us.addAlumno(usuarioAlumno, alumno ,usuarioAlum);
+                    insertadas = us.addAlumno(usuarioAlumno, alumno, usuarioAlum);
                     if (!insertadas) {
-                        try {
-                            root.put("insertado", 0);
-                            root.put("mensaje", Constantes.MENSAJE_ALUMNO_CREADO_MAL);
-                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
-                            temp.process(root, response.getWriter());
-                        } catch (TemplateException ex) {
-                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        root.put("mensaje", Constantes.MENSAJE_ALUMNO_CREADO_MAL);
                     } else {
-                        try {
-                            root.put("insertado", 1);
-                            root.put("mensaje", Constantes.MENSAJE_ALUMNO_CREADO_BIEN);
-                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
-                            temp.process(root, response.getWriter());
-                        } catch (TemplateException ex) {
-                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        root.put("mensaje", Constantes.MENSAJE_ALUMNO_CREADO_BIEN);
+                    }
+
+                    try {
+                        Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
+                        temp.process(root, response.getWriter());
+                    } catch (TemplateException ex) {
+                        Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     break;
-                
+
                 case "DesactivarAdmin":
                     if (us.activaPermisoConSuper(request.getParameter("id"))) {
                         request.setAttribute("mensaje", Constantes.ADMIN_CAMBIADO_OK);
@@ -179,32 +177,33 @@ public class Users extends HttpServlet {
                             request.setAttribute("mensaje2", Constantes.ERROR_ACTIVAR_2);
                             break;
                     }
-                    break;
-                case "activacionManual":
-                    boolean actualizada = us.activarUserManualmente(request.getParameter("id")); 
-                    if (actualizada){
-                        try {
-                            root.put("activado", 1);
-                            root.put("mensaje", Constantes.MENSAJE_USUARIO_ACTIVADO);
-                            root.put("usuarios",us.getAllUsers());
-                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("pantallasuperadmin.ftl");
-                            temp.process(root, response.getWriter());
-                        } catch (TemplateException ex) {
-                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    } else {
-                        try {
-                            root.put("activado", 0);
-                            root.put("mensaje", Constantes.MENSAJE_USUARIO_NO_ACTIVADO);
-                            root.put("usuarios",us.getAllUsers());
-                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("pantallasuperadmin.ftl");
-                            temp.process(root, response.getWriter());
-                        } catch (TemplateException ex) {
-                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                    try {
+                        Template temp = Configuration.getInstance().getFreeMarker().getTemplate("activado.ftl");
+                        temp.process(root, response.getWriter());
+                    } catch (TemplateException ex) {
+                        Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     break;
-                 
+                case "activacionManual":
+                    boolean actualizada = us.activarUserManualmente(request.getParameter("id"));
+                    if (actualizada) {
+                        root.put("activado", 1);
+                        root.put("mensaje", Constantes.MENSAJE_USUARIO_ACTIVADO);
+
+                    } else {
+                        root.put("activado", 0);
+                        root.put("mensaje", Constantes.MENSAJE_USUARIO_NO_ACTIVADO);
+
+                    }
+                    try {
+                        root.put("usuarios", us.getAllUsers());
+                        Template temp = Configuration.getInstance().getFreeMarker().getTemplate("pantallasuperadmin.ftl");
+                        temp.process(root, response.getWriter());
+                    } catch (TemplateException ex) {
+                        Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    break;
+
             }
         } else {
             try {
@@ -214,7 +213,7 @@ public class Users extends HttpServlet {
             } catch (TemplateException ex) {
                 Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
             }
-        
+
         }
     }
 

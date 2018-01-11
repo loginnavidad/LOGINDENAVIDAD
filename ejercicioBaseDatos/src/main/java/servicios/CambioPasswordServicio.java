@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.User;
+import model.UserChangePass;
 import utils.PasswordHash;
 
 /**
@@ -19,8 +20,8 @@ import utils.PasswordHash;
  * @author Sergio
  */
 public class CambioPasswordServicio {
-    public User recogerDatos(String correo, String password){
-        User user = null;
+    public UserChangePass recogerDatos(String correo, String password){
+        UserChangePass user = new UserChangePass();
     
         if (!"".equals(correo)) {
             user.setEmail(correo);
@@ -34,13 +35,9 @@ public class CambioPasswordServicio {
         UsersDAO dao = new UsersDAO();
         return dao.getUserByEmail(correo);
     }
-    public boolean comprobarPassword(User user,User user2){
+    public boolean comprobarPassword(User user,UserChangePass user2){
         try {
-            if(PasswordHash.getInstance().validatePassword(user2.getPassword(), user.getPassword())){
-                return true;
-            } else {
-                return false;
-            }
+            return PasswordHash.getInstance().validatePassword(user2.getPassword(), user.getPassword());
         } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
             Logger.getLogger(CambioPasswordServicio.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -48,7 +45,17 @@ public class CambioPasswordServicio {
     }
     public boolean cambioPassword(User user){
         UsersDAO dao = new UsersDAO();
-        
+        String hash = "";
+        try {
+
+                hash = PasswordHash.getInstance().createHash(user.getPassword());
+
+            } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
+
+                Logger.getLogger(UsersServicios.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            user.setPassword(hash);
         return dao.cambiarPassword(user);
     }
 }

@@ -109,8 +109,8 @@ public class UsersServicios {
     //Es posible que se deba mover
     public boolean addAlumno(User user, Alumno alumno, User user2) {
         UsersDAO dao = new UsersDAO();
-        /* MailServicios mail = new MailServicios();
-        mail.mandarMail(user.getEmail(), Constantes.USUARIO + user2.getUser() + "</br>" + Constantes.PASSWORD + user2.getPassword(), Constantes.ASUNTO_EMAIL);*/
+        MailServicios mail = new MailServicios();
+        mail.mandarMail(user.getEmail(), Constantes.USUARIO + user2.getUser() + "</br>" + Constantes.PASSWORD + user2.getPassword(), Constantes.ASUNTO_EMAIL);
         return dao.addAlum(user, alumno);
     }
 
@@ -120,11 +120,11 @@ public class UsersServicios {
     }
 
     public boolean login(User user) {
+        CambioPasswordServicio cps = new CambioPasswordServicio();
         boolean valido = false;
         try {
 
-            UsersDAO dao = new UsersDAO();
-            User userDB = dao.getUserByNombre(user.getUser());
+            User userDB = cps.listarUsuarios(user.getEmail());
             boolean passCorrecta = PasswordHash.getInstance().validatePassword(user.getPassword(), userDB.getPassword());
             if (passCorrecta == true && userDB.getActivo()) {
                 valido = true;

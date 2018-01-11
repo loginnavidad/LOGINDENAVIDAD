@@ -30,6 +30,7 @@ public class Constantes {
     public static final String ERROR_LOGIN_2 = "Te hemos enviado un correo para activar tu cuenta. Comprueba tu bandeja de entrada.";
     public static final String ERROR_LOGIN_3 = "Usuario y contraseña incorrectos.";
     public static final String LOGIN = "login.ftl";
+    public static final String USUARIO_EXISTE = "No se ha podido registrar ese nombre";
     
     //QUERIES DIVERSAS
     public static final String INSERTAR_USERS = "INSERT INTO USERS (USER,PASSWORD,CODIGO_ACTIVACION,EMAIL,ACTIVO) VALUES(?,?,?,?,?)";

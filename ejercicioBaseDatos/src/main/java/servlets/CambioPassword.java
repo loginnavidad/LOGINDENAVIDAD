@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.User;
+import model.UserChangePass;
 import servicios.CambioPasswordServicio;
 import servicios.UsersServicios;
 
@@ -43,43 +44,40 @@ public class CambioPassword extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HashMap root = new HashMap();
         CambioPasswordServicio cps = new CambioPasswordServicio();
-        String accion = "";
+        String accion = request.getParameter("accion");
         boolean actualizadas;
-        try {
-            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("cambiopassword.ftl");
-            temp.process(root, response.getWriter());
-        } catch (TemplateException ex) {
-            Logger.getLogger(Superadministrador.class.getName()).log(Level.SEVERE, null, ex);
-        }
         if (accion != null) {
-            accion = request.getParameter("accion");
-        }
-        switch (accion) {
-            case "cambiopassword":
-                User usuario = cps.recogerDatos(request.getParameter("correo"), request.getParameter("password"));
-                User usuario2 = cps.listarUsuarios(usuario.getEmail());
-                if (cps.comprobarPassword(usuario2, usuario)) {
-                    actualizadas = cps.cambioPassword(usuario2);
-                    try {
+
+            switch (accion) {
+                case "cambiopassword":
+                    UserChangePass usuario = cps.recogerDatos(request.getParameter("correo"), request.getParameter("passLogin"));
+                    User usuario2 = cps.listarUsuarios(usuario.getEmail());
+                    if (cps.comprobarPassword(usuario2, usuario)) {
+                        actualizadas = cps.cambioPassword(usuario2);
                         if (actualizadas) {
                             root.put("mensaje", "Su contraseña se actualizó correctamente");
                         } else {
                             root.put("mensaje", "Ha ocurrido un error al cambiar su contraseña");
                         }
-                        Template temp = Configuration.getInstance().getFreeMarker().getTemplate("cambiohecho.ftl");
-                        temp.process(root, response.getWriter());
-                    } catch (TemplateException ex) {
-                        Logger.getLogger(CambioPassword.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } else {
-                    try {
+
+                    } else {
                         root.put("mensaje", "Correo o contraseña equivocado");
+                    }
+                    try {
                         Template temp = Configuration.getInstance().getFreeMarker().getTemplate("cambiohecho.ftl");
                         temp.process(root, response.getWriter());
                     } catch (TemplateException ex) {
                         Logger.getLogger(CambioPassword.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
+            }
+        } else {
+
+            try {
+                Template temp = Configuration.getInstance().getFreeMarker().getTemplate("cambiopassword.ftl");
+                temp.process(root, response.getWriter());
+            } catch (TemplateException ex) {
+                Logger.getLogger(Superadministrador.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

@@ -60,7 +60,7 @@
             <div class="modal-content">
                 <span class="close" id="closea">&times;</span>
                 <form action="users" method="get" name="envioalumno">
-                    <input type="text" name="nombreProfesor" placeholder="Introduzca el nombre del alumno" class="form-control"/>
+                    <input type="text" name="nombreAlumno" placeholder="Introduzca el nombre del alumno" class="form-control"/>
                     <input type="text" name="nombreUser" placeholder="Introduzca el nombre del usuario" class="form-control"/>
                     <input type="text" name="passUser" placeholder="Introduzca la contraseña" class="form-control"/>
                     <input type="email" name="emailUser" placeholder="Introduzca un email" class="form-control"/>

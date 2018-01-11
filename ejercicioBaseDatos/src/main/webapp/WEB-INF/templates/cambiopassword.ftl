@@ -32,7 +32,7 @@
                 <div>
                     <form action="cambiopassword" method="get" onsubmit="return enviar();">
                         <input type="text" name="correo" placeholder="Introduzca el correo electronico" class="form-control"/>
-                        <input type="pass" name="passLogin" placeholder="Introduzca la contraseña" id="inputPass" class="form-control">
+                        <input type="password" name="passLogin" placeholder="Introduzca la contraseña" id="inputPass" class="form-control">
                         <input type="password" name="nuevaPass" placeholder="Introduzca la nueva contraseña" class="form-control" id="nuevaPass"/>
                         <input type="password" name="nuevaPassAgain" placeholder="Repita la contraseña" class="form-control" id="passAgain"/>
                         <input type="submit" name="accion" value="cambiopassword" class="btn btn-primary">
