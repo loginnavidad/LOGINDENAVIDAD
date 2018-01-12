@@ -17,7 +17,7 @@ public class TareasDAO {
     Connection con = null;
     List<Tarea> tareas = null;
     
-    public List<Tarea> listarTareas(int id_alum){
+    public List<Tarea> listarTareas(int id_alum,int id_asignatura){
    
          try {
             con = DBConnection.getInstance().getConnection();
@@ -27,7 +27,7 @@ public class TareasDAO {
                     "from tareas t\n" +
                     "join tareas_alumnos ta \n" +
                     "on t.ID_TAREA=ta.idTarea\n" +
-                    "where ta.idAlumno=?", h, id_alum);           
+                    "where ta.idAlumno=? and t.ID_ASIGNATURA=?;", h, id_alum,id_asignatura);           
         } catch (Exception e) {
             Logger.getLogger(AlumnoDAO.class.getName()).log(Level.SEVERE, null, e);
         } finally {

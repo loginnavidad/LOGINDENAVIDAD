@@ -5,6 +5,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -38,12 +39,20 @@ public class Tareas extends HttpServlet {
         Tarea t = new Tarea();
         Template temp = null;
         HashMap root = new HashMap();
-        switch ((String) request.getSession().getAttribute("permisoUser")) {
+        switch ("ALUMNO"/*(String) request.getSession().getAttribute("permisoUser")*/) {
             case "ALUMNO":
-                //listado de las tareas del alumno en caso de que el permiso sea alumno
-                //ALERTA!!no funciona la query hay que revisarla
+                //listamos las tareas de la asignatura del alumno
                 int id_asig = Integer.parseInt(request.getParameter("id"));
-                root.put("tareas", ts.listarTareas(id_asig));
+                if(op.equals("LISTAR")){
+                
+                //alerta!! cambiar el id de usuario por el id guardado en session por el fijo(8 solo es de prueba)
+                root.put("tareas", ts.listarTareas(8,id_asig));
+                }
+                if(op.equals("UPD_TAREA")){
+                    
+                    
+                }
+                root.put("tareas", ts.listarTareas(8,id_asig));
                 break;
             case "PROFESOR":
                 if(op.equals("GETALLTAREAS")){
