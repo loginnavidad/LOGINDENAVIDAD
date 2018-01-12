@@ -44,46 +44,49 @@ public class Tareas extends HttpServlet {
         Tarea t = new Tarea();
         Template temp = null;
         HashMap root = new HashMap();
+        int id_asig = Integer.parseInt(request.getParameter("id"));
         
         switch ("ALUMNO"/*(String) request.getSession().getAttribute("permisoUser")*/) {
             case "ALUMNO":
                 //listamos las tareas de la asignatura del alumno
-                int id_asig = Integer.parseInt(request.getParameter("id"));
+                
                 if(op.equals("LISTAR")){
                 
                 //alerta!! cambiar el id de usuario por el id guardado en session por el fijo(8 solo es de prueba)
                 root.put("tareas", ts.listarTareas(8,id_asig));
                 }
                 if(op.equals("UPD_TAREA")){
-                    String nombreTarea = (request.getParameter("nombreTarea"));
-                    String fechaEntrega = request.getParameter("fechaEntrega");
-                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                    LocalDate local = LocalDate.parse(fechaEntrega,dtf);
                     
-                    t.setNombre(nombreTarea);
-                    t.setId_asignatura(id_asig);
-                    t.setFecha_entrega(Date.from(local.atStartOfDay().toInstant(ZoneOffset.UTC)));
-                    
-                    int fila = ts.crearTarea(t);
-                    
-                    if(fila != 0){
-                        root.put("mensajeTarea", "tarea modificada correctamente");
-                    } else {
-                        root.put("tareas", "no se ha podido crear la tarea");
-                    }
-                    break;
                 }
                 root.put("tareas", ts.listarTareas(8,id_asig));
                 break;
             case "PROFESOR":
-                if(op.equals("GETALLTAREAS")){
-                //listado de todas las tareas si el permiso es profesor
+
+                String nombreTarea = (request.getParameter("nombreTarea"));
+                String fechaEntrega = request.getParameter("fechaEntrega");
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                LocalDate local = LocalDate.parse(fechaEntrega,dtf);
+                 
+                t.setId_asignatura(id_asig);
+                t.setNombre(nombreTarea); 
+                t.setFecha_entrega(Date.from(local.atStartOfDay().toInstant(ZoneOffset.UTC)));
+                    
+                int fila = ts.crearTarea(t);
+                    
+                if(fila != 0){
+                    root.put("mensajeTarea", "tarea modificada correctamente");
+                } else {
+                    root.put("tareas", "no se ha podido crear la tarea");
                 }
                 break;
 
         }
-                      
-        temp = Configuration.getInstance().getFreeMarker().getTemplate("listaTareas.ftl");
+        
+        if(op.equals("ALUMNO")){
+            temp = Configuration.getInstance().getFreeMarker().getTemplate("listaTareas.ftl");
+        }else if(op.equals("PROFESOR")){
+            temp = Configuration.getInstance().getFreeMarker().getTemplate("profesores.ftl");//puede que sea otra vista distinta tareasPorfesores.ftl por ejemplo
+        }
 
         try {
             temp.process(root, response.getWriter());
