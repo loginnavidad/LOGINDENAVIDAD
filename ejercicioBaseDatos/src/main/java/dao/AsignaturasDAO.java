@@ -79,13 +79,13 @@ public class AsignaturasDAO {
         try {
             con = DBConnection.getInstance().getConnection();
             QueryRunner qr = new QueryRunner();
-            ResultSetHandler<List<Asignatura>> h = new BeanListHandler<Asignatura>(Asignatura.class);
-            lista = qr.query(con, "select as.*, cu.DESCRIPCION "
-                    + "FROM ASIGNATURAS as"
-                    + "join CURSOS cu"
-                    + "on as.ID_CURSO = cu.ID"
-                    + "join PROFE_ASIGNATURA pa"
-                    + "on pa.ID_ASIGNATURA = as.ID"
+            ResultSetHandler<List<Asignatura>> h = new BeanListHandler<>(Asignatura.class);
+            lista = qr.query(con, "SELECT as.ID, as.NOMBRE "/* cu.DESCRIPCION "*/
+                    + "FROM ASIGNATURAS as "
+                    /*+ "join CURSOS cu"
+                    + "on as.ID_CURSO = cu.ID"*/
+                    + "join PROFE_ASIGNATURA pa "
+                    + "on as.ID = pa.ID_ASIGNATURA "
                     + "where pa.ID_PROFE = ?", h, id_prof);
 
         } catch (Exception ex) {
