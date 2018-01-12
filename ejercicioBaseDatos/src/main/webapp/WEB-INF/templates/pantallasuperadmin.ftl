@@ -41,7 +41,7 @@
                     </#if>
                     <td>${usuario.email}</td>
                     <td>
-                        <#if usuario.id_permiso??>
+                       <#if usuario.id_permiso??>
                             <#if usuario.id_permiso == 2>
                                 <p>Profesor</p>
                             <#elseif usuario.id_permiso == 1>
@@ -54,14 +54,16 @@
                                 <p>Alumno</p>
                             <#elseif usuario.id_permiso == 4>
                                 <p>Superadmin</p>
+                            <#elseif usuario.id_permiso == 6>
+                                <form action="users" method="get">
+                                   <input type="hidden" name="id" value="${usuario.id}"/>
+                                   <input type="checkbox" name="admin">
+                                   <button name="accion" value="ActivarAdmin" class="btn btn-primary">Enviar</button>
+                               </form>
                             </#if>
-                      <#else>
-                         <form action="users" method="get">
-                            <input type="hidden" name="id" value="${usuario.id}"/>
-                            <input type="checkbox" name="admin">
-                            <button name="accion" value="ActivarAdmin" class="btn btn-primary">Enviar</button>
-                        </form>
-                      </#if>
+                        <#else>
+                                <p>Operacion no disponible</p>
+                        </#if>
                         
                     </td>
                     

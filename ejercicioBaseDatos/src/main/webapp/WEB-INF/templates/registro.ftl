@@ -2,9 +2,6 @@
 
 <#assign charset="UTF-8">
 <#assign title="Example">
-<#assign content>
-form-control
-</#assign>
 <!DOCTYPE html>
 <html>
     <head>
@@ -27,8 +24,8 @@ form-control
                         <input type="text" name="passUser" placeholder="Introduzca la contraseña" class="input-margin form-control input-height"/>
                         <input type="email" name="emailUser" placeholder="Introduzca un email" class="input-margin form-control input-height"/>
                         <button name="accion" value="addUser" class="btn btn-primary btn-margin col-sm-offset-2 col-sm-7 input-height">Registrar</button>
-                        <button class="btn btn-primary btn-margin col-sm-offset-2 col-sm-7 input-height" id="enlaceLogin" onclick="pantallaLogin();">Inicia sesión</button>
                     </form>
+                        <button class="btn btn-primary btn-margin col-sm-offset-2 col-sm-7 input-height" id="enlaceLogin" onclick="pantallaLogin();">Inicia sesión</button>
                 <div>
             </div>
         </body>

@@ -56,6 +56,7 @@ public class UsersDAO {
 
             usuario.setId(id);
             //LE DAMOS INICIALMENTE UN PERMISO DE INVITADO CON EL QUE NO PODRA ACCEDER A NADA
+			BigInteger id_permiso_insertado = qr.insert(con, Constantes.DAR_PERMISO, new ScalarHandler<BigInteger>(), 6, usuario.getId());
 
             con.commit();
         } catch (Exception ex) {
@@ -129,7 +130,7 @@ public class UsersDAO {
 
     public boolean addAlum(User user, Alumno alumno) {
         Connection con = null;
-        int id_permiso = 2;
+        int id_permiso = 3;
         try {
             try {
                 con = DBConnection.getInstance().getConnection();
@@ -274,7 +275,7 @@ public class UsersDAO {
 
             QueryRunner qr = new QueryRunner();
             filas_actualizadas = qr.update(con,
-                    Constantes.DESHACER_ADMIN, permisoUser, id);
+                    Constantes.DESHACER_ADMIN, permisoUser, id, id);
         } catch (Exception ex) {
             Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -292,7 +293,7 @@ public class UsersDAO {
 
             QueryRunner qr = new QueryRunner();
             filas_actualizadas = qr.update(con,
-                    Constantes.HACER_ADMIN, permisoUser, id);
+                    Constantes.HACER_ADMIN, permisoUser, id, id);
         } catch (Exception ex) {
             Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -320,9 +321,22 @@ public class UsersDAO {
         return true;
     }
 
-    public int sacarPermiso(String nombre) {
+    public User sacarPermiso(String correo) {
         Connection con = null;
-        return 2;
+        int activo = 1;
+        User usuario = new User();
+        try {
+            con = DBConnection.getInstance().getConnection();
+
+            QueryRunner qr = new QueryRunner();
+            ResultSetHandler<User> h = new BeanHandler<>(User.class);
+            usuario = qr.query(con, Constantes.SACAR_PERMISO, h,correo);
+        } catch (Exception ex) {
+            Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DBConnection.getInstance().cerrarConexion(con);
+        }
+        return usuario;
     }
 
     public User getUserByEmail(String correo) {

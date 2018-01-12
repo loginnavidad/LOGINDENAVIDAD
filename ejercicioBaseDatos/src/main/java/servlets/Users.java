@@ -106,17 +106,25 @@ public class Users extends HttpServlet {
 
                     boolean error = false;
                     if (us.login(user)) {
-                        //int permiso = us.cogerPermiso(correoLogin);
-                        root.put("mensaje","Login hecho");
-                        
+                        User userLogeado = us.cogerPermiso(correoLogin);
+                        request.getSession().setAttribute("nombreUsuario", userLogeado.getUser());
+                        request.getSession().setAttribute("idAlumno", userLogeado.getId());
+                        request.getSession().setAttribute("permisoUser", userLogeado.getId_permiso());
+                        if(userLogeado.getId_permiso() == 4){
+                            response.sendRedirect("http://localhost:8080/LOGINDENAVIDAD/ejercicioBaseDatos/superadministrador");
+                        } else if(userLogeado.getId_permiso() == 1) {
+                            response.sendRedirect("http://localhost:8080/LOGINDENAVIDAD/ejercicioBaseDatos/administrador");
+                        }else if(userLogeado.getId_permiso() == 2) {
+                            response.sendRedirect("http://localhost:8080/LOGINDENAVIDAD/ejercicioBaseDatos/profesores");
+                        }else if(userLogeado.getId_permiso() == 3) {
+                            response.sendRedirect("http://localhost:8080/LOGINDENAVIDAD/ejercicioBaseDatos/alumnos");
+                        }
                         try {
                             Template temp = Configuration.getInstance().getFreeMarker().getTemplate("loginhecho.ftl");
                             temp.process(root, response.getWriter());
                         } catch (TemplateException ex) {
                             Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        request.getSession().setAttribute("nombreUsuario", correoLogin);
-                        //request.getSession().setAttribute("permisoUser", permiso);
                     } else {
                         request.setAttribute("errorLogin", Constantes.ERROR_LOGIN);
                     }

@@ -101,8 +101,8 @@ public class UsersServicios {
     //Es posible que se deba mover
     public boolean addProfesor(User user, Profesor profe, User user2) {
         UsersDAO dao = new UsersDAO();
-        /*MailServicios mail = new MailServicios();
-        mail.mandarMail(user.getEmail(), Constantes.USUARIO + profe.getNombre() + "</br>" + Constantes.PASSWORD + user2.getPassword(), Constantes.ASUNTO_EMAIL);*/
+        MailServicios mail = new MailServicios();
+        mail.mandarMail(user.getEmail(), Constantes.USUARIO + profe.getNombre() + "</br>" + Constantes.PASSWORD + user2.getPassword(), Constantes.ASUNTO_EMAIL);
         return dao.addProfe(user, profe);
     }
 
@@ -136,9 +136,9 @@ public class UsersServicios {
         return valido;
     }
 
-    public int cogerPermiso(String nombre) {
+    public User cogerPermiso(String correo) {
         UsersDAO dao = new UsersDAO();
-        return dao.sacarPermiso(nombre);
+        return dao.sacarPermiso(correo);
     }
 
     public int activar(String codigo) {

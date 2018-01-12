@@ -15,7 +15,7 @@ public class Constantes {
     public static final String ERROR_REGISTRO = "No se ha podido registrar al usuario";
     public static final String LINK_EMAIL = "http://localhost:8080/LOGINDENAVIDAD/ejercicioBaseDatos/users?accion=validarUsuario&codigo=";
     public static final String ASUNTO_EMAIL = "Activa tu cuenta";
-    public static final String REGISTRO_CORRECTO_ADMINISTRADOR = "Administrador registrado con éxito.";
+    public static final String REGISTRO_CORRECTO_ADMINISTRADOR = "Usuario creado con exito.";
     public static final String REGISTRO_CORRECTO_PROFESOR = "Profesor registrado con éxito";
     public static final String REGISTRO_CORRECTO_ALUMNO = "Alumno registrado con éxito";
     public static final String ERROR_NOMBRE = "El nombre de usuario ya existe.";
@@ -35,8 +35,8 @@ public class Constantes {
     //QUERIES DIVERSAS
     public static final String INSERTAR_USERS = "INSERT INTO USERS (USER,PASSWORD,CODIGO_ACTIVACION,EMAIL,ACTIVO) VALUES(?,?,?,?,?)";
     public static final String DAR_PERMISO = "INSERT INTO PERMISOS_USUARIOS (ID_PERMISO,ID_USER) VALUES (?,?)";
-    public static final String HACER_ADMIN = "INSERT INTO PERMISOS_USUARIOS (ID_PERMISO,ID_USER) VALUES (?,?)";
-    public static final String DESHACER_ADMIN = "DELETE FROM PERMISOS_USUARIOS WHERE ID_USER = ?";
+    public static final String HACER_ADMIN = "UPDATE PERMISOS_USUARIOS SET ID_PERMISO = ?, ID_USER = ? WHERE ID_USER = ?";
+    public static final String DESHACER_ADMIN = "UPDATE PERMISOS_USUARIOS SET ID_PERMISO = ?, ID_USER = ? WHERE ID_USER = ?";
     public static final String INSERTAR_EN_PROFESOR = "INSERT INTO PROFESORES (ID_USER,NOMBRE) VALUES (?,?)";
     public static final String INSERTAR_EN_ALUMNOS = "INSERT INTO ALUMNOS (ID,NOMBRE) VALUES (?,?)";
     public static final String ACTIVACION_MANUAL = "UPDATE USERS SET ACTIVO = ? WHERE ID = ?";
@@ -46,7 +46,7 @@ public class Constantes {
     public static final String SELECT_USERS_PERMISOS = "SELECT * FROM USERS LEFT JOIN PERMISOS_USUARIOS ON USERS.ID = PERMISOS_USUARIOS.ID_USER;";
     public static final String SELECT_USER_BY_CORREO = "SELECT * FROM USERS WHERE EMAIL = ?";
     public static final String UPDATE_NEW_PASSWORD = "UPDATE USERS SET PASSWORD = ? WHERE EMAIL = ?";
-    
+    public static final String SACAR_PERMISO = "SELECT * from USERS INNER JOIN PERMISOS_USUARIOS ON USERS.ID = PERMISOS_USUARIOS.ID_USER WHERE USERS.EMAIL = ?";
     
     //MENSAJES DE CAMBIO DE PERMISOS DE ADMINISTRADOR
     public static final String ADMIN_CAMBIADO_OK = "Cambio a administrador correcto";
@@ -59,7 +59,7 @@ public class Constantes {
     public static final String MENSAJE_ALUMNO_CREADO_MAL = "Se produjo un error al crear el usuario";
     public static final String MENSAJE_PROFESOR_CREADO_BIEN = "El profesor se creo correctamente";
     public static final String MENSAJE_PROFESOR_CREADO_MAL = "Se produjo un error al crear el profesor";
-    public static final String MENSAJE_ASIGNATURA_CREADA_BIEN = "La asignatura se ha creaod correctamente";
+    public static final String MENSAJE_ASIGNATURA_CREADA_BIEN = "La asignatura se ha creado correctamente";
     public static final String MENSAJE_ASIGNATURA_CREADA_MAL = "Se produjo un error al crear la asignatura";
     public static final String MENSAJE_CURSO_CREADO_BIEN = "El curso se ha creado correctamente";
     public static final String MENSAJE_CURSO_CREADO_MAL = "Se produjo un error al crear el curso";

@@ -20,20 +20,23 @@ import utils.Utils;
  * @author Sergio
  */
 public class RecuperarPasswordServicios {
-
-        public String hashPassword(){
+public String hacerPassword(){
+            String password = Utils.randomAlphaNumeric(10);
+            return password;
+        }
+        public String hashPassword(String password){
             String hash = "";
 
         try {
-            hash = PasswordHash.getInstance().createHash(Utils.randomAlphaNumeric(10));
+            hash = PasswordHash.getInstance().createHash(password);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
             Logger.getLogger(UsersServicios.class.getName()).log(Level.SEVERE, null, ex);
         }
         return hash;
     }
-        public static void mandarCorreo(User user){
+        public static void mandarCorreo(User user, String password){
             MailServicios mail = new MailServicios();
-            mail.mandarMail(user.getEmail(), Constantes.USUARIO + user.getUser() + "</br>" + Constantes.PASSWORD + user.getPassword(), Constantes.ASUNTO_EMAIL);
+            mail.mandarMailRecuperar(user.getEmail(),  Constantes.PASSWORD + password, Constantes.ASUNTO_EMAIL);
         }
         public boolean updatePassword(User usuario){
             UsersDAO dao = new UsersDAO();
