@@ -63,8 +63,5 @@ public class Tarea {
 
     public void setIdAlumno(int idAlumno) {
         this.idAlumno = idAlumno;
-    }
-    
-    
-   
+    } 
 }

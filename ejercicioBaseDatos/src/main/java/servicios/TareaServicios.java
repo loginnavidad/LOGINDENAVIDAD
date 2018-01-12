@@ -19,4 +19,9 @@ public class TareaServicios {
         TareasDAO tareasDao=new TareasDAO();
         return tareasDao.listarTareas(id_alum,id_asignatura);   
     } 
+
+    public int crearTarea(Tarea t) {
+        TareasDAO tareasDao=new TareasDAO();
+        return tareasDao.crearTareaDAO(t);
+    }
 }
