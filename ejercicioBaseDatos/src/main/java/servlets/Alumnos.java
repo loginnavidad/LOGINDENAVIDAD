@@ -39,7 +39,7 @@ public class Alumnos extends HttpServlet {
         AlumnosServicios as = new AlumnosServicios();       
         HashMap root = new HashMap();
         Template temp = null;
-        //ontenemos las asignaturas y sus notas mediante el id del alumno
+        //obtenemos las asignaturas y sus notas mediante el id del alumno
         root.put("asignaturas",  as.getAsignaturaAlumno(id_alumno));
         temp = Configuration.getInstance().getFreeMarker().getTemplate("listaAsignaturaAlum.ftl");
         try {

@@ -35,7 +35,7 @@ public class UsersDAO {
     private final String queryUserByCodigoActivacion = "SELECT * FROM USERS WHERE CODIGO_ACTIVACION = ?";
     private final String queryActivar = "UPDATE USERS SET ACTIVO = TRUE WHERE CODIGO_ACTIVACION = ?";
     private final String queryBorrar = "DELETE FROM USERS WHERE CODIGO_ACTIVACION = ?";
-    private final String queryUserByNombre = "SELECT * FROM USERS WHERE NOMBRE = ?";
+    private final String queryUserByNombre = "SELECT * FROM USERS WHERE USER = ?";
 
     public boolean addUser(User usuario) {
         Connection con = null;

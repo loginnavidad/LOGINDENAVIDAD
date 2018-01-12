@@ -19,6 +19,7 @@
                     <th>Nombre de la tarea</th>
                     <th>Fecha tarea</th>
                     <th>Tarea hecha</th>
+                    <th>Subir tarea</th>
                 </tr>
 
                 <#if tareas??>
@@ -27,6 +28,9 @@
                     <td>${tarea.nombre}</td>
                     <td>${tarea.fecha_entrega?date}</td>
                     <td>${tarea.hecho}</td>
+                    <td>
+                        <a href="tareas?id=${tarea.id_tarea}" class="btn btn-info">Subir tarea</a>    
+                    </td>
                     </tr>
                     <#else>
                 <tr>
