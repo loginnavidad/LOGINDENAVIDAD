@@ -55,11 +55,11 @@ public class AlumnoDAO {
             con = DBConnection.getInstance().getConnection();
             QueryRunner qr = new QueryRunner();
             ResultSetHandler<List<Alumno>> h = new BeanListHandler<>(Alumno.class);
-            alumnos = qr.query(con, "SELECT al.*, aa.NOTA "
-                    + "FROM ALUMNOS al"
-                    + "join ALUMNO_ASIGNATURA aa"
-                    + "on al.ID = aa.ID_ALUMNO"
-                    + " WHERE aa.ID_ASIGNATURA = ?", h, id_asig);
+            alumnos = qr.query(con, "SELECT alum.ID, alum.NOMBRE, alumASig.NOTA "
+                    + "FROM ALUMNOS alum "
+                    + "JOIN ALUMNO_ASIGNATURA alumAsig "
+                    + "ON alum.ID = alumAsig.ID_ALUMNO "
+                    + "WHERE alumAsig.ID_ASIGNATURA = ?", h, id_asig);
         } catch (Exception e) {
             Logger.getLogger(AlumnoDAO.class.getName()).log(Level.SEVERE, null, e);
         } finally {

@@ -46,12 +46,17 @@ public class Profesores extends HttpServlet {
             
             List<Alumno> a = ps.getAlumnos(Integer.parseInt(id_asignatura));//le paso la asignatura y me devuelve los alumnos que pertenecen a ella y sus notas.
             root.put("alumnos", a);                       
-            temp = Configuration.getInstance().getFreeMarker().getTemplate("profesores.ftl");          
+            temp = Configuration.getInstance().getFreeMarker().getTemplate(".ftl");   
+             try {
+                temp.process(root, response.getWriter());
+            } catch (TemplateException ex) {
+                Logger.getLogger(Alumnos.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }else{
-            long num = 17;
             String nombre = "erasto";
+            long id = 17;
             User u = ps.dameIdProf(nombre/*request.getParameter("nombre_prof")*/);//extrae la id del profesor
-            List<Asignatura> asig = ps.getAsignaturas(num/*u.getId()*/);//devuelve lista de asignaturas de ese profesor y el curso de las mismas.
+            List<Asignatura> asig = ps.getAsignaturas(id/*u.getId()*/);//devuelve lista de asignaturas de ese profesor y el curso de las mismas.
             root.put("asignaturas", asig);
             temp = Configuration.getInstance().getFreeMarker().getTemplate("profesores.ftl");
 

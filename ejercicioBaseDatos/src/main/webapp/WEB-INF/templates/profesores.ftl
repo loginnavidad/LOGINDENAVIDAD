@@ -16,18 +16,18 @@
             <h2>Listado de tus asignaturas</h2>
             <table class="table table-striped">
                 <tr>
-                    <th>Tareas</th>
-                    <th>Nombre asignatura</th>
-                    <th>Nota</th>
+                    <th>Nombre de Asignatura</th>
+                    <th>Curso</th>
+                    <th>id</th>
                 </tr>
                 <#if asignaturas??>
                     <#list asignaturas as asignatura>
                 <tr>
                     <td>
-                        <a href="tareas?id=${asignatura.id}" class="btn btn-info">Tareas</a>
+                        <a href="profesores?id_asignatura=${asignatura.id}" class="btn btn-info">${asignatura.nombre}</a>
                     </td>
-                    <td>${asignatura.nombre}</td>
-                    <td>${asignatura.nota}</td>
+                    <td></td>
+                    <td>${asignatura.id}</td>
                     </tr>
                     <#else>
                 <tr>
