@@ -13,21 +13,22 @@
         </head>
     <body>
         <div class="container">
-            <h2>Listado de tus asignaturas</h2>
+            <h2>Listado de tus alumnos</h2>
             <table class="table table-striped">
                 <tr>
-                    <th>Nombre de Asignatura</th>
-                    <th>Curso</th>
-                    <th>Tarea</th>
+                    <th>Nombre</th>
+                    <th>Nota</th>
+                    <th></th>
                 </tr>
                 <#if asignaturas??>
-                    <#list asignaturas as asignatura>
+                    <#list alumnos as alumno>
                 <tr>
                     <td>
-                        <a href="profesores?id_asignatura=${asignatura.id}&nombre_asig=${asignatura.nombre}" class="btn btn-info">${asignatura.nombre}</a>
+                        ${alumno.nombre}
                     </td>
                     <td></td>
-                    <td><a href="tareas?id=${asignatura.id}&op=PROFESOR" class="btn btn-info">Tareas</a></td>
+                    <td><form action="users" method="get" class="form-margin">
+                        <input type="text" name="nota" placeholder="nota" value=${alumno.nota} class="input-margin form-control input-height"/></td>
                     </tr>
                     <#else>
                 <tr>

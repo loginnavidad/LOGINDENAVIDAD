@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Tarea;
 import servicios.TareaServicios;
+import utils.Constantes;
 
 /**
  *
@@ -26,26 +27,17 @@ import servicios.TareaServicios;
 @WebServlet(name = "Tareas", urlPatterns = {"/tareas"})
 public class Tareas extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String op = request.getParameter("op");
+        String op = "PROFESOR"/*request.getParameter("op")*/;
         TareaServicios ts = new TareaServicios();
         Tarea t = new Tarea();
         Template temp = null;
         HashMap root = new HashMap();
-        int id_asig = Integer.parseInt(request.getParameter("id"));
+        int id_asig = 1/*Integer.parseInt(request.getParameter("id"))*/;
         String page = null;
-        switch ("ALUMNO"/*(String) request.getSession().getAttribute("permisoUser")*/) {
+        switch (op/*(String) request.getSession().getAttribute("permisoUser")*/) {
             case "ALUMNO":
                 //listamos las tareas de la asignatura del alumno
                 page="listaTareas.ftl";
@@ -59,35 +51,33 @@ public class Tareas extends HttpServlet {
                 }
                 root.put("tareas", ts.listarTareas(8,id_asig));
                 break;
+                
             case "PROFESOR":
-                page="profesores.ftl";
-                String nombreTarea = (request.getParameter("nombreTarea"));
-                String fechaEntrega = request.getParameter("fechaEntrega");
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                LocalDate local = LocalDate.parse(fechaEntrega,dtf);
-                 
-                t.setId_asignatura(id_asig);
-                t.setNombre(nombreTarea); 
-                t.setFecha_entrega(Date.from(local.atStartOfDay().toInstant(ZoneOffset.UTC)));
-                    
-                int fila = ts.crearTarea(t);
-                    
-                if(fila != 0){
-                    root.put("mensajeTarea", "tarea modificada correctamente");
-                } else {
-                    root.put("tareas", "no se ha podido crear la tarea");
+                page="anadirTarea.ftl";
+                String accion = (request.getParameter("accion"));
+                root.put("mensajeTarea", "");//PROVISIONAL
+                if(accion != null){
+                    String nombreTarea = (request.getParameter("nombreTarea"));
+                    String fechaEntrega = request.getParameter("fechaEntrega");
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                    LocalDate local = LocalDate.parse(fechaEntrega,dtf);
+                    id_asig = 1;
+                    t.setId_asignatura(id_asig);
+                    t.setNombre(nombreTarea); 
+                    t.setFecha_entrega(Date.from(local.atStartOfDay().toInstant(ZoneOffset.UTC)));
+
+                    int fila = ts.crearTarea(t);
+
+                    if(fila != 0){
+                        root.put("mensajeTarea", Constantes.TAREA_EXITO);
+                    } else {
+                        root.put("mensajeTarea", Constantes.TAREA_ERROR);
+                    }
                 }
                 break;
-
         }
         
         temp = Configuration.getInstance().getFreeMarker().getTemplate(page);
-        /*
-        if(op.equals("ALUMNO")){
-            temp = Configuration.getInstance().getFreeMarker().getTemplate("listaTareas.ftl");
-        }else if(op.equals("PROFESOR")){
-            temp = Configuration.getInstance().getFreeMarker().getTemplate("profesores.ftl");//puede que sea otra vista distinta tareasPorfesores.ftl por ejemplo
-        }*/
 
         try {
             temp.process(root, response.getWriter());

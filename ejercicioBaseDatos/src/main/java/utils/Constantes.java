@@ -80,5 +80,8 @@ public class Constantes {
     //MENSAJE DE SI SE HA ACTIVADO EL USUARIO
     public static final String MENSAJE_USUARIO_ACTIVADO = "El usuario ha sido activado correctamente";
     public static final String MENSAJE_USUARIO_NO_ACTIVADO = "Se produjo un error al activar el usuarios";
+    //MESNAJES TAREAS
+    public static final String TAREA_EXITO = "Tarea modificada correctamente";
+    public static final String TAREA_ERROR = "No se ha podido modificar la tarea";
     
 }

@@ -31,7 +31,6 @@ import servicios.ProfesoresServicios;
 @WebServlet(name = "Profesores", urlPatterns = {"/profesores"})
 public class Profesores extends HttpServlet {
 
-   
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
@@ -41,26 +40,25 @@ public class Profesores extends HttpServlet {
         
         HashMap root = new HashMap();
         Template temp = null;
-        
-        if (id_asignatura != null) {
-            
-            List<Alumno> a = ps.getAlumnos(Integer.parseInt(id_asignatura));//le paso la asignatura y me devuelve los alumnos que pertenecen a ella y sus notas.
-            root.put("alumnos", a);                       
-            temp = Configuration.getInstance().getFreeMarker().getTemplate("profesores.ftl");          
-        }else{
-            User u = ps.dameIdProf(request.getParameter("nombre_prof"));//extrae la id del profesor
-            List<Asignatura> asig = ps.getAsignaturas(u.getId());//devuelve lista de asignaturas de ese profesor y el curso de las mismas.
-            root.put("asignaturas", asig);
-            temp = Configuration.getInstance().getFreeMarker().getTemplate("profesores.ftl");
+        String page = null;
 
+        if (id_asignatura != null) {  
+            page = "profesoresAlumnos.ftl";
+            List<Alumno> a = ps.getAlumnos(Integer.parseInt(id_asignatura));//le paso la asignatura y me devuelve los alumnos que pertenecen a ella y sus notas.
+            root.put("alumnos", a);                          
+        }else{
+            page = "profesores.ftl";  
+            List<Asignatura> asig = ps.getAsignaturas(17/*(long) request.getSession().getAttribute("idUser")*/);//devuelve lista de asignaturas de ese profesor y el curso de las mismas.
+            root.put("asignaturas", asig);        
+        }
+        temp = Configuration.getInstance().getFreeMarker().getTemplate(page);
             try {
                 temp.process(root, response.getWriter());
             } catch (TemplateException ex) {
                 Logger.getLogger(Alumnos.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
     }
-
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

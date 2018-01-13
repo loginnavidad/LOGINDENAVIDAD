@@ -52,12 +52,12 @@ public class DBConnection {
         config.setUsername(Configuration.getInstance().getUserDB());
         config.setPassword( Configuration.getInstance().getPassDB());
         config.setDriverClassName(Configuration.getInstance().getDriverDB());
-        config.setMaximumPoolSize(10);
+        config.setMaximumPoolSize(1);
         
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-
+        
         config.setConnectionTimeout(3000);
         config.setValidationTimeout(1000);
         HikariDataSource datasource = new HikariDataSource(config);
