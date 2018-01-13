@@ -10,6 +10,7 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import utils.Constantes;
 
 /**
  *
@@ -73,11 +74,7 @@ public class AlumnoDAO {
             con = DBConnection.getInstance().getConnection();
             QueryRunner qr = new QueryRunner();
             ResultSetHandler<List<Asignatura>> h = new BeanListHandler<>(Asignatura.class);
-            asignatura = qr.query(con, "select asi.* , aa.nota\n" +
-                    "from alumno_asignatura aa\n" +
-                    "join asignaturas asi\n" +
-                    "on aa.id_asignatura=asi.id\n" +
-                    "where aa.id_alumno=?;", h, id_alumno);
+            asignatura = qr.query(con, Constantes.LISTAR_ASIGNATURAS_ALUMNO, h, id_alumno);
         } catch (Exception e) {
             Logger.getLogger(AlumnoDAO.class.getName()).log(Level.SEVERE, null, e);
         } finally {

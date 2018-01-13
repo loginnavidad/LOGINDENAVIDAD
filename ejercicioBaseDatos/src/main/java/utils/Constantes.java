@@ -84,4 +84,11 @@ public class Constantes {
     public static final String TAREA_EXITO = "Tarea modificada correctamente";
     public static final String TAREA_ERROR = "No se ha podido modificar la tarea";
     
+     //ALUMNOS
+    public static final String LISTAR_ALUMNOS_ASIGNATURAS = "SELECT alum.ID, alum.NOMBRE, alumASig.NOTA FROM ALUMNOS alum JOIN ALUMNO_ASIGNATURA alumAsig ON alum.ID = alumAsig.ID_ALUMNO WHERE alumAsig.ID_ASIGNATURA = ?";
+    public static final String LISTAR_ASIGNATURAS_ALUMNO="select asi.* , aa.nota from ALUMNO_ASIGNATURA aa join ASIGNATURAS asi on aa.id_asignatura=asi.id where aa.id_alumno=?";
+    //TAREAS
+    public static final String LISTAR_TAREAS_ALUMNO = "SELECT t.ID_TAREA, t.ID_ASIGNATURA,t.NOMBRE,t.FECHA_ENTREGA,ta.HECHO,ta.idAlumno from TAREAS t join TAREAS_ALUMNOS ta on t.ID_TAREA=ta.idTarea where ta.idAlumno=? and t.ID_ASIGNATURA=?";
+    public static final String SUBIR_TAREA_ALUMNO = "update TAREAS_ALUMNOS set HECHO = 1 where idTarea=?";
+    
 }

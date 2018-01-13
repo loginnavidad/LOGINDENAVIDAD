@@ -30,26 +30,25 @@ public class Tareas extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String op = "PROFESOR"/*request.getParameter("op")*/;
+        String op = request.getParameter("op");
         TareaServicios ts = new TareaServicios();
         Tarea t = new Tarea();
         Template temp = null;
         HashMap root = new HashMap();
-        int id_asig = 1/*Integer.parseInt(request.getParameter("id"))*/;
+        int id_asig = Integer.parseInt(request.getParameter("id"));
         String page = null;
-        switch (op/*(String) request.getSession().getAttribute("permisoUser")*/) {
+        switch ((String) request.getSession().getAttribute("permisoUser")) {
             case "ALUMNO":
-                //listamos las tareas de la asignatura del alumno
-                page="listaTareas.ftl";
-                if(op.equals("LISTAR")){
-                
-                //alerta!! cambiar el id de usuario por el id guardado en session por el fijo(8 solo es de prueba)
-                root.put("tareas", ts.listarTareas(8,id_asig));
+                int id_alumno=(Integer)request.getSession().getAttribute("idAlumno");
+                page = "listaTareas.ftl";
+                if (op != null && op.equals("UPD_TAREA")) {
+                    int idTarea = Integer.parseInt(request.getParameter("id_tarea"));
+                    int ok = ts.subTareaAlumn(idTarea);
+                    root.put("ok", ok);
                 }
-                if(op.equals("UPD_TAREA")){
-                    
-                }
-                root.put("tareas", ts.listarTareas(8,id_asig));
+                //obtenemos las tareas de la asignatura por medio de la id de alumno y la id de asignatura                
+                root.put("tareas", ts.listarTareas(id_alumno, id_asig));
+                root.put("id_asig", id_asig);
                 break;
                 
             case "PROFESOR":
