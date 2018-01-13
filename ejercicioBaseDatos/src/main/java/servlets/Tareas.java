@@ -26,15 +26,6 @@ import servicios.TareaServicios;
 @WebServlet(name = "Tareas", urlPatterns = {"/tareas"})
 public class Tareas extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
@@ -75,19 +66,12 @@ public class Tareas extends HttpServlet {
                 if(fila != 0){
                     root.put("mensajeTarea", "tarea modificada correctamente");
                 } else {
-                    root.put("tareas", "no se ha podido crear la tarea");
+                    root.put("mensajeTarea", "no se ha podido crear la tarea");
                 }
                 break;
-
         }
         
         temp = Configuration.getInstance().getFreeMarker().getTemplate(page);
-        /*
-        if(op.equals("ALUMNO")){
-            temp = Configuration.getInstance().getFreeMarker().getTemplate("listaTareas.ftl");
-        }else if(op.equals("PROFESOR")){
-            temp = Configuration.getInstance().getFreeMarker().getTemplate("profesores.ftl");//puede que sea otra vista distinta tareasPorfesores.ftl por ejemplo
-        }*/
 
         try {
             temp.process(root, response.getWriter());
