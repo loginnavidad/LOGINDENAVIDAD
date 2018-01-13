@@ -27,7 +27,7 @@
                         <a href="profesores?id_asignatura=${asignatura.id}&nombre_asig=${asignatura.nombre}" class="btn btn-info">${asignatura.nombre}</a>
                     </td>
                     <td></td>
-                    <td><a href="tareas?id_asignatura=${asignatura.id}&op=PROFESOR" class="btn btn-info">Tareas</a></td>
+                    <td><a href="tareas?id=${asignatura.id}&op=PROFESOR" class="btn btn-info">Tareas</a></td>
                     </tr>
                     <#else>
                 <tr>
