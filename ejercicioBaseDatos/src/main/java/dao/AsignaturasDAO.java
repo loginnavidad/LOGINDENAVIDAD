@@ -86,7 +86,7 @@ public class AsignaturasDAO {
                     + "on asig.ID_CURSO = cu.ID "
                     + "JOIN PROFE_ASIGNATURA profasig "
                     + "on asig.ID = profasig.ID_ASIGNATURA "
-                    + "where profasig.ID_PROFE = ?", h, id_prof);
+                    + "where profasig.ID_PROFE = ? ", h, id_prof);
 
         } catch (Exception ex) {
             Logger.getLogger(AsignaturasDAO.class.getName()).log(Level.SEVERE, null, ex);

@@ -37,7 +37,7 @@ public class Tareas extends HttpServlet {
         HashMap root = new HashMap();
         int id_asig = Integer.parseInt(request.getParameter("id"));
         String page = null;
-        switch ("ALUMNO"/*(String) request.getSession().getAttribute("permisoUser")*/) {
+        switch (op/*(String) request.getSession().getAttribute("permisoUser")*/) {
             case "ALUMNO":
                 //listamos las tareas de la asignatura del alumno
                 page="listaTareas.ftl";
@@ -52,7 +52,7 @@ public class Tareas extends HttpServlet {
                 root.put("tareas", ts.listarTareas(8,id_asig));
                 break;
             case "PROFESOR":
-                page="profesores.ftl";
+                page="listaTareas.ftl";/*
                 String nombreTarea = (request.getParameter("nombreTarea"));
                 String fechaEntrega = request.getParameter("fechaEntrega");
                 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -68,7 +68,7 @@ public class Tareas extends HttpServlet {
                     root.put("mensajeTarea", Constantes.TAREA_EXITO);
                 } else {
                     root.put("mensajeTarea", Constantes.TAREA_ERROR);
-                }
+                }*/
                 break;
         }
         

@@ -41,15 +41,14 @@ public class Profesores extends HttpServlet {
         HashMap root = new HashMap();
         Template temp = null;
         String page = null;
-        
+
         if (id_asignatura != null) {  
             page = "profesoresAlumnos.ftl";
             List<Alumno> a = ps.getAlumnos(Integer.parseInt(id_asignatura));//le paso la asignatura y me devuelve los alumnos que pertenecen a ella y sus notas.
             root.put("alumnos", a);                          
         }else{
-            page = "profesores.ftl";
-            User u = ps.dameIdProf(request.getParameter("nombre_prof"));//extrae la id del profesor
-            List<Asignatura> asig = ps.getAsignaturas(u.getId());//devuelve lista de asignaturas de ese profesor y el curso de las mismas.
+            page = "profesores.ftl";  
+            List<Asignatura> asig = ps.getAsignaturas(17/*(long) request.getSession().getAttribute("idUser")*/);//devuelve lista de asignaturas de ese profesor y el curso de las mismas.
             root.put("asignaturas", asig);        
         }
         temp = Configuration.getInstance().getFreeMarker().getTemplate(page);

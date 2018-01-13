@@ -18,16 +18,16 @@
                 <tr>
                     <th>Nombre de Asignatura</th>
                     <th>Curso</th>
-                    <th>id</th>
+                    <th>Tarea</th>
                 </tr>
                 <#if asignaturas??>
                     <#list asignaturas as asignatura>
                 <tr>
                     <td>
-                        <a href="profesores?id_asignatura=${asignatura.id}" class="btn btn-info">${asignatura.nombre}</a>
+                        <a href="profesores?id_asignatura=${asignatura.id}&nombre_asig=${asignatura.nombre}" class="btn btn-info">${asignatura.nombre}</a>
                     </td>
                     <td></td>
-                    <td>${asignatura.id}</td>
+                    <td><a href="tareas?id_asignatura=${asignatura.id}&op=PROFESOR" class="btn btn-info">Tareas</a></td>
                     </tr>
                     <#else>
                 <tr>
