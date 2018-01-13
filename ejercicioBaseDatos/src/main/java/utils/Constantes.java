@@ -31,7 +31,15 @@ public class Constantes {
     public static final String ERROR_LOGIN_3 = "Usuario y contraseña incorrectos.";
     public static final String LOGIN = "login.ftl";
     public static final String USUARIO_EXISTE = "No se ha podido registrar ese nombre";
-    
+    public static final String VARIABLE_MENSAJE = "mensaje";
+    public static final String VARIABLE_MENSAJE2 = "mensaje2";
+    public static final String PANTALLASUPERADMIN = "pantallasuperadmin.ftl";
+    public static final String PAGINA_INSERTADO_OK = "insertado.ftl";
+    public static final String REGISTRO_PANTALLA = "registro.ftl";
+    public static final String ACTIVADO_PANTALLA = "activado.ftl";
+    public static final String ASIGNAR_PROFESOR = "asignarprofe.ftl";
+    public static final String PANTALLA_ADMIN = "usuarios.ftl";
+    public static final String MENSAJE_LOGIN_FAIL = "Usuario o contraseña erroneos";
     //QUERIES DIVERSAS
     public static final String INSERTAR_USERS = "INSERT INTO USERS (USER,PASSWORD,CODIGO_ACTIVACION,EMAIL,ACTIVO) VALUES(?,?,?,?,?)";
     public static final String DAR_PERMISO = "INSERT INTO PERMISOS_USUARIOS (ID_PERMISO,ID_USER) VALUES (?,?)";
@@ -43,14 +51,20 @@ public class Constantes {
     public static final String ADD_CURSO = "INSERT INTO CURSOS(DESCRIPCION) VALUES (?)";
     public static final String LISTAR_CURSOS = "SELECT * FROM CURSOS";
     public static final String ADD_ASIGNATURA = "INSERT INTO ASIGNATURAS (NOMBRE,ID_CURSO) VALUES (?,?)";
-    public static final String SELECT_USERS_PERMISOS = "SELECT * FROM USERS LEFT JOIN PERMISOS_USUARIOS ON USERS.ID = PERMISOS_USUARIOS.ID_USER;";
+    public static final String SELECT_USERS_PERMISOS = "SELECT * FROM USERS LEFT JOIN PERMISOS_USUARIOS ON USERS.ID = PERMISOS_USUARIOS.ID_USER LIMIT 10 OFFSET ?";
     public static final String SELECT_USER_BY_CORREO = "SELECT * FROM USERS WHERE EMAIL = ?";
     public static final String UPDATE_NEW_PASSWORD = "UPDATE USERS SET PASSWORD = ? WHERE EMAIL = ?";
     public static final String SACAR_PERMISO = "SELECT * from USERS INNER JOIN PERMISOS_USUARIOS ON USERS.ID = PERMISOS_USUARIOS.ID_USER WHERE USERS.EMAIL = ?";
+    public static final String COGER_TODOS_PROFESORES = "SELECT * FROM PROFESORES";
+    public static final String ASIGNAR_PROFESOR_ASIGNATURA = "INSERT INTO PROFE_ASIGNATURA (ID_PROFE, ID_ASIGNATURA) VALUES (?,?)";
+    
+    
     
     //MENSAJES DE CAMBIO DE PERMISOS DE ADMINISTRADOR
     public static final String ADMIN_CAMBIADO_OK = "Cambio a administrador correcto";
     public static final String ADMIN_CAMBIADO_ERROR = "Se produjo un error al dar el permiso";
+    public static final String MENSAJE_ASIGNAR_PROFE = "Profesor asignado correctamente";
+    public static final String MENSAJE_ASIGNAR_PROFE_ERROR = "Error al asignar el profesor";
     //MENSAJE QUE VA CON EL CORREO CUANDO SE CREA UN PROFESOR O ALUMNO
     public static final String USUARIO = "Su usuario es: ";
     public static final String PASSWORD = "Su contraseña es: ";

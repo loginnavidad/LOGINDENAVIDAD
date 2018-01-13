@@ -9,12 +9,14 @@ import dao.AlumnoDAO;
 import dao.AsignaturasDAO;
 import dao.CursosDAO;
 import dao.NotasDAO;
+import dao.ProfesoresDAO;
 import dao.UsersDAO;
 import java.util.List;
 import model.Alumno;
 import model.Asignatura;
 import model.Curso;
 import model.Nota;
+import model.Profesor;
 import model.User;
 
 /**
@@ -35,6 +37,11 @@ public class ProfesoresServicios {
     public List<Alumno> getAlumnos(int id_asig) {
         AlumnoDAO dao = new AlumnoDAO();
         return  dao.getAlumnosAsignatura(id_asig);
+    }
+    
+    public List<Profesor> getProfesores(){
+        ProfesoresDAO dao = new ProfesoresDAO();
+        return dao.getAllProfesores();
     }
 /*
     public List<Nota> getNotas(List<Alumno> a) {

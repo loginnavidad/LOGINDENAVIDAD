@@ -15,3 +15,6 @@ function enasignatura(){
 function encurso(){
     document.enviocurso.submit();
 }
+function enprofeasig(){
+    document.asignarProfe.submit();
+}

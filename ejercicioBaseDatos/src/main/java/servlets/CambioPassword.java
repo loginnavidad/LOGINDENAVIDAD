@@ -22,6 +22,7 @@ import model.User;
 import model.UserChangePass;
 import servicios.CambioPasswordServicio;
 import servicios.UsersServicios;
+import utils.Constantes;
 
 /**
  *
@@ -55,13 +56,13 @@ public class CambioPassword extends HttpServlet {
                     if (cps.comprobarPassword(usuario2, usuario)) {
                         actualizadas = cps.cambioPassword(usuario2);
                         if (actualizadas) {
-                            root.put("mensaje", "Su contraseña se actualizó correctamente");
+                            root.put(Constantes.VARIABLE_MENSAJE, "Su contraseña se actualizó correctamente");
                         } else {
-                            root.put("mensaje", "Ha ocurrido un error al cambiar su contraseña");
+                            root.put(Constantes.VARIABLE_MENSAJE, "Ha ocurrido un error al cambiar su contraseña");
                         }
 
                     } else {
-                        root.put("mensaje", "Correo o contraseña equivocado");
+                        root.put(Constantes.VARIABLE_MENSAJE, "Correo o contraseña equivocado");
                     }
                     try {
                         Template temp = Configuration.getInstance().getFreeMarker().getTemplate("cambiohecho.ftl");

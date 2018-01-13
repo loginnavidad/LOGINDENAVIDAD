@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import servicios.UsersServicios;
+import utils.Constantes;
 
 /**
  *
@@ -40,9 +41,11 @@ public class Login extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         UsersServicios us = new UsersServicios();
+        
         HashMap root = new HashMap();
+        root.put(Constantes.VARIABLE_MENSAJE, request.getAttribute(Constantes.VARIABLE_MENSAJE));
         try {
-            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("login.ftl");
+            Template temp = Configuration.getInstance().getFreeMarker().getTemplate(Constantes.LOGIN);
             temp.process(root, response.getWriter());
         } catch (TemplateException ex) {
             Logger.getLogger(Superadministrador.class.getName()).log(Level.SEVERE, null, ex);

@@ -11,7 +11,6 @@
         </head>
     <body>
         <p>${mensaje}</p>
-        <p>${mensaje2}</p>
-        <a href="login">Inicia Sesión</a>
-    </body>
+
+        </body>
     </html>

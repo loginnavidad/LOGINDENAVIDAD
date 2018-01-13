@@ -8,7 +8,7 @@ and open the template in the editor.
     Author     : Sergio
 */
 
-.formularioAdministrador,.formularioProfesor,.formularioAlumno,.formularioAsignatura,.formularioCurso{
+.formularioAdministrador,.formularioProfesor,.formularioAlumno,.formularioAsignatura,.formularioCurso,.formularioProfeAsig{
     display: none; 
     position: fixed; 
     z-index: 1; 
@@ -45,9 +45,3 @@ and open the template in the editor.
     cursor: pointer;
 }
 
-
-
-.formularioAdministrador{}
-.formularioProfesor{}
-.formularioAlumno{}
-.formularioAsignatura{}

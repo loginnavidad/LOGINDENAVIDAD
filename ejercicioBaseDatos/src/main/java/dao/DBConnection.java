@@ -58,6 +58,8 @@ public class DBConnection {
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 
+        config.setConnectionTimeout(3000);
+        config.setValidationTimeout(1000);
         HikariDataSource datasource = new HikariDataSource(config);
         return datasource;
     }

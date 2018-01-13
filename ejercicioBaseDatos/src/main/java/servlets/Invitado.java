@@ -18,19 +18,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import servicios.AsignaturasServicios;
-import servicios.CursosServicios;
-import servicios.ProfesoresServicios;
-import servicios.UsersServicios;
-import servicios.AdministradorServicios;
-import utils.Constantes;
 
 /**
  *
  * @author Sergio
  */
-@WebServlet(name = "Administrador", urlPatterns = {"/administrador"})
-public class Administrador extends HttpServlet {
+@WebServlet(name = "Invitado", urlPatterns = {"/invitado"})
+public class Invitado extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,36 +38,10 @@ public class Administrador extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        ProfesoresServicios ps = new ProfesoresServicios();
-        CursosServicios cs = new CursosServicios();
-        AsignaturasServicios as = new AsignaturasServicios();
-        AdministradorServicios adms = new AdministradorServicios();
-
+        
         HashMap root = new HashMap();
-
-        String accion = request.getParameter("accion");
-        if (null != accion) {
-            switch (accion) {
-                case "asignarProfesor":
-                    if (adms.asignarProfeAsignatura(request.getParameter("id_profesor"), request.getParameter("id_asignatura"))) {
-                        root.put(Constantes.VARIABLE_MENSAJE, Constantes.MENSAJE_ASIGNAR_PROFE);
-                    } else {
-                        root.put(Constantes.VARIABLE_MENSAJE, Constantes.MENSAJE_ASIGNAR_PROFE_ERROR);
-                    }
-                    try {
-                        Template temp = Configuration.getInstance().getFreeMarker().getTemplate(Constantes.ASIGNAR_PROFESOR);
-                        temp.process(root, response.getWriter());
-                    } catch (TemplateException ex) {
-                        Logger.getLogger(Superadministrador.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-            }
-        }
-
-        root.put("asignaturas", as.getAllAsignaturas());
-        root.put("profesores", ps.getProfesores());
-        root.put("cursos", cs.listarCursos());
         try {
-            Template temp = Configuration.getInstance().getFreeMarker().getTemplate(Constantes.PANTALLA_ADMIN);
+            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("invitado.ftl");
             temp.process(root, response.getWriter());
         } catch (TemplateException ex) {
             Logger.getLogger(Superadministrador.class.getName()).log(Level.SEVERE, null, ex);

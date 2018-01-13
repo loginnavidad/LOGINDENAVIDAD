@@ -10,8 +10,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
     <body>
-        <p>${mensaje}</p>
-        <p>${mensaje2}</p>
-        <a href="login">Inicia Sesión</a>
-    </body>
+        <h2>Con este usuario no tiene permisos para acceder a nada, hable con sus administrador</h2>
+        </body>
     </html>

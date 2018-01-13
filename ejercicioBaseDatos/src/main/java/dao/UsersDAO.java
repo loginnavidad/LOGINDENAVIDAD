@@ -178,7 +178,7 @@ public class UsersDAO {
         return true;
     }
 
-    public List<User> getUsers() {
+    public List<User> getUsers(int numPaginas) {
         List<User> lista = null;
         Connection con = null;
         try {
@@ -186,7 +186,7 @@ public class UsersDAO {
             QueryRunner qr = new QueryRunner();
             ResultSetHandler<List<User>> h = new BeanListHandler<User>(User.class
             );
-            lista = qr.query(con, Constantes.SELECT_USERS_PERMISOS, h);
+            lista = qr.query(con, Constantes.SELECT_USERS_PERMISOS, h,numPaginas);
 
         } catch (Exception ex) {
             Logger.getLogger(UsersDAO.class
@@ -268,7 +268,7 @@ public class UsersDAO {
 
     public int desactivarPermisoDeAdmin(int id) {
         Connection con = null;
-        int permisoUser = 5;
+        int permisoUser = 6;
         int filas_actualizadas = 0;
         try {
             con = DBConnection.getInstance().getConnection();
