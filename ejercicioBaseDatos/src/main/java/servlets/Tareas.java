@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Tarea;
 import servicios.TareaServicios;
+import utils.Constantes;
 
 /**
  *
@@ -64,9 +65,9 @@ public class Tareas extends HttpServlet {
                 int fila = ts.crearTarea(t);
                     
                 if(fila != 0){
-                    root.put("mensajeTarea", "tarea modificada correctamente");
+                    root.put("mensajeTarea", Constantes.TAREA_EXITO);
                 } else {
-                    root.put("mensajeTarea", "no se ha podido crear la tarea");
+                    root.put("mensajeTarea", Constantes.TAREA_ERROR);
                 }
                 break;
         }
