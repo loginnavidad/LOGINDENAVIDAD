@@ -32,7 +32,7 @@
                     </tr>
                     <#else>
                 <tr>
-                    <td colspan="3">No existen asignaturas</td>
+                    <td colspan="3">No existen alumnos</td>
                     </tr>
                     </#list>
                 </#if>
