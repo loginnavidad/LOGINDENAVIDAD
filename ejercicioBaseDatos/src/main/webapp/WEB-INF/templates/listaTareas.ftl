@@ -2,7 +2,17 @@
 
 <#assign charset="UTF-8">
 <#assign title="Listado de tareas">
-
+<#assign no_tareas="No hay tareas asignadas">
+<#assign subir_tarea_ok="Todo correcto. Acabas de subir tu tarea">
+<#assign subir_tarea_ko="La tarea no se ha podido sunir. Vuelve a intentarlo">
+<#assign return_asignaturas="Volver a mis asignaturas">
+<#assign cerrar_sesion="Cerrar sesion">
+<#assign nombre_tarea="Nombre de la tarea">
+<#assign fecha_tarea="Fecha tarea">
+<#assign tarea_hecha="Tarea hecha">
+<#assign subir_tarea="Subir tarea">
+<#assign volver_tarea="Volver a subir tarea">
+<#assign titulo_tabla="Tus tareas">
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,32 +23,57 @@
         </head>
     <body>
         <div class="container">
-            <h2>Listado de tareas del alumno</h2>
+            <h2>${titulo_tabla}</h2>
             <table class="table table-striped">
                 <tr>
-                    <th>Nombre de la tarea</th>
-                    <th>Fecha tarea</th>
-                    <th>Tarea hecha</th>
-                    <th>Subir tarea</th>
-                </tr>
+                    <th>${nombre_tarea}</th>
+                    <th>${fecha_tarea}</th>
+                    <th>${tarea_hecha}</th>
+                    <th>${subir_tarea}</th>
+                    </tr>
 
                 <#if tareas??>
                     <#list tareas as tarea>
                 <tr>
                     <td>${tarea.nombre}</td>
                     <td>${tarea.fecha_entrega?date}</td>
-                    <td>${tarea.hecho}</td>
                     <td>
-                        <a href="tareas?id=${tarea.id_tarea}" class="btn btn-info">Subir tarea</a>    
+                        <#if tarea.hecho == 1>
+                            <span class="glyphicon glyphicon-ok"></span>
+                        <#else>
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </#if>
                     </td>
-                    </tr>
+                    <#if tarea.hecho == 0>
+                    <td>
+                        <a href="tareas?op=UPD_TAREA&id_tarea=${tarea.id_tarea}&id=${id_asig}" class="btn btn-primary">${subir_tarea}</a>    
+                    </td>
+                    <#else>
+                    <td>
+                        <a href="tareas?op=UPD_TAREA&id_tarea=${tarea.id_tarea}&id=${id_asig}" class="btn btn-warning">${volver_tarea}</a>    
+                    </td>
+                    </#if>
+                </tr>
                     <#else>
                 <tr>
-                    <td colspan="3">No hay tareas asignadas</td>
+                    <td colspan="3">${no_tareas}</td>
                     </tr>
                     </#list>
                 </#if>
                 </table>
-           
+                <#if ok??>
+                    <#if ok == 1>
+                        <div class="alert alert-success">
+                           ${subir_tarea_ok}
+                        </div>
+                        <#else>
+                        <div class="alert alert-danger">
+                            ${subir_tarea_ko}
+                        </div>
+                    </#if>
+                </#if>   
+            <a href="alumnos?id=10" class="btn btn-info">${return_asignaturas}</a>
+            
+            <a href="Users?accion=loginout" class="btn btn-success">${cerrar_sesion}</a>  
         </body>
     </html>
