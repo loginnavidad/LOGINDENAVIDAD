@@ -29,7 +29,7 @@ public class Tareas extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String op = request.getParameter("op");
         TareaServicios ts = new TareaServicios();
         Tarea t = new Tarea();
@@ -39,18 +39,26 @@ public class Tareas extends HttpServlet {
         String page = null;
         switch ((String) request.getSession().getAttribute("permisoUser")) {
             case "ALUMNO":
-                int id_alumno=(Integer)request.getSession().getAttribute("idAlumno");
+                int id_alumno = (Integer) request.getSession().getAttribute("idAlumno");
+
                 page = "listaTareas.ftl";
                 if (op != null && op.equals("UPD_TAREA")) {
                     int idTarea = Integer.parseInt(request.getParameter("id_tarea"));
                     int ok = ts.subTareaAlumn(idTarea);
                     root.put("ok", ok);
                 }
+
+                String siguientePaginas = request.getParameter("paginacion");
+                int siguientesTareas = 0;
+                if (null != siguientePaginas) {
+                    siguientesTareas = Integer.parseInt(siguientePaginas);
+                }
                 //obtenemos las tareas de la asignatura por medio de la id de alumno y la id de asignatura                
-                root.put("tareas", ts.listarTareas(id_alumno, id_asig));
+                root.put("tareas", ts.listarTareas(id_alumno, id_asig, siguientesTareas));
                 root.put("id_asig", id_asig);
+                root.put("numAsig", siguientesTareas);
                 break;
-                
+
             case "PROFESOR":
                 page = "anadirTarea.ftl";
                 String accion = request.getParameter("accion");
@@ -62,12 +70,12 @@ public class Tareas extends HttpServlet {
                     LocalDate local = LocalDate.parse(fechaEntrega,dtf);
                     id_asig = 1;//PROVISIONAL
                     t.setId_asignatura(id_asig);
-                    t.setNombre(nombreTarea); 
+                    t.setNombre(nombreTarea);
                     t.setFecha_entrega(Date.from(local.atStartOfDay().toInstant(ZoneOffset.UTC)));
 
                     int fila = ts.crearTarea(t);
 
-                    if(fila != 0){
+                    if (fila != 0) {
                         root.put("mensajeTarea", Constantes.TAREA_EXITO);
                     } else {
                         root.put("mensajeTarea", Constantes.TAREA_ERROR);
@@ -75,7 +83,7 @@ public class Tareas extends HttpServlet {
                 }
                 break;
         }
-        
+
         temp = Configuration.getInstance().getFreeMarker().getTemplate(page);
 
         try {

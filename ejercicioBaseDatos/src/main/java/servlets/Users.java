@@ -68,7 +68,7 @@ public class Users extends HttpServlet {
                     }
 
                     try {
-                        Template temp = Configuration.getInstance().getFreeMarker().getTemplate(Constantes.PAGINA_INSERTADO_OK);
+                        Template temp = Configuration.getInstance().getFreeMarker().getTemplate(Constantes.NUEVO_USER_REGISTRADO);
                         temp.process(root, response.getWriter());
                     } catch (TemplateException ex) {
                         Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);

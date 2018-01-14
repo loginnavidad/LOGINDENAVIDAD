@@ -20,6 +20,16 @@
         <meta charset="${charset}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script>
+            function addpaginas(){
+                document.getElementById("paginar").value = document.getElementById("paginar").value + 10;
+                pagination.submit();
+            }
+            function substracpaginas(){
+                document.getElementById("paginar").value = document.getElementById("paginar").value -10;
+                pagination.submit();
+            }
+        </script>
         </head>
     <body>
         <div class="container">
@@ -72,7 +82,12 @@
                         </div>
                     </#if>
                 </#if>   
-            <a href="alumnos?id=10" class="btn btn-info">${return_asignaturas}</a>
+            <form action="alumnos" method="get" name="pagination">
+                <input type="hidden" id="paginar" value="${numAsig}" name="paginacion">
+                <button onclick="substracpaginas();" class="btn btn-primary col-xs-offset-5"><-</button>
+                <button onclick="addpaginas();" class="btn btn-primary col-xs-offset-5">-></button>
+            </form>
+            <a href="alumnos" class="btn btn-info">${return_asignaturas}</a>
             
             <a href="Users?accion=loginout" class="btn btn-success">${cerrar_sesion}</a>  
         </body>

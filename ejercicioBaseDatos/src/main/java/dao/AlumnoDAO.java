@@ -69,12 +69,12 @@ public class AlumnoDAO {
         return alumnos;
     }
     
-    public List<Asignatura> getAsignaturaAlumno(int id_alumno) {
+    public List<Asignatura> getAsignaturaAlumno(int id_alumno,int siguientesAsig) {
         try {
             con = DBConnection.getInstance().getConnection();
             QueryRunner qr = new QueryRunner();
             ResultSetHandler<List<Asignatura>> h = new BeanListHandler<>(Asignatura.class);
-            asignatura = qr.query(con, Constantes.LISTAR_ASIGNATURAS_ALUMNO, h, id_alumno);
+            asignatura = qr.query(con, Constantes.LISTAR_ASIGNATURAS_ALUMNO, h, id_alumno,siguientesAsig);
         } catch (Exception e) {
             Logger.getLogger(AlumnoDAO.class.getName()).log(Level.SEVERE, null, e);
         } finally {

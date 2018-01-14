@@ -26,10 +26,11 @@ public class AlumnosServicios {
     /**
      * Obtenemos las asignaturas del alumno
      * @param id_alumno id del alumno
-     * @return listado contodas sus assignaturas
+     * @param siguientesAsig las 10 siguientes asignaturas
+     * @return listado con todas sus asignaturas
      */
-    public List<Asignatura> getAsignaturaAlumno(int id_alumno){
+    public List<Asignatura> getAsignaturaAlumno(int id_alumno,int siguientesAsig){
     alumDao = new AlumnoDAO();
-    return alumDao.getAsignaturaAlumno(id_alumno);
+    return alumDao.getAsignaturaAlumno(id_alumno,siguientesAsig);
     }
 }

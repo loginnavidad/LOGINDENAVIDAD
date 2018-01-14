@@ -21,13 +21,13 @@ public class TareasDAO {
     Connection con = null;
     List<Tarea> tareas = null;
     
-    public List<Tarea> listarTareas(int id_alum,int id_asignatura){
+    public List<Tarea> listarTareas(int id_alum,int id_asignatura,int siguientesTareas){
    
          try {
             con = DBConnection.getInstance().getConnection();
             QueryRunner qr = new QueryRunner();
             ResultSetHandler<List<Tarea>> h = new BeanListHandler<>(Tarea.class);
-            tareas = qr.query(con, Constantes.LISTAR_TAREAS_ALUMNO, h, id_alum,id_asignatura);           
+            tareas = qr.query(con, Constantes.LISTAR_TAREAS_ALUMNO, h, id_alum,id_asignatura,siguientesTareas);           
         } catch (Exception e) {
             Logger.getLogger(AlumnoDAO.class.getName()).log(Level.SEVERE, null, e);
         } finally {
