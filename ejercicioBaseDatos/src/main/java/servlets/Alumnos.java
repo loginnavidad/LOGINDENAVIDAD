@@ -34,16 +34,24 @@ public class Alumnos extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        HttpSession sesion=request.getSession();
-        sesion.setAttribute("idAlumno",10);
-        sesion.setAttribute("permisoUser", "ALUMNO");
+        //HttpSession sesion=request.getSession();
+        //sesion.setAttribute("idAlumno",10);
+        //sesion.setAttribute("permisoUser", "ALUMNO");
+        
         int id_usuario=(Integer)request.getSession().getAttribute("idAlumno");
         AlumnosServicios as = new AlumnosServicios();
+        String siguientePaginas = request.getParameter("paginacion");
+        int siguientesAsig = 0;
+        if(null != siguientePaginas){
+            siguientesAsig = Integer.parseInt(siguientePaginas);
+        }
  
         HashMap root = new HashMap();
         Template temp = null;
         //obtenemos las asignaturas y sus notas mediante el id del alumno
-        root.put("asignaturas",  as.getAsignaturaAlumno(id_usuario));
+        root.put("asignaturas",  as.getAsignaturaAlumno(id_usuario, siguientesAsig));
+        root.put("numAsig", siguientesAsig);
+
         temp = Configuration.getInstance().getFreeMarker().getTemplate("listaAsignaturaAlum.ftl");
         try {
             temp.process(root, response.getWriter());
