@@ -20,14 +20,12 @@
                 formulario2.submit();
             }
             function addpaginas(){
-                var numerodeusuarios = document.getElementById("paginar").value;
-                numerodeusuarios = numerodeusuarios + 10;
-                paginar.submit();
+                document.getElementById("paginar").value = document.getElementById("paginar").value + 10;
+                pagination.submit();
             }
             function substracpaginas(){
-                var numerodeusuarios = document.getElementById("paginar").value;
-                numerodeusuarios = numerodeusuarios - 10;
-                paginar.submit();
+                document.getElementById("paginar").value = document.getElementById("paginar").value -10;
+                pagination.submit();
             }
         </script>
         </head>

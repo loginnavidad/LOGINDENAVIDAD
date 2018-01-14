@@ -35,6 +35,7 @@ public class Constantes {
     public static final String VARIABLE_MENSAJE2 = "mensaje2";
     public static final String PANTALLASUPERADMIN = "pantallasuperadmin.ftl";
     public static final String PAGINA_INSERTADO_OK = "insertado.ftl";
+    public static final String NUEVO_USER_REGISTRADO = "nuevouser.ftl";
     public static final String REGISTRO_PANTALLA = "registro.ftl";
     public static final String ACTIVADO_PANTALLA = "activado.ftl";
     public static final String ASIGNAR_PROFESOR = "asignarprofe.ftl";
