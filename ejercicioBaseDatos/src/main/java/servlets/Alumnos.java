@@ -12,8 +12,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import servicios.AlumnosServicios;
+import utils.Constantes;
 
 /**
  *
@@ -34,10 +34,6 @@ public class Alumnos extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        //HttpSession sesion=request.getSession();
-        //sesion.setAttribute("idAlumno",10);
-        //sesion.setAttribute("permisoUser", "ALUMNO");
-        
         int id_usuario=(Integer)request.getSession().getAttribute("idUser");
         AlumnosServicios as = new AlumnosServicios();
         String siguientePaginas = request.getParameter("paginacion");
@@ -52,7 +48,7 @@ public class Alumnos extends HttpServlet {
         root.put("asignaturas",  as.getAsignaturaAlumno(id_usuario, siguientesAsig));
         root.put("numAsig", siguientesAsig);
 
-        temp = Configuration.getInstance().getFreeMarker().getTemplate("listaAsignaturaAlum.ftl");
+        temp = Configuration.getInstance().getFreeMarker().getTemplate(Constantes.LISTA_ASIGNATURA_ALUMNO);
         try {
             temp.process(root, response.getWriter());
         } catch (TemplateException ex) {

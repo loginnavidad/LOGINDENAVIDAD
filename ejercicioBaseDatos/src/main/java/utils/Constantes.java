@@ -98,4 +98,5 @@ public class Constantes {
     public static final String AÑADIR_TAREA = "anadirTarea.ftl";
     public static final String LISTA_ALUMNOS = "profesoresAlumnos.ftl";
     public static final String PROFESORES = "profesores.ftl";
+    public static final String LISTA_ASIGNATURA_ALUMNO = "listaAsignaturaAlum.ftl";
 }
