@@ -41,6 +41,8 @@ public class Constantes {
     public static final String ASIGNAR_PROFESOR = "asignarprofe.ftl";
     public static final String PANTALLA_ADMIN = "usuarios.ftl";
     public static final String MENSAJE_LOGIN_FAIL = "Usuario o contraseña erroneos";
+    public static final String MENSAJE_PERMISOS = "No tiene permiso para acceder aqui";
+    public static final String MENSAJE_LOGIN_NO_HECHO = "Por favor haga login";
     //QUERIES DIVERSAS
     public static final String INSERTAR_USERS = "INSERT INTO USERS (USER,PASSWORD,CODIGO_ACTIVACION,EMAIL,ACTIVO) VALUES(?,?,?,?,?)";
     public static final String DAR_PERMISO = "INSERT INTO PERMISOS_USUARIOS (ID_PERMISO,ID_USER) VALUES (?,?)";

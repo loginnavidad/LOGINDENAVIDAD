@@ -34,10 +34,10 @@ public class Alumnos extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        HttpSession sesion=request.getSession();
+        /*HttpSession sesion=request.getSession();
         sesion.setAttribute("idAlumno",10);
-        sesion.setAttribute("permisoUser", "ALUMNO");
-        int id_usuario=(Integer)request.getSession().getAttribute("idAlumno");
+        sesion.setAttribute("permisoUser", "ALUMNO");*/
+        int id_usuario=(Integer)request.getSession().getAttribute("permisoUser");
         AlumnosServicios as = new AlumnosServicios();
  
         HashMap root = new HashMap();

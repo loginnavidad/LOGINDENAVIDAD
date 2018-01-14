@@ -110,12 +110,17 @@ public class FiltroProfe implements Filter {
         
         Throwable problem = null;
         try {
-             if (((HttpServletRequest) request).getSession().getAttribute("permisoUser").equals("4")) {
+        if(((HttpServletRequest) request).getSession().getAttribute("login")!=null){
+             if (1 == (long)(((HttpServletRequest) request).getSession().getAttribute("permisoUser")) || 4 == (long)(((HttpServletRequest) request).getSession().getAttribute("permisoUser")) || 2 == (long)(((HttpServletRequest) request).getSession().getAttribute("permisoUser"))  ) {
                 chain.doFilter(request, response);
             } else {
-                request.setAttribute(Constantes.VARIABLE_MENSAJE, this);
+                request.setAttribute(Constantes.VARIABLE_MENSAJE, Constantes.MENSAJE_PERMISOS);
                request.getRequestDispatcher("errorpermiso").forward(request, response);
             }
+        }else {
+            request.setAttribute(Constantes.VARIABLE_MENSAJE, Constantes.MENSAJE_LOGIN_NO_HECHO);
+            request.getRequestDispatcher("errorpermiso").forward(request, response);
+        }
         } catch (Throwable t) {
             // If an exception is thrown somewhere down the filter chain,
             // we still want to execute our after processing, and then
