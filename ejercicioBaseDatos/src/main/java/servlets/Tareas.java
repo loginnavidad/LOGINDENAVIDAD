@@ -30,19 +30,21 @@ public class Tareas extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String op = request.getParameter("op");
+        
         TareaServicios ts = new TareaServicios();
         Tarea t = new Tarea();
         Template temp = null;
         HashMap root = new HashMap();
+        String op = request.getParameter("op");
         int id_asig = Integer.parseInt(request.getParameter("id"));
         String page = null;
+        
         switch ((String) request.getSession().getAttribute("permisoUser")) {
             case "ALUMNO":
                 int id_alumno = (Integer) request.getSession().getAttribute("idAlumno");
 
-                page = "listaTareas.ftl";
-                if (op != null && op.equals("UPD_TAREA")) {
+                page = Constantes.LISTA_TAREAS;
+                if (op.equals("UPD_TAREA")) {
                     int idTarea = Integer.parseInt(request.getParameter("id_tarea"));
                     int ok = ts.subTareaAlumn(idTarea);
                     root.put("ok", ok);
@@ -60,26 +62,18 @@ public class Tareas extends HttpServlet {
                 break;
 
             case "PROFESOR":
-                page = "anadirTarea.ftl";
-                String accion = request.getParameter("accion");
-                root.put("mensajeTarea", "");//PROVISIONAL
-                if(accion != null){
+                
+                page = Constantes.AÑADIR_TAREA;
+                if(op.equals("CREAR_TAREA")){
                     String nombreTarea = request.getParameter("nombreTarea");
                     String fechaEntrega = request.getParameter("fechaEntrega");
                     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                     LocalDate local = LocalDate.parse(fechaEntrega,dtf);
-                    id_asig = 1;//PROVISIONAL
                     t.setId_asignatura(id_asig);
                     t.setNombre(nombreTarea);
                     t.setFecha_entrega(Date.from(local.atStartOfDay().toInstant(ZoneOffset.UTC)));
-
-                    int fila = ts.crearTarea(t);
-
-                    if (fila != 0) {
-                        root.put("mensajeTarea", Constantes.TAREA_EXITO);
-                    } else {
-                        root.put("mensajeTarea", Constantes.TAREA_ERROR);
-                    }
+                    
+                    root.put("ok", ts.crearTarea(t));
                 }
                 break;
         }
