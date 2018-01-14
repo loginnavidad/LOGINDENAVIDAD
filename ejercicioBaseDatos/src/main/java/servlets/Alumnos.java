@@ -38,7 +38,7 @@ public class Alumnos extends HttpServlet {
         //sesion.setAttribute("idAlumno",10);
         //sesion.setAttribute("permisoUser", "ALUMNO");
         
-        int id_usuario=(Integer)request.getSession().getAttribute("idAlumno");
+        int id_usuario=(Integer)request.getSession().getAttribute("idUser");
         AlumnosServicios as = new AlumnosServicios();
         String siguientePaginas = request.getParameter("paginacion");
         int siguientesAsig = 0;

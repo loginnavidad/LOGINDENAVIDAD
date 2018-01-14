@@ -110,6 +110,7 @@ public class Users extends HttpServlet {
                         request.getSession().setAttribute("nombreUsuario", userLogeado.getUser());
                         request.getSession().setAttribute("idUser", userLogeado.getId());
                         request.getSession().setAttribute("permisoUser", userLogeado.getId_permiso());
+                        request.getSession().setAttribute("login", "login");
                         
                         
                         if(userLogeado.getId_permiso()== 4){

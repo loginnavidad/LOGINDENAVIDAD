@@ -23,7 +23,7 @@ import utils.Constantes;
  *
  * @author Sergio
  */
-@WebFilter(filterName = "FiltroAdmin", urlPatterns = {""})
+@WebFilter(filterName = "FiltroAdmin", urlPatterns = {"/administrador"})
 public class FiltroAdmin implements Filter {
     
     private static final boolean debug = true;
@@ -110,12 +110,20 @@ public class FiltroAdmin implements Filter {
         
         Throwable problem = null;
         try {
-             if (((HttpServletRequest) request).getSession().getAttribute("permisoUser").equals("1")) {
+        if(((HttpServletRequest) request).getSession().getAttribute("login") != null){
+            long permiso = (long)(((HttpServletRequest) request).getSession().getAttribute("permisoUser"));
+            
+             if (4 == permiso || 1 == permiso) {
+                
                 chain.doFilter(request, response);
             } else {
-                request.setAttribute(Constantes.VARIABLE_MENSAJE, this);
+                request.setAttribute(Constantes.VARIABLE_MENSAJE, Constantes.MENSAJE_PERMISOS);
                request.getRequestDispatcher("errorpermiso").forward(request, response);
             }
+        } else {
+            request.setAttribute(Constantes.VARIABLE_MENSAJE, Constantes.MENSAJE_LOGIN_NO_HECHO);
+            request.getRequestDispatcher("errorpermiso").forward(request, response);
+        }
         } catch (Throwable t) {
             // If an exception is thrown somewhere down the filter chain,
             // we still want to execute our after processing, and then
