@@ -14,6 +14,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     </head>
     <body>
+        <#include "cabecera.ftl">
         <div class="container">
             <h2>Crear una Tarea</h2>
             <form action="tareas" method="get" name="pagination">

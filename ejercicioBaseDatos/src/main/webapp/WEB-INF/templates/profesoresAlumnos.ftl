@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         </head>
     <body>
+        <#include "cabecera.ftl">
         <div class="container">
             <h2>Listado de tus alumnos</h2>
             <table class="table table-striped">
