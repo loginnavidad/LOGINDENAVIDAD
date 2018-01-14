@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import servicios.UsersServicios;
+import utils.Constantes;
 
 /**
  *
@@ -41,9 +42,15 @@ public class Superadministrador extends HttpServlet {
 
         UsersServicios us = new UsersServicios();
         HashMap root = new HashMap();
-        root.put("usuarios", us.getAllUsers());
+        String siguientePaginas = request.getParameter("paginacion");
+        int siguientesUsers = 0;
+        if(null != siguientePaginas){
+            siguientesUsers = Integer.parseInt(siguientePaginas);
+        }
+        root.put("usuarios", us.getAllUsers(siguientesUsers));
+        root.put("numUsers", siguientesUsers);
         try {
-            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("pantallasuperadmin.ftl");
+            Template temp = Configuration.getInstance().getFreeMarker().getTemplate(Constantes.PANTALLASUPERADMIN);
             temp.process(root, response.getWriter());
         } catch (TemplateException ex) {
             Logger.getLogger(Superadministrador.class.getName()).log(Level.SEVERE, null, ex);

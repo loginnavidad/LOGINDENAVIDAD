@@ -1,8 +1,13 @@
 <#ftl strip_whitespace = true>
 
 <#assign charset="UTF-8">
-<#assign title="Listado alumnos">
-
+<#assign title="Listado de tus asignaturas">
+<#assign cerrar_sesion="Cerrar sesion">
+<#assign title_table="Listado de tus asignaturas">
+<#assign no_asignaturas="No tienes asignaturas asignadas">
+<#assign tareas="Tareas">
+<#assign nombre_asignatura="Nombre asignatura">
+<#assign nota="Nota">
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,12 +18,12 @@
         </head>
     <body>
         <div class="container">
-            <h2>Listado de tus asignaturas</h2>
+            <h2>${title_table}</h2>
             <table class="table table-striped">
                 <tr>
-                    <th>Tareas</th>
-                    <th>Nombre asignatura</th>
-                    <th>Nota</th>
+                    <th>${tareas}</th>
+                    <th>${nombre_asignatura}</th>
+                    <th>${nota}</th>
                 </tr>
                 <#if asignaturas??>
                     <#list asignaturas as asignatura>
@@ -31,10 +36,12 @@
                     </tr>
                     <#else>
                 <tr>
-                    <td colspan="3">No existen asignaturas</td>
+                    <td colspan="3">${no_asignaturas}</td>
                     </tr>
                     </#list>
                 </#if>
                 </table>
+            
+            <a href="Users?accion=loginout" class="btn btn-success">${cerrar_sesion}</a>  
         </body>
     </html>

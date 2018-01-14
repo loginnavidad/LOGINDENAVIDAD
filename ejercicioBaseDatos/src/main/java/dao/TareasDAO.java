@@ -11,6 +11,7 @@ import model.Tarea;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import utils.Constantes;
 
 /**
  *
@@ -26,11 +27,7 @@ public class TareasDAO {
             con = DBConnection.getInstance().getConnection();
             QueryRunner qr = new QueryRunner();
             ResultSetHandler<List<Tarea>> h = new BeanListHandler<>(Tarea.class);
-            tareas = qr.query(con, "SELECT t.ID_TAREA, t.ID_ASIGNATURA,t.NOMBRE,t.FECHA_ENTREGA,ta.HECHO,ta.idAlumno\n" +
-                    "from tareas t\n" +
-                    "join tareas_alumnos ta \n" +
-                    "on t.ID_TAREA=ta.idTarea\n" +
-                    "where ta.idAlumno=? and t.ID_ASIGNATURA=?;", h, id_alum,id_asignatura);           
+            tareas = qr.query(con, Constantes.LISTAR_TAREAS_ALUMNO, h, id_alum,id_asignatura);           
         } catch (Exception e) {
             Logger.getLogger(AlumnoDAO.class.getName()).log(Level.SEVERE, null, e);
         } finally {
@@ -60,5 +57,20 @@ public class TareasDAO {
             DBConnection.getInstance().cerrarConexion(con);
         }
         return filas;
+    }
+    
+    public int subTareaAlumn(int idTarea) {
+        int insert = 0;
+        try {
+            con = DBConnection.getInstance().getConnection();
+            QueryRunner qr = new QueryRunner();
+            ResultSetHandler<List<Tarea>> h = new BeanListHandler<>(Tarea.class);
+            insert = qr.update(con, Constantes.SUBIR_TAREA_ALUMNO,idTarea);
+        } catch (Exception e) {
+            Logger.getLogger(AlumnoDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            DBConnection.getInstance().cerrarConexion(con);
+        }
+        return insert;
     }
 }

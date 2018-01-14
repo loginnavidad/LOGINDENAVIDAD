@@ -86,9 +86,9 @@ public class UsersServicios {
         return user;
     }
 
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers(int numUsers) {
         UsersDAO dao = new UsersDAO();
-        return dao.getUsers();
+        return dao.getUsers(numUsers);
     }
 
     public boolean addUsuario(User user) {

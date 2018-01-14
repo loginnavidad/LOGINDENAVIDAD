@@ -62,13 +62,13 @@ public class Users extends HttpServlet {
                     
 
                     if (!insertadas) {
-                        root.put("mensaje", Constantes.ERROR_REGISTRO);
+                        root.put(Constantes.VARIABLE_MENSAJE, Constantes.ERROR_REGISTRO);
                     } else {
-                        root.put("mensaje", Constantes.REGISTRO_CORRECTO_ADMINISTRADOR);
+                        root.put(Constantes.VARIABLE_MENSAJE, Constantes.REGISTRO_CORRECTO_ADMINISTRADOR);
                     }
 
                     try {
-                        Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
+                        Template temp = Configuration.getInstance().getFreeMarker().getTemplate(Constantes.PAGINA_INSERTADO_OK);
                         temp.process(root, response.getWriter());
                     } catch (TemplateException ex) {
                         Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
@@ -83,14 +83,14 @@ public class Users extends HttpServlet {
                     
 
                     if (!insertadas) {
-                        root.put("mensaje", Constantes.MENSAJE_PROFESOR_CREADO_MAL);
+                        root.put(Constantes.VARIABLE_MENSAJE, Constantes.MENSAJE_PROFESOR_CREADO_MAL);
 
                     } else {
-                        root.put("mensaje", Constantes.MENSAJE_PROFESOR_CREADO_BIEN);
+                        root.put(Constantes.VARIABLE_MENSAJE, Constantes.MENSAJE_PROFESOR_CREADO_BIEN);
                     }
 
                     try {
-                        Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
+                        Template temp = Configuration.getInstance().getFreeMarker().getTemplate(Constantes.PAGINA_INSERTADO_OK);
                         temp.process(root, response.getWriter());
                     } catch (TemplateException ex) {
                         Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
@@ -108,30 +108,30 @@ public class Users extends HttpServlet {
                     if (us.login(user)) {
                         User userLogeado = us.cogerPermiso(correoLogin);
                         request.getSession().setAttribute("nombreUsuario", userLogeado.getUser());
-                        request.getSession().setAttribute("idAlumno", userLogeado.getId());
+                        request.getSession().setAttribute("idUser", userLogeado.getId());
                         request.getSession().setAttribute("permisoUser", userLogeado.getId_permiso());
-                        if(userLogeado.getId_permiso() == 4){
-                            response.sendRedirect("http://localhost:8080/LOGINDENAVIDAD/ejercicioBaseDatos/superadministrador");
-                        } else if(userLogeado.getId_permiso() == 1) {
-                            response.sendRedirect("http://localhost:8080/LOGINDENAVIDAD/ejercicioBaseDatos/administrador");
-                        }else if(userLogeado.getId_permiso() == 2) {
-                            response.sendRedirect("http://localhost:8080/LOGINDENAVIDAD/ejercicioBaseDatos/profesores");
-                        }else if(userLogeado.getId_permiso() == 3) {
-                            response.sendRedirect("http://localhost:8080/LOGINDENAVIDAD/ejercicioBaseDatos/alumnos");
+                        
+                        
+                        if(userLogeado.getId_permiso()== 4){
+                            request.getRequestDispatcher("superadministrador").forward(request, response);
+                        } else if(userLogeado.getId_permiso()== 3){
+                            request.getRequestDispatcher("alumnos").forward(request, response);
+                        } else if(userLogeado.getId_permiso()== 2){
+                            request.getRequestDispatcher("profesores").forward(request, response);
+                        } else if(userLogeado.getId_permiso()== 1){
+                            request.getRequestDispatcher("administrador").forward(request, response);
+                        } else if(userLogeado.getId_permiso()== 6){
+                            request.getRequestDispatcher("invitado").forward(request, response);
                         }
-                        try {
-                            Template temp = Configuration.getInstance().getFreeMarker().getTemplate("loginhecho.ftl");
-                            temp.process(root, response.getWriter());
-                        } catch (TemplateException ex) {
-                            Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        
                     } else {
-                        request.setAttribute("errorLogin", Constantes.ERROR_LOGIN);
+                        request.setAttribute(Constantes.VARIABLE_MENSAJE, Constantes.MENSAJE_LOGIN_FAIL);
+                        request.getRequestDispatcher("login").forward(request, response);
                     }
                     break;
 
                 case "logout": {
-                    request.getSession().invalidate();
+                    request.getSession().invalidate(); break;
                 }
                 case "addAlumno":
                     Alumno alumno = us.recogidaAlumno(request.getParameter("nombreAlumno"));
@@ -139,13 +139,13 @@ public class Users extends HttpServlet {
                     User usuarioAlumno = us.recogidaParametros(request.getParameter("nombreUser"), request.getParameter("passUser"), request.getParameter("emailUser"));
                     insertadas = us.addAlumno(usuarioAlumno, alumno, usuarioAlum);
                     if (!insertadas) {
-                        root.put("mensaje", Constantes.MENSAJE_ALUMNO_CREADO_MAL);
+                        root.put(Constantes.VARIABLE_MENSAJE, Constantes.MENSAJE_ALUMNO_CREADO_MAL);
                     } else {
-                        root.put("mensaje", Constantes.MENSAJE_ALUMNO_CREADO_BIEN);
+                        root.put(Constantes.VARIABLE_MENSAJE, Constantes.MENSAJE_ALUMNO_CREADO_BIEN);
                     }
 
                     try {
-                        Template temp = Configuration.getInstance().getFreeMarker().getTemplate("insertado.ftl");
+                        Template temp = Configuration.getInstance().getFreeMarker().getTemplate(Constantes.PAGINA_INSERTADO_OK);
                         temp.process(root, response.getWriter());
                     } catch (TemplateException ex) {
                         Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
@@ -153,40 +153,44 @@ public class Users extends HttpServlet {
                     break;
 
                 case "DesactivarAdmin":
-                    if (us.activaPermisoConSuper(request.getParameter("id"))) {
-                        request.setAttribute("mensaje", Constantes.ADMIN_CAMBIADO_OK);
+                    if (us.desactivarPermisoAdmin(request.getParameter("id"))) {
+                        request.setAttribute(Constantes.VARIABLE_MENSAJE, Constantes.ADMIN_CAMBIADO_OK);
+                        break;
                     } else {
-                        request.setAttribute("mensaje", Constantes.ADMIN_CAMBIADO_ERROR);
+                        request.setAttribute(Constantes.VARIABLE_MENSAJE, Constantes.ADMIN_CAMBIADO_ERROR);
+                        break;
                     }
-                case "activarConSuper":
+                case "ActivarAdmin":
                     if (us.activaPermisoConSuper(request.getParameter("id"))) {
-                        request.setAttribute("mensaje", Constantes.ADMIN_CAMBIADO_OK);
+                        request.setAttribute(Constantes.VARIABLE_MENSAJE, Constantes.ADMIN_CAMBIADO_OK);
+                        break;
                     } else {
-                        request.setAttribute("mensaje", Constantes.ADMIN_CAMBIADO_ERROR);
+                        request.setAttribute(Constantes.VARIABLE_MENSAJE, Constantes.ADMIN_CAMBIADO_ERROR);
+                        break;
                     }
                 case "validarUsuario":
                     String codigo = request.getParameter("codigo");
                     int valido = us.activar(codigo);
                     switch (valido) {
                         case 0:
-                            request.setAttribute("mensaje", Constantes.ERROR_TIEMPO);
-                            request.setAttribute("mensaje2", Constantes.ERROR_TIEMPO_2);
+                            root.put(Constantes.VARIABLE_MENSAJE, Constantes.ERROR_TIEMPO);
+                            root.put(Constantes.VARIABLE_MENSAJE2, Constantes.ERROR_TIEMPO_2);
                             break;
                         case 1:
-                            request.setAttribute("mensaje", Constantes.CUENTA_ACTIVADA);
-                            request.setAttribute("mensaje2", Constantes.CUENTA_ACTIVADA_2);
+                            root.put(Constantes.VARIABLE_MENSAJE, Constantes.CUENTA_ACTIVADA);
+                            root.put(Constantes.VARIABLE_MENSAJE2, Constantes.CUENTA_ACTIVADA_2);
                             break;
                         case 2:
-                            request.setAttribute("mensaje", Constantes.YA_ACTIVADA);
-                            request.setAttribute("mensaje2", Constantes.CUENTA_ACTIVADA_2);
+                            root.put(Constantes.VARIABLE_MENSAJE, Constantes.YA_ACTIVADA);
+                            root.put(Constantes.VARIABLE_MENSAJE2, Constantes.CUENTA_ACTIVADA_2);
                             break;
                         case -1:
-                            request.setAttribute("mensaje", Constantes.ERROR_ACTIVAR);
-                            request.setAttribute("mensaje2", Constantes.ERROR_ACTIVAR_2);
+                            root.put(Constantes.VARIABLE_MENSAJE, Constantes.ERROR_ACTIVAR);
+                            root.put(Constantes.VARIABLE_MENSAJE2, Constantes.ERROR_ACTIVAR_2);
                             break;
                     }
                     try {
-                        Template temp = Configuration.getInstance().getFreeMarker().getTemplate("activado.ftl");
+                        Template temp = Configuration.getInstance().getFreeMarker().getTemplate(Constantes.ACTIVADO_PANTALLA);
                         temp.process(root, response.getWriter());
                     } catch (TemplateException ex) {
                         Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
@@ -196,16 +200,17 @@ public class Users extends HttpServlet {
                     boolean actualizada = us.activarUserManualmente(request.getParameter("id"));
                     if (actualizada) {
                         root.put("activado", 1);
-                        root.put("mensaje", Constantes.MENSAJE_USUARIO_ACTIVADO);
-
+                        root.put(Constantes.VARIABLE_MENSAJE, Constantes.MENSAJE_USUARIO_ACTIVADO);
+                        root.put("numUsers", 0);
                     } else {
                         root.put("activado", 0);
-                        root.put("mensaje", Constantes.MENSAJE_USUARIO_NO_ACTIVADO);
-
+                        root.put(Constantes.VARIABLE_MENSAJE, Constantes.MENSAJE_USUARIO_NO_ACTIVADO);
+                        root.put("numUsers", 0);
                     }
                     try {
-                        root.put("usuarios", us.getAllUsers());
-                        Template temp = Configuration.getInstance().getFreeMarker().getTemplate("pantallasuperadmin.ftl");
+                        int numeroUsers = 0;
+                        root.put("usuarios", us.getAllUsers(numeroUsers));
+                        Template temp = Configuration.getInstance().getFreeMarker().getTemplate(Constantes.PANTALLASUPERADMIN);
                         temp.process(root, response.getWriter());
                     } catch (TemplateException ex) {
                         Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);
@@ -216,7 +221,7 @@ public class Users extends HttpServlet {
         } else {
             try {
                 root.put("contenido", "1");
-                Template temp = Configuration.getInstance().getFreeMarker().getTemplate("registro.ftl");
+                Template temp = Configuration.getInstance().getFreeMarker().getTemplate(Constantes.REGISTRO_PANTALLA);
                 temp.process(root, response.getWriter());
             } catch (TemplateException ex) {
                 Logger.getLogger(Users.class.getName()).log(Level.SEVERE, null, ex);

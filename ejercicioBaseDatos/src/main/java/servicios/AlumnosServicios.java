@@ -22,18 +22,12 @@ public class AlumnosServicios {
         alumDao = new AlumnoDAO();
         return alumDao.listarAlumnos();
     }
-
-    /**
-     * Buscar un alumno
-     *
-     * @param nombre buscamos el alumno por su identificador
-     * @return un objeto de tipo alumno
-     */
-    public Alumno buscarAlumno(String nombre) {
-        alumDao = new AlumnoDAO();
-        return alumDao.buscarAlumno(nombre);
-    }
     
+    /**
+     * Obtenemos las asignaturas del alumno
+     * @param id_alumno id del alumno
+     * @return listado contodas sus assignaturas
+     */
     public List<Asignatura> getAsignaturaAlumno(int id_alumno){
     alumDao = new AlumnoDAO();
     return alumDao.getAsignaturaAlumno(id_alumno);

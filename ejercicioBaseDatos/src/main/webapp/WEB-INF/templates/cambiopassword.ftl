@@ -28,16 +28,21 @@
         </script>
         </head>
         <body>
-            <div class="row">
-                <div>
-                    <form action="cambiopassword" method="get" onsubmit="return enviar();">
-                        <input type="text" name="correo" placeholder="Introduzca el correo electronico" class="form-control"/>
-                        <input type="password" name="passLogin" placeholder="Introduzca la contraseña" id="inputPass" class="form-control">
-                        <input type="password" name="nuevaPass" placeholder="Introduzca la nueva contraseña" class="form-control" id="nuevaPass"/>
-                        <input type="password" name="nuevaPassAgain" placeholder="Repita la contraseña" class="form-control" id="passAgain"/>
-                        <input type="submit" name="accion" value="cambiopassword" class="btn btn-primary">
-                    </form>
-                <div>
+            <div class="container">
+                <div class="row">
+                    <h3 class="col-xs-offset-4">Recuperacion de contraseña</h3>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 col-xs-offset-4">
+                        <form action="cambiopassword" method="get" onsubmit="return enviar();">
+                            <input type="text" name="correo" placeholder="Introduzca el correo electronico" class="form-control"/>
+                            <input type="password" name="passLogin" placeholder="Introduzca la contraseña" id="inputPass" class="form-control">
+                            <input type="password" name="nuevaPass" placeholder="Introduzca la nueva contraseña" class="form-control" id="nuevaPass"/>
+                            <input type="password" name="nuevaPassAgain" placeholder="Repita la contraseña" class="form-control" id="passAgain"/>
+                            <input type="submit" name="accion" value="cambiopassword" class="btn btn-primary col-xs-offset-3">
+                        </form>
+                    </div>
+                </div>
             </div>
         </body>
     </html>

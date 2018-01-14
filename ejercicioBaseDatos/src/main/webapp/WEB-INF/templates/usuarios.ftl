@@ -20,22 +20,31 @@
     </head>
     <body onload="cargar();">
         
-        <nav class="row">
-            <nav id="profesor" class="col-8 btn btn-primary">Añadir Profesor</nav>
-        </nav>
+        <#include "cabecera.ftl">
         
-        <nav class="row">
-            <nav id="alumno" class="col-8 btn btn-primary">Añadir Alumno</nav>
-        </nav>
-        
-        <nav class="row">
-            <nav id="asignatura" class="col-8 btn btn-primary">Añadir Asignatura</nav>
-        </nav>
-        
-        <nav class="row">
-            <nav id="curso" class="col-8 btn btn-primary">Añadir Curso</nav>
-        </nav>
-        
+        <div class="container">
+                <div class="col-xs-offset-5">
+                    <nav class="row">
+                        <nav id="profesor" class="btn btn-primary">Añadir Profesor</nav>
+                    </nav>
+
+                    <nav class="row">
+                        <nav id="alumno" class="btn btn-primary">Añadir Alumno</nav>
+                    </nav>
+
+                    <nav class="row">
+                        <nav id="asignatura" class="btn btn-primary">Añadir Asignatura</nav>
+                    </nav>
+
+                    <nav class="row">
+                        <nav id="curso" class="btn btn-primary">Añadir Curso</nav>
+                    </nav>
+
+                    <nav class="row">
+                        <nav id="asignarProfe" class="btn btn-primary">Asignar Profesor</nav>
+                    </nav>
+                </div>
+        </div>
         
         
         
@@ -77,7 +86,7 @@
                 <span class="close" id="closeas">&times;</span>
                 <form action="asignaturas" method="get" name="envioasignatura">
                     <input type="text" name="nombreAsignatura" placeholder="Introduzca el nombre de la asignatura" class="form-control"/>
-                    <select name="id_curso">
+                    <select name="id_curso" class="form-control">
                         <#list cursos as curso>
                             <option value="${curso.id}">${curso.descripcion}</option>
                         </#list>
@@ -96,6 +105,30 @@
                 <form action="cursos" method="get" name="enviocurso">
                     <textarea name="descripcion" placeholder="Introduzca una breve descripcion del curso" rows="5" class="form-control">Escriba aqui la descripcion del curso</textarea>
                     <button value="addCurso" name="accion" class="btn btn-primary">Enviar</button>
+                </form>
+            </div>
+
+        </div>
+      
+        
+        <div id="asigprofe" class="formularioProfeAsig">
+
+            <div class="modal-content">
+                <span class="close" id="closeap">&times;</span>
+                <form action="administrador" method="get" name="asignarProfe">
+                    <label for="asignaturaSelect">Asignaturas</label>
+                    <select name="id_asignatura" id="asignaturaSelect" class="form-control">
+                        <#list asignaturas as asignatura>
+                            <option value="${asignatura.id}">${asignatura.nombre}</option>
+                        </#list>
+                    </select>
+                    <label for="profesorSelect">Profesores</label>
+                    <select name="id_profesor" id="profesorSelect" class="form-control">
+                        <#list profesores as profesor>
+                            <option value="${profesor.id_user}">${profesor.nombre}</option>
+                        </#list>
+                    </select>
+                    <button value="asignarProfesor" name="accion" class="btn btn-primary">Enviar</button>
                 </form>
             </div>
 

@@ -24,4 +24,15 @@ public class TareaServicios {
         TareasDAO tareasDao=new TareasDAO();
         return tareasDao.crearTareaDAO(t);
     }
+    
+    /**
+     * El alumno sube la tarea de la asignatura correspondiente
+     * @param idTarea id de la tarea
+     * @return devuelve 1 en el caso de que la tarea se haya subido en caso contrario el
+     * valor devuleto sera 0
+     */
+    public int subTareaAlumn(int idTarea) {
+        TareasDAO tareasDao = new TareasDAO();
+        return tareasDao.subTareaAlumn(idTarea);
+    }
 }
