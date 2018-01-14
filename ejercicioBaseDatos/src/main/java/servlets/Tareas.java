@@ -52,15 +52,15 @@ public class Tareas extends HttpServlet {
                 break;
                 
             case "PROFESOR":
-                page="anadirTarea.ftl";
-                String accion = (request.getParameter("accion"));
+                page = "anadirTarea.ftl";
+                String accion = request.getParameter("accion");
                 root.put("mensajeTarea", "");//PROVISIONAL
                 if(accion != null){
-                    String nombreTarea = (request.getParameter("nombreTarea"));
+                    String nombreTarea = request.getParameter("nombreTarea");
                     String fechaEntrega = request.getParameter("fechaEntrega");
                     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                     LocalDate local = LocalDate.parse(fechaEntrega,dtf);
-                    id_asig = 1;
+                    id_asig = 1;//PROVISIONAL
                     t.setId_asignatura(id_asig);
                     t.setNombre(nombreTarea); 
                     t.setFecha_entrega(Date.from(local.atStartOfDay().toInstant(ZoneOffset.UTC)));
