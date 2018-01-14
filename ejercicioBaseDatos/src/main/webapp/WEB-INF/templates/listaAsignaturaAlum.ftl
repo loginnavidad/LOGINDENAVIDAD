@@ -28,6 +28,7 @@
         </script>
         </head>
     <body>
+        <#include "cabecera.ftl">
         <div class="container">
             <h2>${title_table}</h2>
             <table class="table table-striped">

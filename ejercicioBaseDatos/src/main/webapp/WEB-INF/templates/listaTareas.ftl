@@ -32,6 +32,7 @@
         </script>
         </head>
     <body>
+        <#include "cabecera.ftl">
         <div class="container">
             <h2>${titulo_tabla}</h2>
             <table class="table table-striped">
