@@ -13,13 +13,19 @@ public class TareaServicios {
      * Listamos las tareas del alumno y la asignatura correspondiente
      * @param id_alum id del alumno
      * @param id_asignatura id de la asignatura
+     * @param siguientesTareas las 10 siguientes tareas
      * @return listado con las tareas de la asignatura del alumno
      */
-    public List<Tarea> listarTareas(int id_alum,int id_asignatura){
+    public List<Tarea> listarTareas(int id_alum,int id_asignatura,int siguientesTareas){
         TareasDAO tareasDao=new TareasDAO();
-        return tareasDao.listarTareas(id_alum,id_asignatura);   
+        return tareasDao.listarTareas(id_alum,id_asignatura,siguientesTareas);   
     } 
 
+    /**
+     * Creamos la tarea a los alumnos
+     * @param t objeto de tipo tarea
+     * @return 1 si la tarea se ha creado y 0 en caso contrario
+     */
     public int crearTarea(Tarea t) {
         TareasDAO tareasDao=new TareasDAO();
         return tareasDao.crearTareaDAO(t);

@@ -23,6 +23,7 @@ import model.Alumno;
 import model.Asignatura;
 import model.User;
 import servicios.ProfesoresServicios;
+import utils.Constantes;
 
 /**
  *
@@ -43,13 +44,13 @@ public class Profesores extends HttpServlet {
         String page = null;
 
         if (id_asignatura != null) {  
-            page = "profesoresAlumnos.ftl";
             List<Alumno> a = ps.getAlumnos(Integer.parseInt(id_asignatura));//le paso la asignatura y me devuelve los alumnos que pertenecen a ella y sus notas.
-            root.put("alumnos", a);                          
-        }else{
-            page = "profesores.ftl";  
+            root.put("alumnos", a);  
+            page = Constantes.LISTA_ALUMNOS;
+        }else{ 
             List<Asignatura> asig = ps.getAsignaturas(17/*(long) request.getSession().getAttribute("idUser")*/);//devuelve lista de asignaturas de ese profesor y el curso de las mismas.
-            root.put("asignaturas", asig);        
+            root.put("asignaturas", asig);
+            page = Constantes.PROFESORES;
         }
         temp = Configuration.getInstance().getFreeMarker().getTemplate(page);
             try {

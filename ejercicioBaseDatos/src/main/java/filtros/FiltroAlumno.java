@@ -23,7 +23,7 @@ import utils.Constantes;
  *
  * @author Sergio
  */
-@WebFilter(filterName = "FiltroAlumno", urlPatterns = {""})
+@WebFilter(filterName = "FiltroAlumno", urlPatterns = {"/alumnos","/tareas"})
 public class FiltroAlumno implements Filter {
     
     private static final boolean debug = true;
